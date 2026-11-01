@@ -10,6 +10,7 @@
   <link rel="preload" as="image" href="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp" type="image/webp">
   <!-- Hanzi Writer Animated Chinese Calligraphy CDN -->
   <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <script src="js/page-flip.browser.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -222,7 +223,9 @@
 
   <!-- HERO SECTION WITH REAL 3D BOOK MOCKUP -->
   <section id="tong-quan" class="pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto">
+    <!-- Atmospheric Oriental Sakura & Golden Dust Particles Canvas -->
+    <canvas id="sakura-canvas" class="absolute inset-0 pointer-events-none z-0 w-full h-full"></canvas>
+    <div class="max-w-7xl mx-auto relative z-10">
       <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <!-- Text Col (Left: 7 cols) -->
         <div class="lg:col-span-7 flex flex-col justify-center text-left animate-on-scroll fade-left">
@@ -437,17 +440,179 @@
         </div>
       </div>
 
-      <!-- Live Lesson Pages Showcase (3 Book Spread Pages) -->
+      <!-- Live Lesson Pages Showcase (3D FlipBook & Grid Showcase) -->
       <div class="bg-white p-5 sm:p-8 rounded-3xl border border-[#EAE5DB] shadow-md animate-on-scroll">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-gray-100">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100">
           <div>
-            <span class="text-xs font-bold text-[#8C1D24] uppercase tracking-wider block">Trích đoạn ruột sách thực tế</span>
-            <h4 class="font-serifcjk text-xl font-bold text-gray-900 mt-0.5">Bài 2: 你叫什么名字？ (Bạn Tên Là Gì?)</h4>
+            <span class="text-xs font-bold text-[#8C1D24] uppercase tracking-wider block">Trích đoạn sách thực tế</span>
+            <h4 class="font-serifcjk text-xl sm:text-2xl font-bold text-gray-900 mt-0.5">Bài 2: 你叫什么名字？ (Bạn Tên Là Gì?)</h4>
           </div>
-          <span class="text-xs text-gray-500 bg-[#FAF8F5] border border-gray-200 px-3 py-1.5 rounded-full flex items-center">
-            🔍 Bấm vào ảnh để phóng to thẩm định chi tiết trang sách
-          </span>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-[#8C1D24] bg-red-50 border border-red-200 px-3.5 py-1.5 rounded-full flex items-center shadow-2xs">
+              📖 Sách Mẫu Tương Tác 3D
+            </span>
+          </div>
         </div>
+
+        <!-- 3D INTERACTIVE FLIPBOOK (Nodlik / StPageFlip) -->
+        <div class="bg-gradient-to-b from-[#F7F4EE] to-[#F1ECE1] p-4 sm:p-8 rounded-2xl border border-[#E4DFD5] mb-8 shadow-inner">
+          <div class="text-center mb-4">
+            <p class="text-xs text-gray-600 flex items-center justify-center space-x-1.5 font-medium">
+              <span>💡</span>
+              <span><strong>Tương tác 3D:</strong> Dùng chuột kéo mép trang, lướt ngón tay hoặc bấm nút điều hướng dưới đây để lật mở cuốn sách:</span>
+            </p>
+          </div>
+
+          <!-- FlipBook Mounting Box -->
+          <div class="flex justify-center items-center py-2 sm:py-4 overflow-hidden">
+            <div id="flipbook-mount" class="relative mx-auto" style="min-height: 400px; max-width: 100%;">
+              <div id="book-lesson-2" class="flip-book-shadow">
+                <!-- Page 0: Bìa Bài 2 (Hard Cover) -->
+                <div class="book-page" data-density="hard">
+                  <div class="w-full h-full bg-[#8C1D24] relative flex flex-col items-center justify-between p-4 sm:p-6 text-white text-center border-r-2 border-amber-900/40 select-none">
+                    <div class="w-full flex items-center justify-between text-[10px] tracking-wider text-amber-200/80 uppercase font-semibold">
+                      <span>Ấn phẩm Đề Án 2026</span>
+                      <span>Bài Số 02</span>
+                    </div>
+                    <div class="my-auto py-2">
+                      <img src="anh_minh_hoa/Bia Bai Hoc/Bai 2.webp" alt="Bìa Bài 2" class="w-44 sm:w-56 h-auto rounded-xl mx-auto shadow-xl border-2 border-amber-200/40 object-cover">
+                      <h4 class="font-serifcjk text-lg sm:text-xl font-bold text-amber-100 mt-4 leading-tight">你叫什么名字？</h4>
+                      <p class="text-xs text-amber-200/90 mt-1 font-medium">(Bạn Tên Là Gì?)</p>
+                    </div>
+                    <div class="w-full pt-2 border-t border-white/20 flex items-center justify-between text-[10px] text-amber-200/80">
+                      <span>Tác giả: Vũ Kim Anh</span>
+                      <span class="bg-white/20 px-2 py-0.5 rounded text-[9px] animate-pulse">Lật mở &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 1: Trang 1 Ruột Sách (Soft Page) -->
+                <div class="book-page" data-density="soft">
+                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2.5 sm:p-4 border-l border-r border-[#EAE5DB] relative select-none">
+                    <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
+                      <span>Phần 1: Bộ Thủ & Phần 2: Chiết Tự</span>
+                      <span class="text-[#8C1D24]">Trang 16</span>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_1')">
+                      <img src="anh_minh_hoa/Ruot_Sach/trang_1_khoi_dong_chiet_tu.webp" alt="Trang 1: Khởi động bộ thủ" class="w-full h-auto max-h-[92%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
+                    </div>
+                    <div class="text-[9px] text-center text-gray-400 mt-1 flex items-center justify-center space-x-1">
+                      <span>🔍 Nhấp đúp để phóng to toàn màn hình</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 2: Trang 2 Ruột Sách (Soft Page) -->
+                <div class="book-page" data-density="soft">
+                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2.5 sm:p-4 border-l border-r border-[#EAE5DB] relative select-none">
+                    <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
+                      <span>Phần 3: Bài Tập Não Bộ Dạng 1 & 2</span>
+                      <span class="text-[#8C1D24]">Trang 17</span>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_2')">
+                      <img src="anh_minh_hoa/Ruot_Sach/trang_2_toan_hoc_bat_benh.webp" alt="Trang 2: Toán học & Bắt bệnh nét" class="w-full h-auto max-h-[92%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
+                    </div>
+                    <div class="text-[9px] text-center text-gray-400 mt-1 flex items-center justify-center space-x-1">
+                      <span>🔍 Nhấp đúp để phóng to toàn màn hình</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 3: Trang 3 Ruột Sách (Soft Page) -->
+                <div class="book-page" data-density="soft">
+                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2.5 sm:p-4 border-l border-r border-[#EAE5DB] relative select-none">
+                    <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
+                      <span>Phần 3: Điền Từ & Ma Trận Não Bộ 4x4</span>
+                      <span class="text-[#8C1D24]">Trang 18</span>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_3')">
+                      <img src="anh_minh_hoa/Ruot_Sach/trang_3_dien_tu_ma_tran.webp" alt="Trang 3: Ma trận tìm từ" class="w-full h-auto max-h-[92%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
+                    </div>
+                    <div class="text-[9px] text-center text-gray-400 mt-1 flex items-center justify-center space-x-1">
+                      <span>🔍 Nhấp đúp để phóng to toàn màn hình</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Page 4: Bìa Sau Kết Thúc Bài 2 (Hard Cover) -->
+                <div class="book-page" data-density="hard">
+                  <div class="w-full h-full bg-[#FAF5EC] flex flex-col items-center justify-between p-5 sm:p-6 text-center border-l-2 border-amber-900/30 select-none">
+                    <div class="w-full flex items-center justify-between text-[10px] text-gray-500 font-semibold uppercase">
+                      <span>Cấu trúc chuẩn sư phạm</span>
+                      <span>Hết Bài 02</span>
+                    </div>
+                    <div class="my-auto max-w-xs">
+                      <span class="seal-stamp text-xs px-3 py-1 font-bold inline-block mb-3">武金英 · BẢN QUYỀN</span>
+                      <h5 class="font-serifcjk text-base font-bold text-gray-900 mb-2 leading-relaxed">
+                        Tác Quyền Độc Quyền<br>Sách Chiết Tự Hán Tự 1
+                      </h5>
+                      <p class="text-xs text-gray-600 leading-relaxed italic mb-4">
+                        "Học Hán tự không phải học thuộc lòng máy móc từng nét vạch, mà là thấu hiểu quy luật tượng hình và chiều sâu văn hóa Đông phương."
+                      </p>
+                      <div class="p-3 bg-white rounded-xl border border-[#EAE5DB] shadow-2xs mb-3 text-left">
+                        <div class="text-[11px] text-gray-700 font-semibold">Hotline / Zalo: 0332.756.267</div>
+                        <div class="text-[10px] text-gray-500 mt-0.5">Tác giả: Vũ Kim Anh (武金英)</div>
+                      </div>
+                      <a href="https://forms.gle/H9cDjkCnXv2kv3VR8" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#8C1D24] hover:bg-[#6F1418] text-white text-[11px] font-bold px-4 py-2 rounded-full uppercase tracking-wider transition shadow-sm">
+                        Đăng Ký Bản Mẫu In &rarr;
+                      </a>
+                    </div>
+                    <div class="text-[9px] text-gray-400">
+                      Sách mẫu in offset 185 trang màu chuẩn
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FlipBook Interactive Controls Bar -->
+          <div class="mt-4 pt-4 border-t border-gray-200/80 flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <button id="book-btn-prev" class="px-4 py-2 rounded-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-800 text-xs font-semibold shadow-2xs hover:border-[#8C1D24] hover:text-[#8C1D24] transition flex items-center space-x-1.5 active:scale-95">
+              <span>&larr;</span>
+              <span>Trang Trước</span>
+            </button>
+            <span id="book-page-indicator" class="font-serifcjk font-bold text-xs sm:text-sm text-[#8C1D24] px-4 py-1.5 bg-white rounded-full border border-red-200 shadow-2xs">
+              Bìa Bài 2 (Trang 1 / 5)
+            </span>
+            <button id="book-btn-next" class="px-4 py-2 rounded-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-800 text-xs font-semibold shadow-2xs hover:border-[#8C1D24] hover:text-[#8C1D24] transition flex items-center space-x-1.5 active:scale-95">
+              <span>Trang Sau</span>
+              <span>&rarr;</span>
+            </button>
+            <button id="book-btn-zoom" class="px-3.5 py-2 rounded-full bg-red-50 hover:bg-red-100 border border-red-200 text-[#8C1D24] text-xs font-semibold transition flex items-center space-x-1 active:scale-95">
+              <span>🔍</span>
+              <span>Phóng To Chi Tiết</span>
+            </button>
+          </div>
+
+          <!-- Fast Jump Thumbnails Bar -->
+          <div class="mt-4 flex flex-wrap justify-center items-center gap-1.5 sm:gap-2">
+            <button onclick="jumpToBookPage(0)" id="thumb-btn-0" class="book-thumb-btn px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border border-[#8C1D24] bg-[#8C1D24] text-white transition">
+              Bìa Bài 2
+            </button>
+            <button onclick="jumpToBookPage(1)" id="thumb-btn-1" class="book-thumb-btn px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border border-gray-200 bg-white text-gray-700 hover:border-[#8C1D24] transition">
+              Trang 1: Bộ Thủ & Chiết Tự
+            </button>
+            <button onclick="jumpToBookPage(2)" id="thumb-btn-2" class="book-thumb-btn px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border border-gray-200 bg-white text-gray-700 hover:border-[#8C1D24] transition">
+              Trang 2: Toán Hán Tự & Bắt Bệnh
+            </button>
+            <button onclick="jumpToBookPage(3)" id="thumb-btn-3" class="book-thumb-btn px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border border-gray-200 bg-white text-gray-700 hover:border-[#8C1D24] transition">
+              Trang 3: Điền Từ & Ma Trận
+            </button>
+            <button onclick="jumpToBookPage(4)" id="thumb-btn-4" class="book-thumb-btn px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold border border-gray-200 bg-white text-gray-700 hover:border-[#8C1D24] transition">
+              Bìa Sau
+            </button>
+          </div>
+        </div>
+
+        <!-- Static 3-Page Grid Showcase (Quick Comparison Mode) -->
+        <div class="pt-6 border-t border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <h5 class="font-serifcjk text-sm sm:text-base font-bold text-gray-800">
+              Khung Thẩm Định Dàn Trải Cả 3 Trang Sách (Bấm để phóng to sắc nét):
+            </h5>
+            <span class="text-[11px] text-gray-500 hidden sm:inline-block">Dạng xem tĩnh thuận tiện so sánh song song</span>
+          </div>
 
         <div class="grid md:grid-cols-3 gap-6 items-start">
           <!-- Trang 1 -->
@@ -1194,6 +1359,220 @@
     };
 
     
+
+    // ==========================================
+    // REPO ANIMATION 1: ATMOSPHERIC SAKURA & GOLDEN DUST CANVAS
+    // ==========================================
+    (function initSakuraParticles() {
+      const canvas = document.getElementById('sakura-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let animId = null;
+      let isVisible = true;
+      let w = 0, h = 0;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = canvas.width = rect.width * dpr;
+        h = canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+      }
+
+      const count = window.innerWidth < 768 ? 20 : 36;
+      const particles = [];
+
+      class SakuraPetal {
+        constructor() {
+          this.reset(true);
+        }
+        reset(initial = false) {
+          const rect = canvas.getBoundingClientRect();
+          this.x = Math.random() * rect.width;
+          this.y = initial ? Math.random() * rect.height : -15;
+          this.size = Math.random() * 8 + 6;
+          this.speedY = Math.random() * 0.7 + 0.35;
+          this.speedX = Math.random() * 0.4 - 0.15;
+          this.rotation = Math.random() * Math.PI * 2;
+          this.rotSpeed = (Math.random() - 0.5) * 0.02;
+          this.flip = Math.random() * Math.PI;
+          this.flipSpeed = Math.random() * 0.03 + 0.01;
+          this.opacity = Math.random() * 0.35 + 0.35;
+          this.isGold = Math.random() < 0.22;
+        }
+        update() {
+          const rect = canvas.getBoundingClientRect();
+          this.y += this.speedY;
+          this.x += Math.sin(this.y * 0.008) * 0.5 + this.speedX;
+          this.rotation += this.rotSpeed;
+          this.flip += this.flipSpeed;
+
+          if (this.y > rect.height + 20 || this.x > rect.width + 20 || this.x < -20) {
+            this.reset(false);
+          }
+        }
+        draw(c) {
+          c.save();
+          c.translate(this.x, this.y);
+          c.rotate(this.rotation);
+          c.scale(Math.cos(this.flip), 1);
+
+          if (this.isGold) {
+            c.beginPath();
+            c.arc(0, 0, this.size * 0.22, 0, Math.PI * 2);
+            c.fillStyle = `rgba(218, 165, 32, ${this.opacity * 0.8})`;
+            c.shadowColor = 'rgba(218, 165, 32, 0.4)';
+            c.shadowBlur = 4;
+            c.fill();
+          } else {
+            c.beginPath();
+            c.moveTo(0, 0);
+            c.bezierCurveTo(this.size * 0.55, -this.size * 0.85, this.size * 1.15, -this.size * 0.2, 0, this.size * 1.15);
+            c.bezierCurveTo(-this.size * 1.15, -this.size * 0.2, -this.size * 0.55, -this.size * 0.85, 0, 0);
+            const grad = c.createLinearGradient(0, -this.size, 0, this.size);
+            grad.addColorStop(0, `rgba(240, 135, 150, ${this.opacity * 0.55})`);
+            grad.addColorStop(1, `rgba(180, 40, 50, ${this.opacity * 0.85})`);
+            c.fillStyle = grad;
+            c.fill();
+          }
+          c.restore();
+        }
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      for (let i = 0; i < count; i++) particles.push(new SakuraPetal());
+
+      const hero = document.getElementById('tong-quan');
+      if (hero && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            isVisible = e.isIntersecting;
+            if (isVisible && !animId) loop();
+          });
+        }, { threshold: 0.05 });
+        obs.observe(hero);
+      }
+
+      function loop() {
+        if (!isVisible) { animId = null; return; }
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw(ctx);
+        }
+        animId = requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    // ==========================================
+    // REPO ANIMATION 2: NODLIK / STPAGEFLIP 3D BOOK
+    // ==========================================
+    let globalPageFlip = null;
+    const pageLabels = [
+      'Bìa Bài 2 (Trang 1 / 5)',
+      'Trang 16: Bộ Thủ & Chiết Tự (Trang 2 / 5)',
+      'Trang 17: Toán Hán Tự & Bắt Bệnh (Trang 3 / 5)',
+      'Trang 18: Điền Từ & Ma Trận 4x4 (Trang 4 / 5)',
+      'Bìa Sau: Tác Quyền & Đăng Ký (Trang 5 / 5)'
+    ];
+
+    function updateThumbActive(pageIdx) {
+      document.querySelectorAll('.book-thumb-btn').forEach((btn, idx) => {
+        if (idx === pageIdx) {
+          btn.classList.add('bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]');
+          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+        } else {
+          btn.classList.remove('bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]');
+          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+        }
+      });
+    }
+
+    function initPageFlipBook() {
+      const bookEl = document.getElementById('book-lesson-2');
+      if (!bookEl || typeof St === 'undefined' || !St.PageFlip) return;
+
+      const isMobile = window.innerWidth < 768;
+      const baseWidth = isMobile ? 320 : 380;
+      const baseHeight = isMobile ? 440 : 510;
+
+      globalPageFlip = new St.PageFlip(bookEl, {
+        width: baseWidth,
+        height: baseHeight,
+        size: 'stretch',
+        minWidth: 260,
+        maxWidth: 480,
+        minHeight: 360,
+        maxHeight: 650,
+        maxShadowOpacity: 0.5,
+        showCover: true,
+        usePortrait: true,
+        mobileScrollSupport: false,
+        flippingTime: 700,
+        showPageCorners: true
+      });
+
+      const pages = bookEl.querySelectorAll('.book-page');
+      globalPageFlip.loadFromHTML(pages);
+
+      const ind = document.getElementById('book-page-indicator');
+      const prevBtn = document.getElementById('book-btn-prev');
+      const nextBtn = document.getElementById('book-btn-next');
+      const zoomBtn = document.getElementById('book-btn-zoom');
+
+      globalPageFlip.on('flip', (e) => {
+        const cur = e.data;
+        if (ind) ind.textContent = pageLabels[cur] || `Trang ${cur + 1} / 5`;
+        updateThumbActive(cur);
+      });
+
+      if (prevBtn) prevBtn.onclick = () => globalPageFlip.flipPrev();
+      if (nextBtn) nextBtn.onclick = () => globalPageFlip.flipNext();
+      if (zoomBtn) {
+        zoomBtn.onclick = () => {
+          const cur = globalPageFlip ? globalPageFlip.getCurrentPageIndex() : 1;
+          if (cur === 0) {
+            openCoverLightboxCustom('anh_minh_hoa/Bia Bai Hoc/Bai 2.webp', 'Bìa Tranh Cổ Phong Bài 2: 你叫什么名字？');
+          } else if (cur === 1) {
+            openPageLightbox('trang_1');
+          } else if (cur === 2) {
+            openPageLightbox('trang_2');
+          } else if (cur === 3) {
+            openPageLightbox('trang_3');
+          } else {
+            openCoverLightboxCustom('anh_minh_hoa/Bia Bai Hoc/Bai 2.webp', 'Bìa Sau: Sách Chiết Tự Hán Tự 1 - Tác giả Vũ Kim Anh');
+          }
+        };
+      }
+    }
+
+    window.jumpToBookPage = function(pageIndex) {
+      if (globalPageFlip) {
+        globalPageFlip.flip(pageIndex);
+      }
+    };
+
+    function openCoverLightboxCustom(src, caption) {
+      const lb = document.getElementById('cover-lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      const lbCap = document.getElementById('lightbox-caption');
+      if (lb && lbImg) {
+        lbImg.src = src;
+        if (lbCap) lbCap.textContent = caption;
+        lb.classList.remove('hidden');
+      }
+    }
+
+    // Call init on DOMContentLoaded or immediate
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPageFlipBook);
+    } else {
+      setTimeout(initPageFlipBook, 100);
+    }
+
     // Open Page Lightbox for Lesson Pages
     window.openPageLightbox = function(pageKey) {
       const pages = {
