@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bảng Tuần Hoàn Bộ Thủ & Phòng Thí Nghiệm Chiết Tự Hán Ngữ 2026</title>
+  <meta name="description" content="214 Bộ thủ chữ Hán xếp dạng Bảng tuần hoàn: Chọn 2-3 bộ thủ để tạo phản ứng ghép chữ Hán mới, xem pinyin, Hán Việt và câu chuyện tượng hình.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Hanzi Writer CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            jade: '#2E9E76'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --gold-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA8222 100%);
+      --cinnabar-gradient: linear-gradient(135deg, #FF4D3B 0%, #C23B2A 60%, #8C1D24 100%);
+    }
+    body {
+      background-color: #0C0A09;
+      color: #FAF6EE;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    /* Paper Grain */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Element Card on Grid */
+    .element-card {
+      background: rgba(22, 19, 17, 0.95);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+    .element-card:hover {
+      transform: translateY(-3px) scale(1.04);
+      border-color: rgba(212, 175, 55, 0.6);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.25);
+      z-index: 10;
+    }
+    .element-card.selected {
+      border-color: #FF4D3B !important;
+      background: rgba(194, 59, 42, 0.25) !important;
+      box-shadow: 0 0 20px rgba(255, 77, 59, 0.6) !important;
+      transform: translateY(-3px) scale(1.05);
+    }
+    .element-card.dimmed {
+      opacity: 0.25;
+      filter: grayscale(80%);
+    }
+
+    /* Glow Text */
+    .text-gold-gradient {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0C0A09;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2A2421;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+  <div class="grain"></div>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="border-b border-gold/15 bg-lacquer/90 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="website_gioi_thieu_chiet_tu.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-900 border border-stone-800 text-stone-300 hover:text-gold hover:border-gold/40 text-xs font-semibold transition-all">
+          ← Về Trang Chủ Sách
+        </a>
+        <div class="h-6 w-px bg-stone-800 hidden sm:block"></div>
+        <div>
+          <h1 class="font-display font-bold text-base sm:text-lg text-gold-bright flex items-center gap-2">
+            <span>BẢNG TUẦN HOÀN BỘ THỦ CHỮ HÁN</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cinnabar/20 text-cinnabar-glow border border-cinnabar/30">LAB 2026</span>
+          </h1>
+          <p class="text-[11px] text-stone-400 hidden sm:block">Chọn 2-3 bộ thủ để tạo "phản ứng ghép chữ" kèm câu chuyện tượng hình</p>
+        </div>
+      </div>
+
+      <!-- Quick Search & Actions -->
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" id="search-input" placeholder="Tìm bộ thủ / pinyin..." 
+                 class="w-36 sm:w-56 px-3 py-2 pl-8 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-200 placeholder-stone-500 focus:outline-none focus:border-gold transition-all">
+          <svg class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <button onclick="randomPair()" class="px-3.5 py-2 rounded-xl bg-gold/15 border border-gold/30 text-gold-bright hover:bg-gold hover:text-lacquer text-xs font-bold transition-all flex items-center gap-1.5" title="Chọn thử một cặp bộ thủ ngẫu nhiên">
+          <span>🎲 Ghép Thử</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ==========================================================================
+       THE "CHEMICAL REACTION" LAB WORKSPACE (BÀN PHẢN ỨNG GHÉP CHỮ)
+       ========================================================================== -->
+  <section class="border-b border-gold/15 bg-gradient-to-b from-[#14100E] to-[#0C0A09] py-6 px-4 sticky top-20 z-30 shadow-2xl backdrop-blur-md">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        <!-- Reaction Formula Display -->
+        <div class="flex items-center flex-wrap gap-3 sm:gap-4 justify-center md:justify-start w-full md:w-auto">
+          <span class="text-xs font-mono text-stone-400 uppercase tracking-widest hidden lg:block">PHẢN ỨNG TẠO CHỮ:</span>
+          
+          <!-- Slot 1 -->
+          <div id="slot-0" onclick="removeSlot(0)" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-dashed border-stone-700 bg-stone-900/80 flex flex-col items-center justify-center cursor-pointer hover:border-gold/50 transition-all relative group" title="Bấm để gỡ bỏ">
+            <span class="text-xs text-stone-500 group-hover:hidden font-mono">Bộ 1</span>
+            <span class="text-xs text-red-400 hidden group-hover:block">✕ Bỏ</span>
+          </div>
+
+          <span class="text-gold font-display text-2xl font-bold">+</span>
+
+          <!-- Slot 2 -->
+          <div id="slot-1" onclick="removeSlot(1)" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-dashed border-stone-700 bg-stone-900/80 flex flex-col items-center justify-center cursor-pointer hover:border-gold/50 transition-all relative group" title="Bấm để gỡ bỏ">
+            <span class="text-xs text-stone-500 group-hover:hidden font-mono">Bộ 2</span>
+            <span class="text-xs text-red-400 hidden group-hover:block">✕ Bỏ</span>
+          </div>
+
+          <span class="text-gold font-display text-2xl font-bold">=</span>
+
+          <!-- Result Character Slot -->
+          <div id="result-slot" class="h-16 sm:h-20 min-w-[120px] px-4 rounded-2xl border-2 border-gold/40 bg-lacquer flex items-center justify-center gap-3 shadow-xl">
+            <span class="text-xs text-stone-500 italic">Chọn bộ thủ...</span>
+          </div>
+
+          <!-- Clear Button -->
+          <button onclick="clearReaction()" class="text-xs text-stone-400 hover:text-red-400 underline underline-offset-4 ml-2">
+            Làm sạch bàn
+          </button>
+        </div>
+
+        <!-- Matching Characters counter & tags -->
+        <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1" id="matching-tags">
+          <span class="text-xs text-stone-400">Gợi ý từ ghép:</span>
+          <span class="text-xs text-stone-600 italic">(Nhấp vào bộ thủ bên dưới để bắt đầu)</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================================================
+       MAIN CONTENT: FILTER TABS & PERIODIC GRID
+       ========================================================================== -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full space-y-8">
+    
+    <!-- Filter Tabs (6 Nhóm chủ đề Ngũ Hành / Cổ Phong) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-stone-800" id="filter-tabs">
+      <button onclick="filterGroup('all')" class="filter-btn active px-3.5 py-1.5 rounded-lg bg-gold text-lacquer font-bold text-xs whitespace-nowrap transition-all">
+        Tất Cả (214 Bộ Thủ)
+      </button>
+      <button onclick="filterGroup('con-nguoi')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-red-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        👤 Con Người & Thân Thể
+      </button>
+      <button onclick="filterGroup('ngu-hanh')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-emerald-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        🏔️ Ngũ Hành & Tự Nhiên
+      </button>
+      <button onclick="filterGroup('dong-vat')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-amber-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        🐎 Động Vật & Muông Thú
+      </button>
+      <button onclick="filterGroup('cay-co')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-green-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        🌾 Cây Cỏ & Nông Nghiệp
+      </button>
+      <button onclick="filterGroup('do-vat')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-yellow-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        🏮 Đồ Vật, Nơi Ở & Khí Giới
+      </button>
+      <button onclick="filterGroup('truu-tuong')" class="filter-btn px-3.5 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-blue-400 border border-stone-800 text-xs font-medium whitespace-nowrap transition-all">
+        ✒️ Nét Bút & Trừu Tượng
+      </button>
+    </div>
+
+    <!-- The 214 Radicals Grid -->
+    <div id="radicals-grid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 sm:gap-2.5">
+      <!-- Generated via JavaScript -->
+    </div>
+
+  </main>
+
+
+  <!-- ==========================================================================
+       MODAL CHI TIẾT TỪ VỰNG & BÚT LÔNG HOẠT HỌA (HANZI WRITER)
+       ========================================================================== -->
+  <div id="detail-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-4 sm:p-6 flex items-center justify-center hidden">
+    <div class="oriental-card max-w-2xl w-full bg-[#141110] border border-gold/40 rounded-2xl overflow-hidden shadow-2xl relative p-6 sm:p-8 space-y-6">
+      
+      <!-- Close button -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white text-lg font-bold">
+        ✕
+      </button>
+
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+        <!-- Hanzi Writer animation canvas -->
+        <div class="sm:col-span-5 text-center space-y-3">
+          <div id="modal-hanzi-writer" class="w-44 h-44 mx-auto rounded-xl bg-stone-950/80 border border-gold/20 flex items-center justify-center relative cursor-pointer" onclick="replayStroke()">
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <button onclick="replayStroke()" class="px-3 py-1 rounded bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 font-semibold">
+              ▶ Vẽ lại nét
+            </button>
+            <button onclick="speakChar()" class="px-3 py-1 rounded bg-cinnabar/20 text-cinnabar-glow hover:bg-cinnabar hover:text-white text-[11px] font-semibold flex items-center gap-1">
+              🔊 Phát âm
+            </button>
+          </div>
+          <div class="text-[10px] text-stone-500">Nhấp để xem ngòi bút lông chạy từng nét</div>
+        </div>
+
+        <!-- Info details -->
+        <div class="sm:col-span-7 space-y-3">
+          <div class="flex items-center gap-2">
+            <span id="modal-hsk-badge" class="px-2 py-0.5 rounded bg-gold/20 text-gold-bright text-[10px] font-bold">HSK 1</span>
+            <span id="modal-lesson-badge" class="px-2 py-0.5 rounded bg-cinnabar/20 text-cinnabar-glow text-[10px] font-bold">Bài 1</span>
+          </div>
+
+          <div>
+            <h2 id="modal-hanzi-title" class="text-3xl font-bold font-cjk text-stone-100 flex items-center gap-3">
+              你 <span id="modal-pinyin" class="text-lg font-sans font-normal text-gold">nǐ</span>
+            </h2>
+            <div id="modal-hanviet-meaning" class="text-sm text-stone-300 font-medium">
+              Hán Việt: <strong class="text-gold-bright">Nhĩ</strong> · Nghĩa: <strong>Bạn, anh, cậu</strong>
+            </div>
+          </div>
+
+          <!-- Formula components -->
+          <div id="modal-formula" class="p-2.5 rounded-lg bg-stone-900 border border-stone-800 text-xs font-mono text-stone-300">
+            亻 (Nhân đứng) + 尔 (Nhĩ)
+          </div>
+
+          <!-- Story -->
+          <div id="modal-story-box" class="p-3.5 rounded-xl bg-cinnabar/10 border border-cinnabar/30 text-xs sm:text-sm text-stone-200 leading-relaxed italic">
+            "Người bạn từ thuở nhỏ (亻) cùng ta quàng dải khăn lụa (冖) chơi đùa (小) ➔ BẠN, CẬU, ANH (你)."
+          </div>
+
+          <!-- Example sentence -->
+          <div id="modal-example-box" class="text-xs space-y-1 p-2.5 rounded-lg bg-stone-950 border border-stone-800">
+            <div class="text-stone-400 font-bold">Ví dụ câu bài khóa:</div>
+            <div id="modal-ex-cn" class="font-cjk text-stone-200">你好 ！</div>
+            <div id="modal-ex-py" class="text-gold font-mono">Nǐ hǎo!</div>
+            <div id="modal-ex-vi" class="text-stone-400 italic">Xin chào bạn!</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Data Script -->
+  <script src="js/bang_tuan_hoan_data.js"></script>
+
+  <!-- Application Logic -->
+  <script>
+    var currentGroup = 'all';
+    var selectedRadicals = [];
+    var activeWriter = null;
+    var currentCharData = null;
+
+    // 1. Render 214 Radicals
+    function renderGrid(filter, keyword) {
+      var grid = document.getElementById('radicals-grid');
+      grid.innerHTML = '';
+
+      var data = window.CHIET_TU_DATABASE;
+      if (!data) return;
+
+      var radicals = data.radicals;
+      var filterKw = (keyword || '').trim().toLowerCase();
+
+      radicals.forEach(function(rad) {
+        if (filter !== 'all' && rad.theme !== filter) return;
+
+        if (filterKw) {
+          var matchChar = rad.char.includes(filterKw);
+          var matchPy = rad.pinyin.toLowerCase().includes(filterKw);
+          var matchHv = rad.han_viet.toLowerCase().includes(filterKw);
+          var matchMn = rad.meaning.toLowerCase().includes(filterKw);
+          if (!matchChar && !matchPy && !matchHv && !matchMn) return;
+        }
+
+        var isSelected = selectedRadicals.indexOf(rad.id) !== -1;
+        var theme = data.themes[rad.theme] || {};
+
+        var card = document.createElement('div');
+        card.className = 'element-card p-2 rounded-xl flex flex-col justify-between h-[82px] relative group ' + (isSelected ? 'selected' : '');
+        card.setAttribute('data-id', rad.id);
+        card.onclick = function() { toggleRadical(rad.id); };
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-[9px] text-stone-500 font-mono">
+            <span>${rad.id}</span>
+            <span class="text-stone-400">${rad.strokes}n</span>
+          </div>
+          <div class="text-center font-cjk text-2xl font-black text-stone-100 group-hover:text-gold transition-colors" style="color: ${isSelected ? '#FF4D3B' : ''}">
+            ${rad.char}
+          </div>
+          <div class="text-center overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-stone-400 font-medium">
+            ${rad.han_viet}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // 2. Toggle Radical Selection
+    function toggleRadical(radId) {
+      var idx = selectedRadicals.indexOf(radId);
+      if (idx !== -1) {
+        selectedRadicals.splice(idx, 1);
+      } else {
+        if (selectedRadicals.length >= 2) {
+          selectedRadicals.shift(); // keep max 2
+        }
+        selectedRadicals.push(radId);
+      }
+      updateReactionWorkspace();
+      renderGrid(currentGroup, document.getElementById('search-input').value);
+    }
+
+    function removeSlot(index) {
+      if (selectedRadicals[index] !== undefined) {
+        selectedRadicals.splice(index, 1);
+        updateReactionWorkspace();
+        renderGrid(currentGroup, document.getElementById('search-input').value);
+      }
+    }
+
+    function clearReaction() {
+      selectedRadicals = [];
+      updateReactionWorkspace();
+      renderGrid(currentGroup, document.getElementById('search-input').value);
+    }
+
+    // 3. Update Reaction Workspace
+    function updateReactionWorkspace() {
+      var db = window.CHIET_TU_DATABASE;
+      var radMap = {};
+      db.radicals.forEach(function(r) { radMap[r.id] = r; });
+
+      // Update Slot 0 & 1
+      for (var s = 0; s < 2; s++) {
+        var slotEl = document.getElementById('slot-' + s);
+        var rId = selectedRadicals[s];
+        if (rId && radMap[rId]) {
+          var r = radMap[rId];
+          slotEl.className = 'w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-cinnabar bg-cinnabar/20 flex flex-col items-center justify-center cursor-pointer relative group shadow-lg shadow-cinnabar/20';
+          slotEl.innerHTML = `
+            <span class="text-[9px] text-gold font-mono">#${r.id}</span>
+            <span class="text-2xl sm:text-3xl font-cjk font-bold text-white">${r.char}</span>
+            <span class="text-[10px] text-stone-300 font-medium">${r.han_viet}</span>
+          `;
+        } else {
+          slotEl.className = 'w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-dashed border-stone-700 bg-stone-900/80 flex flex-col items-center justify-center cursor-pointer hover:border-gold/50 transition-all relative group';
+          slotEl.innerHTML = `<span class="text-xs text-stone-500 font-mono">Bộ ${s+1}</span>`;
+        }
+      }
+
+      // Find matching reactions
+      var resSlot = document.getElementById('result-slot');
+      var tagsContainer = document.getElementById('matching-tags');
+      tagsContainer.innerHTML = '';
+
+      if (selectedRadicals.length === 0) {
+        resSlot.innerHTML = '<span class="text-xs text-stone-500 italic">Chọn bộ thủ...</span>';
+        tagsContainer.innerHTML = '<span class="text-xs text-stone-400">Gợi ý từ ghép:</span><span class="text-xs text-stone-600 italic">(Nhấp vào bộ thủ bên dưới để bắt đầu)</span>';
+        return;
+      }
+
+      // Find all characters that contain ALL selected radicals
+      var matches = [];
+      db.reactions.forEach(function(rx) {
+        var rxRads = rx.radicals;
+        var matchAll = selectedRadicals.every(function(sid) {
+          return rxRads.indexOf(sid) !== -1;
+        });
+        if (matchAll) {
+          matches.push(rx);
+        }
+      });
+
+      if (matches.length > 0) {
+        var best = matches[0];
+        resSlot.innerHTML = `
+          <button onclick='openModalForChar(${JSON.stringify(best).replace(/'/g, "&apos;")})' class="flex items-center gap-2 hover:scale-105 transition-transform text-left">
+            <span class="text-3xl sm:text-4xl font-cjk font-bold text-gold-bright">${best.char}</span>
+            <div class="text-xs">
+              <div class="text-gold font-bold">${best.pinyin} · ${best.han_viet}</div>
+              <div class="text-[11px] text-stone-300">${best.meaning}</div>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gold/20 text-gold">Xem ➔</span>
+          </button>
+        `;
+
+        // Render tags for other matches
+        tagsContainer.innerHTML = `<span class="text-xs text-gold font-semibold">${matches.length} Chữ Hán tạo thành:</span>`;
+        matches.slice(0, 10).forEach(function(m) {
+          var btn = document.createElement('button');
+          btn.className = 'px-2 py-1 rounded-lg bg-stone-900 hover:bg-gold hover:text-lacquer border border-stone-800 text-xs font-cjk text-stone-200 transition-all flex items-center gap-1';
+          btn.innerHTML = `<strong class="text-gold-bright">${m.char}</strong> <span class="text-[10px] text-stone-400">(${m.pinyin})</span>`;
+          btn.onclick = function() { openModalForChar(m); };
+          tagsContainer.appendChild(btn);
+        });
+      } else {
+        resSlot.innerHTML = '<span class="text-xs text-stone-500 italic">Chưa ghép thành chữ HSK...</span>';
+        tagsContainer.innerHTML = '<span class="text-xs text-stone-500">Hai bộ thủ này chưa có phản ứng trực tiếp trong kho HSK. Thử bộ khác!</span>';
+      }
+    }
+
+    // 4. Open Modal Detail
+    function openModalForChar(item) {
+      currentCharData = item;
+      document.getElementById('modal-hanzi-title').innerHTML = `${item.char} <span class="text-lg font-sans font-normal text-gold">${item.pinyin}</span>`;
+      document.getElementById('modal-hanviet-meaning').innerHTML = `Hán Việt: <strong class="text-gold-bright">${item.han_viet}</strong> · Nghĩa: <strong>${item.meaning}</strong>`;
+      document.getElementById('modal-hsk-badge').innerText = 'HSK ' + item.hsk;
+      
+      var lessonBadge = document.getElementById('modal-lesson-badge');
+      if (item.lesson) {
+        lessonBadge.style.display = 'inline-block';
+        lessonBadge.innerText = 'Bài ' + item.lesson + ' (Sách 1)';
+      } else {
+        lessonBadge.style.display = 'none';
+      }
+
+      // Formula
+      var db = window.CHIET_TU_DATABASE;
+      var radMap = {};
+      db.radicals.forEach(function(r) { radMap[r.id] = r; });
+      var parts = item.radicals.map(function(rid) {
+        var r = radMap[rid];
+        return r ? `${r.char} (${r.han_viet})` : `Bộ #${rid}`;
+      });
+      document.getElementById('modal-formula').innerText = parts.join(' + ') + ' ➔ ' + item.char;
+
+      // Story
+      var storyBox = document.getElementById('modal-story-box');
+      if (item.narrative) {
+        storyBox.innerHTML = `<strong>Giải mã chiết tự:</strong> ${item.narrative}`;
+        storyBox.style.display = 'block';
+      } else {
+        storyBox.innerHTML = `<strong>Cấu tạo bộ thủ:</strong> Kết hợp giữa ${parts.join(' và ')} để biểu đạt ý nghĩa "${item.meaning}".`;
+      }
+
+      // Example
+      var exBox = document.getElementById('modal-example-box');
+      if (item.example_cn) {
+        document.getElementById('modal-ex-cn').innerText = item.example_cn;
+        document.getElementById('modal-ex-py').innerText = item.example_py;
+        document.getElementById('modal-ex-vi').innerText = item.example_vi;
+        exBox.style.display = 'block';
+      } else {
+        exBox.style.display = 'none';
+      }
+
+      // Show modal
+      document.getElementById('detail-modal').classList.remove('hidden');
+
+      // Init HanziWriter
+      var container = document.getElementById('modal-hanzi-writer');
+      container.innerHTML = '';
+      activeWriter = HanziWriter.create('modal-hanzi-writer', item.char, {
+        width: 150,
+        height: 150,
+        padding: 5,
+        showOutline: true,
+        strokeColor: '#C23B2A',
+        outlineColor: 'rgba(212, 175, 55, 0.25)',
+        drawingColor: '#FF4D3B',
+        strokeAnimationSpeed: 1.2,
+        delayBetweenStrokes: 100
+      });
+      activeWriter.animateCharacter();
+    }
+
+    function replayStroke() {
+      if (activeWriter) activeWriter.animateCharacter();
+    }
+
+    function speakChar() {
+      if (currentCharData && 'speechSynthesis' in window) {
+        var u = new SpeechSynthesisUtterance(currentCharData.char);
+        u.lang = 'zh-CN';
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    // 5. Random Pair
+    function randomPair() {
+      var db = window.CHIET_TU_DATABASE;
+      var randomReaction = db.reactions[Math.floor(Math.random() * db.reactions.length)];
+      if (randomReaction && randomReaction.radicals.length >= 2) {
+        selectedRadicals = [randomReaction.radicals[0], randomReaction.radicals[1]];
+        updateReactionWorkspace();
+        renderGrid(currentGroup, document.getElementById('search-input').value);
+      }
+    }
+
+    // Filter Buttons
+    function filterGroup(group) {
+      currentGroup = group;
+      document.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('bg-gold', 'text-lacquer', 'font-bold');
+        b.classList.add('bg-stone-900', 'text-stone-300');
+      });
+      event.target.classList.remove('bg-stone-900', 'text-stone-300');
+      event.target.classList.add('bg-gold', 'text-lacquer', 'font-bold');
+      renderGrid(group, document.getElementById('search-input').value);
+    }
+
+    // Search Input Listener
+    document.addEventListener('DOMContentLoaded', function() {
+      renderGrid('all', '');
+
+      document.getElementById('search-input').addEventListener('input', function(e) {
+        renderGrid(currentGroup, e.target.value);
+      });
+    });
+  </script>
+</body>
+</html>

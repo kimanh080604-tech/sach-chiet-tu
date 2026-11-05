@@ -2,1734 +2,860 @@
 <html lang="vi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giáo Trình Chiết Tự Hán Tự - Đề Án Cải Cách Giáo Dục 2026</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Preload Hero Book Mockup for Instant Display -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Vở Bài Tập & Luyện Viết Chiết Tự Hán Tự - Đề Án Cải Cách Giáo Dục 2026</title>
+  <meta name="description" content="Phương pháp học chữ Hán đột phá: Bóc tách kết cấu IDC chuẩn quốc tế, thuận chiều bút thuận, 100% tranh thủy mặc Cổ phong và ma trận não bộ.">
+  
+  <!-- Preload Assets for Instant Display -->
   <link rel="preload" as="image" href="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp" type="image/webp">
-  <!-- Hanzi Writer Animated Chinese Calligraphy CDN -->
+  
+  <!-- Fonts: Google Fonts Cinzel Decorative, Noto Serif SC & Be Vietnam Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Hanzi Writer CDN -->
   <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  
+  <!-- Page Flip 3D CDN / Local -->
   <script src="js/page-flip.browser.js"></script>
+  
+  <!-- ScrollCraft Taste Floor CSS -->
+  <link rel="stylesheet" href="css/scrollcraft.css">
+  
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
+            lacquer: '#0C0A09',
             cinnabar: {
-              DEFAULT: '#8C1D24',
-              dark: '#6F1418',
-              light: '#FDF2F2',
-              border: '#E8C5C8',
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
             },
-            ricepaper: '#FBF8F2',
             gold: {
-              antique: '#C5A059',
-              light: '#FBF5E8',
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
             },
-            ink: {
-              DEFAULT: '#18181B',
-              soft: '#3F3F46',
-              muted: '#71717A',
-            }
+            ricepaper: '#FAF6EE',
+            ink: '#141210'
           },
           fontFamily: {
-            serifcjk: ['"LXGW WenKai"', '"Songti SC"', '"Noto Serif SC"', '"Times New Roman"', 'serif'],
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
           }
         }
       }
     }
   </script>
+
   <style>
-    /* Custom Luxury & Ink Wash Styling */
+    /* ==========================================================================
+       SCROLL-CRAFT CUSTOM DESIGN TOKENS & CỔ PHONG LUXURY STYLING
+       ========================================================================== */
     :root {
-      --cinnabar: #8C1D24;
-      --cinnabar-dark: #6F1418;
-      --rice-paper: #FBF8F2;
-      --gold: #C5A059;
+      --sc-bg: #0C0A09;
+      --sc-surface: #141110;
+      --sc-surface-elevated: #1F1B18;
+      --sc-ink: #FAF6EE;
+      --sc-ink-soft: #A8A196;
+      --sc-accent: #C23B2A;
+      --sc-accent-ink: #FFFFFF;
+      --sc-font-display: "Cinzel", "Noto Serif SC", serif;
+      --sc-font-text: "Be Vietnam Pro", sans-serif;
+      --gold-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA8222 100%);
+      --cinnabar-gradient: linear-gradient(135deg, #FF4D3B 0%, #C23B2A 60%, #8C1D24 100%);
     }
 
     body {
-      background-color: #FBF8F2;
-      color: #18181B;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--sc-bg);
+      color: var(--sc-ink);
+      font-family: var(--sc-font-text);
       overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      selection-background-color: #C23B2A;
+      selection-color: #FFF;
     }
 
-    /* Scroll progress bar */
-    #progress-bar {
+    /* Subtle Paper / Silk Texture Grain */
+    .sc-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Top Scroll Progress Bar */
+    [data-sc-progress] {
       position: fixed;
       top: 0;
       left: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #8C1D24, #C5A059);
+      height: 3px;
       width: 0%;
-      z-index: 9999;
-      transition: width 0.1s ease-out;
+      background: var(--gold-gradient);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+      z-index: 1000;
+      transition: width 0.1s cubic-bezier(0, 0, 0.2, 1);
     }
 
-    /* Seal stamp */
-    .seal-stamp {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid #8C1D24;
-      color: #8C1D24;
-      padding: 3px 10px;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 4px;
-      letter-spacing: 2px;
-      position: relative;
-      background: rgba(140, 29, 36, 0.04);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .seal-stamp::before {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      border: 0.5px solid rgba(140, 29, 36, 0.4);
-      border-radius: 2px;
-    }
-
-    /* Glass Header */
-    nav {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background-color: rgba(251, 248, 242, 0.9);
-      border-bottom: 1px solid #EAE5DB;
-    }
-
-
-
-    /* Scroll reveal */
-    
-
-    /* 3D Book Float */
-    .book-mockup-wrapper {
+    /* Dimensional Hero Layers */
+    .hero-space {
       perspective: 1200px;
     }
-    .book-mockup {
-      transition: all 0.5s ease;
-      transform: rotateY(-8deg) rotateX(4deg);
-      box-shadow: -20px 25px 40px -10px rgba(24, 24, 27, 0.25), 0 0 25px rgba(140, 29, 36, 0.15);
-    }
-    .book-mockup-wrapper:hover .book-mockup {
-      transform: rotateY(0deg) rotateX(0deg) translateY(-8px);
-      box-shadow: 0 30px 60px -15px rgba(24, 24, 27, 0.3), 0 0 35px rgba(140, 29, 36, 0.2);
-    }
-
-    /* Card glow */
-    .feature-card {
-      transition: all 0.3s ease;
-    }
-    .feature-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 35px -10px rgba(140, 29, 36, 0.1);
-      border-color: #8C1D24;
-    }
-  
-    .cover-tab-btn.active {
-      background-color: #8C1D24;
-      color: #ffffff;
-      border-color: #8C1D24;
-      box-shadow: 0 4px 12px rgba(140, 29, 36, 0.2);
+    
+    .floating-radical {
+      position: absolute;
+      font-family: "Noto Serif SC", serif;
+      font-weight: 900;
+      pointer-events: none;
+      text-shadow: 0 0 30px rgba(212, 175, 55, 0.35);
+      will-change: transform, opacity;
     }
 
-  
-    /* Safe Scroll Animation Engine */
-    .animate-on-scroll, .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: opacity, transform;
-    }
-    .animate-on-scroll.in-view, .reveal.active, .reveal.in-view {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
-    .animate-on-scroll.fade-left { transform: translateX(-30px); }
-    .animate-on-scroll.fade-right { transform: translateX(30px); }
-    .animate-on-scroll.zoom-in { transform: scale(0.95); }
-    .animate-on-scroll.in-view.fade-left,
-    .animate-on-scroll.in-view.fade-right { transform: translateX(0) !important; }
-    .animate-on-scroll.in-view.zoom-in { transform: scale(1) !important; }
-    .delay-100 { transition-delay: 0.1s; }
-    .delay-200 { transition-delay: 0.2s; }
-    .delay-300 { transition-delay: 0.3s; }
-    .delay-400 { transition-delay: 0.4s; }
-
-    /* Interactive Cover Tabs */
-    .cover-tab-btn {
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .cover-tab-btn:hover {
-      transform: translateY(-1px);
-    }
-    .cover-tab-btn.active {
-      background-color: #8C1D24 !important;
-      color: #ffffff !important;
-      border-color: #8C1D24 !important;
-      box-shadow: 0 4px 14px rgba(140, 29, 36, 0.25) !important;
-      transform: translateY(-2px);
+    .book-shadow {
+      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.85)) drop-shadow(0 50px 60px rgba(194, 59, 42, 0.25));
     }
 
-    /* Floating subtle animation for hero book */
-    @keyframes float-hero-book {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    .float-book {
-      animation: float-hero-book 6s ease-in-out infinite;
+    /* Golden text gradient */
+    .text-gold-gradient {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
+    .text-cinnabar-gradient {
+      background: var(--cinnabar-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Card glow & border */
+    .oriental-card {
+      background: linear-gradient(180deg, rgba(28, 24, 22, 0.85) 0%, rgba(18, 15, 14, 0.95) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .oriental-card:hover {
+      border-color: rgba(212, 175, 55, 0.45);
+      box-shadow: 0 15px 40px rgba(194, 59, 42, 0.25), 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    /* Interactive Hanzi Canvas Container */
+    #hanzi-target {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto;
+      background: radial-gradient(circle, rgba(250, 246, 238, 0.08) 0%, rgba(12, 10, 9, 0) 70%);
+      border: 2px dashed rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 3D Flipbook Modal */
+    #flipbook-modal {
+      display: none;
+      backdrop-filter: blur(12px);
+    }
   </style>
 </head>
-<body class="selection:bg-red-100 selection:text-red-900">
-  <div id="progress-bar"></div>
+<body class="antialiased">
 
-  <!-- NAVIGATION -->
-  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-[#FBF8F2]/95 backdrop-blur-md transition-all duration-300 border-b border-[#EAE5DB]/70 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-      <!-- Left: Brand & Seal (Optimized for Mobile & Desktop) -->
-      <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-        <span class="seal-stamp text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 font-bold whitespace-nowrap">武金英</span>
-        <div class="flex flex-col justify-center">
-          <span class="font-serifcjk text-sm sm:text-lg xl:text-xl font-bold tracking-wide sm:tracking-wider text-[#8C1D24] leading-tight whitespace-nowrap">CHIẾT TỰ HÁN TỰ</span>
-          <span class="text-[8px] sm:text-[10px] xl:text-[11px] text-gray-500 font-semibold tracking-wider uppercase leading-tight whitespace-nowrap">Đề Án Cải Cách Giáo Dục 2026</span>
+  <!-- Progress bar & grain -->
+  <span data-sc-progress id="progress-bar"></span>
+  <div class="sc-grain" aria-hidden="true"></div>
+
+  <!-- ==========================================================================
+       STICKY TOP NAVIGATION BAR (CỔ PHONG TÂN THỜI)
+       ========================================================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#0C0A09]/85 backdrop-blur-md border-b border-gold/15 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-lg bg-cinnabar flex items-center justify-center text-gold-bright font-serif text-xl shadow-lg shadow-cinnabar/30 group-hover:scale-105 transition-transform">
+          漢
         </div>
-      </div>
+        <div class="flex flex-col">
+          <span class="font-display tracking-wider text-sm font-bold text-gold-bright">CHIẾT TỰ HÁN TỰ</span>
+          <span class="text-[10px] text-stone-400 tracking-widest uppercase">Đề Án Cải Cách Giáo Dục 2026</span>
+        </div>
+      </a>
 
-      <!-- Center: Menu Links (All on ONE line with whitespace-nowrap & vertical alignment) -->
-      <div class="hidden lg:flex items-center space-x-3 xl:space-x-6 text-xs xl:text-sm font-semibold text-gray-700 flex-shrink-0">
-        <a href="#tong-quan" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Tổng Quan</a>
-        <a href="#so-sanh" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Đột Phá</a>
-        <a href="#cau-truc" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Cấu Trúc Bài</a>
-        <a href="#trai-nghiem" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Phòng Lab</a>
-        <a href="#lo-trinh" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">12 Bài</a>
-        <a href="#hinh-anh-sach" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Bìa Sách</a>
-        <a href="#gia-tri" class="px-2 py-1.5 hover:text-[#8C1D24] transition whitespace-nowrap flex items-center">Hiệu Quả</a>
-      </div>
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-300">
+        <a href="bang_tuan_hoan_chiet_tu.html" class="px-2.5 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold-bright hover:bg-gold hover:text-lacquer transition-all flex items-center gap-1 font-bold text-xs">🧪 Bảng Tuần Hoàn Bộ Thủ</a>
+        <a href="#signature" class="hover:text-gold transition-colors">Giải Mã Tương Tác</a>
+        <a href="#pillars" class="hover:text-gold transition-colors">4 Trụ Cột Đột Phá</a>
+        <a href="#interior" class="hover:text-gold transition-colors">Trải Nghiệm Ruột Sách</a>
+        <a href="#roadmap" class="hover:text-gold transition-colors">Lộ Trình 12 Bài</a>
+        <a href="#authority" class="hover:text-gold transition-colors">Bản Quyền Độc Quyền</a>
+      </nav>
 
-      <!-- Right: Action CTA Button linking directly to Google Form -->
-      <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-        <a href="https://forms.gle/H9cDjkCnXv2kv3VR8" target="_blank" rel="noopener noreferrer" class="bg-[#8C1D24] hover:bg-[#6F1418] text-white px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold tracking-wider uppercase transition shadow-sm hover:shadow-md whitespace-nowrap flex items-center justify-center active:scale-95">
-          Đăng Ký Bản Mẫu
+      <!-- Magnetic CTA Button -->
+      <div class="flex items-center gap-4">
+        <a href="#download" data-sc-magnet="0.2" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-cinnabar to-cinnabar-dark text-white font-medium text-xs tracking-wider uppercase shadow-lg shadow-cinnabar/30 hover:shadow-cinnabar/60 hover:brightness-110 transition-all border border-cinnabar-glow/30 flex items-center gap-2">
+          <span>Tải Đọc Thử PDF</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <!-- HERO SECTION WITH REAL 3D BOOK MOCKUP -->
-  <section id="tong-quan" class="pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 relative overflow-hidden">
-    <!-- Atmospheric Oriental Sakura & Golden Dust Particles Canvas -->
-    <canvas id="sakura-canvas" class="absolute inset-0 pointer-events-none z-0 w-full h-full"></canvas>
-    <div class="max-w-7xl mx-auto relative z-10">
-      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        <!-- Text Col (Left: 7 cols) -->
-        <div class="lg:col-span-7 flex flex-col justify-center text-left animate-on-scroll fade-left">
-          <div class="inline-flex items-center space-x-2 bg-white border border-[#E4DFD5] rounded-full px-4 py-1.5 mb-5 shadow-sm self-start">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#8C1D24] animate-ping"></span>
-            <span class="text-xs font-semibold text-gray-700 uppercase tracking-wider">Học Liệu Bản Quyền Độc Quyền</span>
-          </div>
+  <main id="top" class="pt-20">
 
-          <h1 class="font-serifcjk text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight mb-5">
-            Đột Phá Tư Duy Hán Tự:<br>
-            <span class="text-[#8C1D24]">Phương Pháp Chiết Tự</span><br>
-            Kết Hợp Tượng Hình Trực Quan
-          </h1>
-
-          <p class="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed mb-6 max-w-2xl">
-            Bộ học liệu và phương pháp giảng dạy độc quyền do <strong>Tác giả Vũ Kim Anh (武金英)</strong> biên soạn.
-            Giải mã toàn bộ <strong>282 Hán tự trọng tâm</strong> thông qua <strong>214 bộ thủ</strong>, tranh minh họa Cổ phong và bài tập não bộ – Giúp học viên hiểu sâu, nhớ lâu gấp 3 lần và chấm dứt hoàn toàn hội chứng "sợ viết chữ Hán".
-          </p>
-
-          <div class="flex flex-wrap items-center gap-3 sm:gap-4 mb-8">
-            <a href="#trai-nghiem" class="bg-[#8C1D24] hover:bg-[#6F1418] text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition shadow-md hover:shadow-xl whitespace-nowrap">
-              Trải Nghiệm Phòng Lab Chiết Tự
-            </a>
-            <a href="#lo-trinh" class="border border-gray-300 bg-white hover:border-[#8C1D24] hover:text-[#8C1D24] text-gray-800 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition shadow-sm whitespace-nowrap">
-              Khám Phá Lộ Trình 12 Bài Học
-            </a>
-          </div>
-
-          <!-- Quick Metrics Banner -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-white border border-[#EAE5DB] shadow-sm">
-            <div>
-              <div class="metric-number font-serifcjk text-2xl sm:text-3xl font-bold text-[#8C1D24]" data-target="85" data-suffix="%+">85%+</div>
-              <div class="text-[10px] sm:text-[11px] text-gray-500 font-medium uppercase mt-0.5">Tỷ lệ nhớ từ > 30 ngày</div>
-            </div>
-            <div>
-              <div class="metric-number font-serifcjk text-2xl sm:text-3xl font-bold text-gray-800" data-target="50" data-suffix="%">50%</div>
-              <div class="text-[10px] sm:text-[11px] text-gray-500 font-medium uppercase mt-0.5">Rút ngắn thời gian học</div>
-            </div>
-            <div>
-              <div class="metric-number font-serifcjk text-2xl sm:text-3xl font-bold text-[#8C1D24]" data-target="185" data-suffix="">185</div>
-              <div class="text-[10px] sm:text-[11px] text-gray-500 font-medium uppercase mt-0.5">Trang sách bài tập chuẩn</div>
-            </div>
-            <div>
-              <div class="metric-number font-serifcjk text-2xl sm:text-3xl font-bold text-gray-800" data-target="100" data-suffix="%">100%</div>
-              <div class="text-[10px] sm:text-[11px] text-gray-500 font-medium uppercase mt-0.5">Bản quyền sở hữu riêng</div>
-            </div>
+    <!-- ==========================================================================
+         ACT 1: DIMENSIONAL HERO (Scroll-Craft Core: 3-Plane Parallax Depth)
+         Plane 1: Vầng Trăng Hoàng Kim & Thủy Mặc Nho
+         Plane 2: Cuốn Sách Nổi Khối 3D Studio Mockup
+         Plane 3: Bộ Thủ Thư Pháp Bay Tách Lớp Trục Z
+         ========================================================================== -->
+    <section data-sc-act="pin" data-sc-span="2.6" data-sc-drift="#0C0A09" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div data-sc-stage class="w-full h-full flex items-center justify-center relative">
+        
+        <!-- Plane 1: Background Atmosphere & Golden Moon -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+          <div class="w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-gold/10 via-cinnabar/15 to-transparent blur-3xl animate-pulse" style="animation-duration: 8s;"></div>
+          <!-- Vành Nguyệt Cổ Phong -->
+          <div class="absolute w-[420px] h-[420px] rounded-full border border-gold/20 flex items-center justify-center">
+            <div class="w-[360px] h-[360px] rounded-full border border-dashed border-gold/15"></div>
           </div>
         </div>
 
-        <!-- 3D Book Mockup Col (Right: 5 cols - Side by Side with Text) -->
-        <div class="lg:col-span-5 flex flex-col items-center justify-center animate-on-scroll fade-right delay-200 mt-6 lg:mt-0">
-          <div class="relative w-full max-w-sm sm:max-w-md group cursor-pointer" onclick="switchCoverView('studio'); document.getElementById('hinh-anh-sach').scrollIntoView({behavior: 'smooth'})">
-            <!-- Free-standing 3D Mockup with Pure Clean Transparent Shadow (NO BLACK BOX) -->
-            <div class="float-book flex justify-center">
-              <img 
-                src="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp" 
-                alt="Bìa Sách Chiết Tự 1 3D Mockup - Tác giả Vũ Kim Anh (武金英)"
-                fetchpriority="high"
-                class="w-full max-w-[340px] sm:max-w-[380px] h-auto object-contain transition-transform duration-500 group-hover:scale-[1.03] group-hover:-translate-y-1.5"
-                style="filter: drop-shadow(0 16px 20px rgba(100, 30, 30, 0.16));"
-              >
-            </div>
-
-            <div class="text-center mt-3 flex items-center justify-center space-x-2">
-              <span class="seal-stamp text-[10px] py-0.5 px-2">武金英</span>
-              <span class="text-xs font-bold text-gray-800 tracking-wider uppercase font-serifcjk">
-                SÁCH CHIẾT TỰ 1 · TÁC GIẢ VŨ KIM ANH
-              </span>
-            </div>
-            <div class="text-center mt-1 text-[11px] text-[#8C1D24] font-semibold opacity-90 group-hover:opacity-100 transition">
-              Ấn bản chuẩn in offset 185 trang · Bấm để xem chi tiết phối cảnh 3D &rarr;
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SO SÁNH THỰC TRẠNG: CŨ VS MỚI -->
-  <section id="so-sanh" class="py-20 sm:py-24 px-4 sm:px-6 bg-white border-y border-[#EAE5DB]">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
-        <span class="seal-stamp mb-3">革新 · ĐỐI CHIẾU</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          Vì Sao Phương Pháp Cũ Khiến Học Viên Bỏ Cuộc?
-        </h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto mt-3">
-          Phân tích thực tế tỷ lệ rơi rụng học viên ở các trung tâm hiện nay và giải pháp cứu vãn bằng Chiết tự bản quyền.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8 items-stretch">
-        <!-- Cột Cũ (Lối mòn đào tạo) -->
-        <div class="animate-on-scroll fade-left delay-100 p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-gray-200 shadow-sm relative flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-6">
-              <span class="px-3.5 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold uppercase tracking-wider">Lối mòn đào tạo</span>
-              <span class="text-xs text-gray-400">Tỷ lệ quên: 70% sau 1 tuần</span>
-            </div>
-            <h3 class="font-serifcjk text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <span class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-3 text-sm font-bold">✕</span>
-              Chép Phạt Cơ Học (Học Vẹt)
-            </h3>
-            <ul class="space-y-4 text-sm text-gray-600">
-              <li class="flex items-start">
-                <span class="text-red-500 mr-3 font-bold text-base">•</span>
-                <span><strong>Xem chữ như một bức vẽ rối rắm:</strong> Học sinh chép từng nét mò mẫm, dễ nhầm nét phẩy, nét chấm giữa các chữ na ná nhau (人 vs 入, 大 vs 太 vs 犬).</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-red-500 mr-3 font-bold text-base">•</span>
-                <span><strong>Học trước quên sau:</strong> Chép 50 lần chỉ nhớ tức thời trong phòng thi; sau 1 tháng không dùng là quên sạch mặt chữ.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-red-500 mr-3 font-bold text-base">•</span>
-                <span><strong>Tỷ lệ bỏ học cao:</strong> 45% - 60% học viên từ bỏ không học tiếp lên HSK 3-4 vì quá áp lực với số lượng chữ Hán khổng lồ.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-red-500 mr-3 font-bold text-base">•</span>
-                <span><strong>Không có lợi thế cạnh tranh:</strong> Dùng giáo trình đại trà thì bất kỳ trung tâm hay gia sư nào cũng dạy được, dễ bị ép giá học phí.</span>
-              </li>
-            </ul>
-          </div>
-          <div class="mt-8 pt-4 border-t border-gray-200 text-xs font-semibold text-red-600">
-            Hậu quả: Giảm doanh thu tái đăng ký khóa học, học viên chán nản.
-          </div>
-        </div>
-
-        <!-- Cột Mới (Đột phá Chiết Tự) -->
-        <div class="animate-on-scroll fade-right delay-200 p-6 sm:p-8 rounded-3xl bg-[#FDFBF7] border-2 border-[#8C1D24] shadow-lg relative flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-6">
-              <span class="px-3.5 py-1 bg-[#8C1D24] text-white rounded-full text-xs font-bold uppercase tracking-wider">Đột phá giáo dục</span>
-              <span class="text-xs text-[#8C1D24] font-semibold">Tỷ lệ nhớ: 85%+ sau 30 ngày</span>
-            </div>
-            <h3 class="font-serifcjk text-xl font-bold text-[#8C1D24] mb-6 flex items-center">
-              <span class="w-8 h-8 rounded-full bg-red-100 text-[#8C1D24] flex items-center justify-center mr-3 text-sm font-bold">✓</span>
-              Chiết Tự Bộ Thủ & Tượng Hình Trực Quan
-            </h3>
-            <ul class="space-y-4 text-sm text-gray-700">
-              <li class="flex items-start">
-                <span class="text-[#8C1D24] mr-3 font-bold text-base">•</span>
-                <span><strong>Tư duy xếp hình Lego:</strong> Chữ Hán phức tạp được bóc tách thành các bộ thủ quen thuộc. Biết 1 bộ thủ là tự động hiểu hàng chục chữ liên quan.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-[#8C1D24] mr-3 font-bold text-base">•</span>
-                <span><strong>Ghi nhớ đa giác quan:</strong> Mỗi chữ đi kèm một câu chuyện tượng hình sinh động và một bức tranh Cổ phong chạm vào cảm xúc người học.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-[#8C1D24] mr-3 font-bold text-base">•</span>
-                <span><strong>Khả năng tự suy luận:</strong> Học viên tự tin đoán được nghĩa của từ mới khi nhìn vào bộ thủ cấu thành mà không cần tra từ điển.</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-[#8C1D24] mr-3 font-bold text-base">•</span>
-                <span><strong>Vũ khí độc quyền của Trung tâm:</strong> Giáo trình bản quyền sạch, biến khóa học thành "đặc sản" thu hút học viên mới qua truyền miệng.</span>
-              </li>
-            </ul>
-          </div>
-          <div class="mt-8 pt-4 border-t border-red-200 text-xs font-semibold text-[#8C1D24]">
-            Hiệu quả: Tăng tỷ lệ học viên học tiếp lên 88%, gia tăng uy tín học thuật.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CẤU TRÚC 1 BÀI HỌC CHUẨN SƯ PHẠM (TRÍCH ĐOẠN RUỘT SÁCH BÀI 2) -->
-  <section id="cau-truc" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#FAF8F5] border-b border-[#EAE5DB]">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16 animate-on-scroll">
-        <span class="seal-stamp mb-3">课程架构 · CẤU TRÚC SƯ PHẠM</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          Cấu Trúc 1 Bài Học Chuẩn Trong Sách
-        </h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto mt-3 leading-relaxed">
-          Mỗi bài học được thiết kế theo quy trình 3 giai đoạn sư phạm khép kín, kết hợp giữa tư duy logic bộ thủ, tranh Cổ phong và bài tập kích hoạt não bộ:
-        </p>
-      </div>
-
-      <!-- 3-Pillar Architecture Summary -->
-      <div class="grid md:grid-cols-3 gap-6 mb-12">
-        <!-- Bước 1 -->
-        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-[#EAE5DB] shadow-sm hover:shadow-md transition">
-          <div class="flex items-center space-x-3 mb-3">
-            <span class="w-8 h-8 rounded-full bg-red-50 text-[#8C1D24] border border-red-200 flex items-center justify-center font-bold text-sm">1</span>
-            <h3 class="font-serifcjk text-base font-bold text-gray-900">Khởi Động Bộ Thủ</h3>
-          </div>
-          <p class="text-xs text-gray-600 leading-relaxed">
-            Hệ thống hóa bảng bộ thủ trọng tâm xuất hiện trong bài kèm tên Hán Việt, ý nghĩa gốc và danh sách chữ liên quan. Nắm vững "viên gạch nền móng" trước khi học chữ.
-          </p>
-        </div>
-
-        <!-- Bước 2 -->
-        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-[#EAE5DB] shadow-sm hover:shadow-md transition">
-          <div class="flex items-center space-x-3 mb-3">
-            <span class="w-8 h-8 rounded-full bg-red-50 text-[#8C1D24] border border-red-200 flex items-center justify-center font-bold text-sm">2</span>
-            <h3 class="font-serifcjk text-base font-bold text-gray-900">Chiết Tự & Luyện Viết</h3>
-          </div>
-          <p class="text-xs text-gray-600 leading-relaxed">
-            Mỗi Hán tự đi kèm tranh Cổ phong độc bản, công thức bóc tách bộ thủ, câu chuyện tượng hình ghi nhớ sâu, từ ghép mở rộng và ô Điền Tự Cách luyện viết chuẩn nét bút.
-          </p>
-        </div>
-
-        <!-- Bước 3 -->
-        <div class="bg-white p-5 sm:p-6 rounded-2xl border border-[#EAE5DB] shadow-sm hover:shadow-md transition">
-          <div class="flex items-center space-x-3 mb-3">
-            <span class="w-8 h-8 rounded-full bg-red-50 text-[#8C1D24] border border-red-200 flex items-center justify-center font-bold text-sm">3</span>
-            <h3 class="font-serifcjk text-base font-bold text-gray-900">4 Dạng Bài Tập Não Bộ</h3>
-          </div>
-          <p class="text-xs text-gray-600 leading-relaxed">
-            Hệ thống 4 dạng bài tập củng cố độc quyền: <strong>Toán học chữ Hán</strong> (ghép bộ thủ), <strong>Bắt bệnh nét dễ nhầm</strong>, <strong>Điền từ ngữ cảnh</strong> và <strong>Ma trận tìm từ 4x4</strong>.
-          </p>
-        </div>
-      </div>
-
-      <!-- Live Lesson Pages Showcase (3D FlipBook & Grid Showcase) -->
-      <div class="bg-white p-5 sm:p-8 rounded-3xl border border-[#EAE5DB] shadow-md animate-on-scroll">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100">
-          <div>
-            <span class="text-xs font-bold text-[#8C1D24] uppercase tracking-wider block">Trích đoạn sách thực tế</span>
-            <h4 class="font-serifcjk text-xl sm:text-2xl font-bold text-gray-900 mt-0.5">Bài 2: 你叫什么名字？ (Bạn Tên Là Gì?)</h4>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="text-xs font-semibold text-[#8C1D24] bg-red-50 border border-red-200 px-3.5 py-1.5 rounded-full flex items-center shadow-2xs">
-              📖 Sách Mẫu Tương Tác 3D
-            </span>
-          </div>
-        </div>
-
-        <!-- 3D INTERACTIVE FLIPBOOK (Nodlik / StPageFlip) -->
-        <div class="bg-gradient-to-b from-[#FAF7F0] to-[#F3EFE6] p-3 sm:p-6 md:p-8 rounded-3xl border border-[#E4DFD5] shadow-xs">
-          <!-- FlipBook Mounting Box (EXPANDED DISPLAY AREA) -->
-          <div class="flex justify-center items-center py-2 sm:py-6 overflow-hidden">
-            <div id="flipbook-mount" class="relative mx-auto w-full flex justify-center items-center" style="min-height: 480px; max-width: 100%;">
-              <div id="book-lesson-2" class="flip-book-shadow">
-                <!-- Page 0: Bìa Bài 2 (Hard Cover) -->
-                <div class="book-page" data-density="hard">
-                  <div class="w-full h-full bg-[#8C1D24] relative flex flex-col items-center justify-between p-3 sm:p-5 text-white text-center border-r-2 border-amber-900/40 select-none">
-                    <div class="w-full flex items-center justify-between text-[10px] tracking-wider text-amber-200/80 uppercase font-semibold">
-                      <span>Ấn phẩm Đề Án 2026</span>
-                      <span>Bài Số 02</span>
-                    </div>
-                    <div class="my-auto py-2">
-                      <img src="anh_minh_hoa/Bia Bai Hoc/Bai 2.webp" alt="Bìa Bài 2" class="w-48 sm:w-64 h-auto rounded-xl mx-auto shadow-xl border-2 border-amber-200/40 object-cover">
-                      <h4 class="font-serifcjk text-xl sm:text-2xl font-bold text-amber-100 mt-4 leading-tight">你叫什么名字？</h4>
-                      <p class="text-xs sm:text-sm text-amber-200/90 mt-1 font-medium">(Bạn Tên Là Gì?)</p>
-                    </div>
-                    <div class="w-full pt-2 border-t border-white/20 flex items-center justify-between text-[10px] text-amber-200/80">
-                      <span>Tác giả: Vũ Kim Anh</span>
-                      <span class="bg-white/20 px-2 py-0.5 rounded text-[9px] animate-pulse">Lật mở &rarr;</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Page 1: Trang 1 Ruột Sách (Soft Page) -->
-                <div class="book-page" data-density="soft">
-                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2 sm:p-3 border-l border-r border-[#EAE5DB] relative select-none">
-                    <div class="flex items-center justify-between pb-1 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
-                      <span>Phần 1: Bộ Thủ & Phần 2: Chiết Tự</span>
-                      <span class="text-[#8C1D24] font-bold">Trang 16</span>
-                    </div>
-                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_1')">
-                      <img src="anh_minh_hoa/Ruot_Sach/trang_1_khoi_dong_chiet_tu.webp" alt="Trang 1: Khởi động bộ thủ" class="w-full h-auto max-h-[96%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
-                    </div>
-                    <div class="text-[9px] text-center text-gray-400 mt-0.5">
-                      <span>🔍 Nhấp chuột để phóng to toàn màn hình</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Page 2: Trang 2 Ruột Sách (Soft Page) -->
-                <div class="book-page" data-density="soft">
-                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2 sm:p-3 border-l border-r border-[#EAE5DB] relative select-none">
-                    <div class="flex items-center justify-between pb-1 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
-                      <span>Phần 3: Bài Tập Não Bộ Dạng 1 & 2</span>
-                      <span class="text-[#8C1D24] font-bold">Trang 17</span>
-                    </div>
-                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_2')">
-                      <img src="anh_minh_hoa/Ruot_Sach/trang_2_toan_hoc_bat_benh.webp" alt="Trang 2: Toán học & Bắt bệnh nét" class="w-full h-auto max-h-[96%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
-                    </div>
-                    <div class="text-[9px] text-center text-gray-400 mt-0.5">
-                      <span>🔍 Nhấp chuột để phóng to toàn màn hình</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Page 3: Trang 3 Ruột Sách (Soft Page) -->
-                <div class="book-page" data-density="soft">
-                  <div class="w-full h-full bg-[#FCFAF6] flex flex-col p-2 sm:p-3 border-l border-r border-[#EAE5DB] relative select-none">
-                    <div class="flex items-center justify-between pb-1 mb-1 border-b border-gray-200 text-[10px] text-gray-500 font-semibold uppercase">
-                      <span>Phần 3: Điền Từ & Ma Trận Não Bộ 4x4</span>
-                      <span class="text-[#8C1D24] font-bold">Trang 18</span>
-                    </div>
-                    <div class="flex-1 flex items-center justify-center overflow-hidden cursor-pointer group" onclick="openPageLightbox('trang_3')">
-                      <img src="anh_minh_hoa/Ruot_Sach/trang_3_dien_tu_ma_tran.webp" alt="Trang 3: Ma trận tìm từ" class="w-full h-auto max-h-[96%] object-contain rounded shadow-xs group-hover:scale-[1.01] transition">
-                    </div>
-                    <div class="text-[9px] text-center text-gray-400 mt-0.5">
-                      <span>🔍 Nhấp chuột để phóng to toàn màn hình</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Page 4: Bìa Sau Kết Thúc Bài 2 (Hard Cover) -->
-                <div class="book-page" data-density="hard">
-                  <div class="w-full h-full bg-[#FAF5EC] flex flex-col items-center justify-between p-4 sm:p-6 text-center border-l-2 border-amber-900/30 select-none">
-                    <div class="w-full flex items-center justify-between text-[10px] text-gray-500 font-semibold uppercase">
-                      <span>Cấu trúc chuẩn sư phạm</span>
-                      <span>Hết Bài 02</span>
-                    </div>
-                    <div class="my-auto max-w-xs">
-                      <span class="seal-stamp text-xs px-3 py-1 font-bold inline-block mb-3">武金英 · BẢN QUYỀN</span>
-                      <h5 class="font-serifcjk text-base sm:text-lg font-bold text-gray-900 mb-2 leading-relaxed">
-                        Tác Quyền Độc Quyền<br>Sách Chiết Tự Hán Tự 1
-                      </h5>
-                      <p class="text-xs text-gray-600 leading-relaxed italic mb-4">
-                        "Học Hán tự không phải học thuộc lòng máy móc từng nét vạch, mà là thấu hiểu quy luật tượng hình và chiều sâu văn hóa Đông phương."
-                      </p>
-                      <div class="p-3 bg-white rounded-xl border border-[#EAE5DB] shadow-2xs mb-3 text-left">
-                        <div class="text-[11px] text-gray-700 font-semibold">Hotline / Zalo: 0332.756.267</div>
-                        <div class="text-[10px] text-gray-500 mt-0.5">Tác giả: Vũ Kim Anh (武金英)</div>
-                      </div>
-                      <a href="https://forms.gle/H9cDjkCnXv2kv3VR8" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#8C1D24] hover:bg-[#6F1418] text-white text-[11px] font-bold px-4 py-2 rounded-full uppercase tracking-wider transition shadow-sm">
-                        Đăng Ký Bản Mẫu In &rarr;
-                      </a>
-                    </div>
-                    <div class="text-[9px] text-gray-400">
-                      Sách mẫu in offset 185 trang màu chuẩn
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MINIMAL CLEAN CONTROLS BAR -->
-          <div class="mt-4 pt-4 border-t border-gray-200/70 flex flex-col sm:flex-row items-center justify-between gap-3 max-w-2xl mx-auto">
-            <!-- Navigation buttons & current page -->
-            <div class="flex items-center space-x-2">
-              <button id="book-btn-prev" class="h-8 px-3 rounded-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 text-xs font-semibold shadow-2xs hover:border-[#8C1D24] hover:text-[#8C1D24] transition flex items-center space-x-1 active:scale-95">
-                <span>‹</span>
-                <span>Trước</span>
-              </button>
-              
-              <div class="h-8 px-3.5 rounded-full bg-white border border-gray-200 shadow-2xs flex items-center space-x-1.5">
-                <span class="w-2 h-2 rounded-full bg-[#8C1D24]"></span>
-                <span id="book-page-indicator" class="font-serifcjk text-xs font-bold text-gray-800 whitespace-nowrap">
-                  Trang 1 / 5 · Bìa Bài 2
-                </span>
-              </div>
-
-              <button id="book-btn-next" class="h-8 px-3 rounded-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 text-xs font-semibold shadow-2xs hover:border-[#8C1D24] hover:text-[#8C1D24] transition flex items-center space-x-1 active:scale-95">
-                <span>Sau</span>
-                <span>›</span>
-              </button>
-            </div>
-
-            <!-- Zoom button -->
-            <button id="book-btn-zoom" class="h-8 px-3.5 rounded-full bg-red-50 hover:bg-red-100 border border-red-200 text-[#8C1D24] text-xs font-semibold transition flex items-center space-x-1.5 active:scale-95 shadow-2xs">
-              <span>🔍</span>
-              <span>Phóng to trang</span>
-            </button>
-          </div>
-
-          <!-- Minimal Fast Jump Pills -->
-          <div class="mt-3 flex flex-wrap justify-center items-center gap-1.5">
-            <button onclick="jumpToBookPage(0)" id="thumb-btn-0" class="book-thumb-btn px-3 py-1 rounded-full text-[11px] font-medium border border-[#8C1D24] bg-[#8C1D24] text-white transition">
-              1. Bìa
-            </button>
-            <button onclick="jumpToBookPage(1)" id="thumb-btn-1" class="book-thumb-btn px-3 py-1 rounded-full text-[11px] font-medium border border-gray-200 bg-white text-gray-600 hover:border-[#8C1D24] transition">
-              2. Bộ Thủ
-            </button>
-            <button onclick="jumpToBookPage(2)" id="thumb-btn-2" class="book-thumb-btn px-3 py-1 rounded-full text-[11px] font-medium border border-gray-200 bg-white text-gray-600 hover:border-[#8C1D24] transition">
-              3. Toán Hán Tự
-            </button>
-            <button onclick="jumpToBookPage(3)" id="thumb-btn-3" class="book-thumb-btn px-3 py-1 rounded-full text-[11px] font-medium border border-gray-200 bg-white text-gray-600 hover:border-[#8C1D24] transition">
-              4. Điền Từ & Ma Trận
-            </button>
-            <button onclick="jumpToBookPage(4)" id="thumb-btn-4" class="book-thumb-btn px-3 py-1 rounded-full text-[11px] font-medium border border-gray-200 bg-white text-gray-600 hover:border-[#8C1D24] transition">
-              5. Bìa Sau
-            </button>
-          </div>
-
-          <div class="text-center mt-2.5">
-            <span class="text-[11px] text-gray-400 font-medium">💡 Gợi ý: Bạn có thể nhấp chuột vào mép trang hoặc lướt ngón tay để lật mở cuốn sách</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PHÒNG THÍ NGHIỆM CHIẾT TỰ VỚI TRANH MINH HỌA THẬT -->
-  <section id="trai-nghiem" class="py-24 px-6 bg-[#FAF8F5]">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-      <div class="animate-on-scroll">
-        <span class="seal-stamp mb-3">拆字实验室 · TRẢI NGHIỆM</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          Phòng Thí Nghiệm Chiết Tự Tương Tác
-        </h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto mt-3">
-          Kính mời Ban Lãnh đạo bấm thử vào từng chữ Hán dưới đây để thấy sự khác biệt vượt trội khi học chữ bằng hình ảnh tượng hình:
-        </p>
-      </div>
-
-      <!-- Character Buttons (Responsive 2x2 on mobile, flex on desktop) -->
-      <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 max-w-lg sm:max-w-none mx-auto">
-        <button onclick="changeChar(0)" id="btn-0" class="char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-[#8C1D24] bg-[#8C1D24] text-white shadow-sm transition truncate">
-          好 (hǎo - Tốt, Hay)
-        </button>
-        <button onclick="changeChar(1)" id="btn-1" class="char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-gray-300 bg-white text-gray-700 hover:border-[#8C1D24] transition truncate">
-          休 (xiū - Nghỉ ngơi)
-        </button>
-        <button onclick="changeChar(2)" id="btn-2" class="char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-gray-300 bg-white text-gray-700 hover:border-[#8C1D24] transition truncate">
-          明 (míng - Sáng sủa)
-        </button>
-        <button onclick="changeChar(3)" id="btn-3" class="char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-gray-300 bg-white text-gray-700 hover:border-[#8C1D24] transition truncate">
-          安 (ān - Bình an)
-        </button>
-      </div>
-
-      <!-- Interactive Display Card -->
-      <div class="bg-white border border-[#EAE5DB] rounded-3xl p-6 sm:p-10 shadow-sm max-w-5xl mx-auto" id="lab-display">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- LỘ TRÌNH 12 BÀI VÀ BÌA BÀI HỌC THẬT -->
-  <section id="lo-trinh" class="py-24 px-6 bg-white border-t border-[#EAE5DB]">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16">
-      <div class="animate-on-scroll">
-        <span class="seal-stamp mb-3">十二课</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          Hệ Thống 12 Bài
-        </h2>
-      </div>
-    
-      </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-        <!-- Bài 1 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%201.webp" alt="Bìa Bài 1" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 1 · 12 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">你好！· Xin Chào</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Nhân đứng, Nữ, Tử, Môn</p>
-        </div>
-
-        <!-- Bài 2 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%202.webp" alt="Bìa Bài 2" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 2 · 14 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">你叫什么名字？· Bạn Tên Là Gì?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Khẩu, Thược, Mịch, Tịch</p>
-        </div>
-
-        <!-- Bài 3 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%203.webp" alt="Bìa Bài 3" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 3 · 15 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">这是我的老师 · Đây Là Thầy Tôi</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Nhật, Thổ, Lão, Cân</p>
-        </div>
-
-        <!-- Bài 4 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-400 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%204.webp" alt="Bìa Bài 4" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 4 · 16 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">你在哪儿工作？· Làm Việc Ở Đâu?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Vi, Nghiễm, Lực, Bốc</p>
-        </div>
-
-        <!-- Bài 5 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%205.webp" alt="Bìa Bài 5" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 5 · 18 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">我家有五口人 · Nhà Tôi Có 5 Người</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Miên, Thị, Phụ, Hòa</p>
-        </div>
-
-        <!-- Bài 6 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%206.webp" alt="Bìa Bài 6" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 6 · 18 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">我想喝茶 · Tôi Muốn Uống Trà</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Thảo, Thủy, Mộc, Tâm</p>
-        </div>
-
-        <!-- Bài 7 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%207.webp" alt="Bìa Bài 7" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 7 · 20 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">你去哪儿？· Bạn Đi Đâu?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Khảm, Tẩu, Thổ, Phụ</p>
-        </div>
-
-        <!-- Bài 8 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-400 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%208.webp" alt="Bìa Bài 8" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 8 · 20 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">今天星期几？· Hôm Nay Thứ Mấy?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Nhật, Nguyệt, Kim, Tinh</p>
-        </div>
-
-        <!-- Bài 9 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%209.webp" alt="Bìa Bài 9" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 9 · 22 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">祝你生日快乐！· Chúc Mừng Sinh Nhật</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Kỳ, Sinh, Nhật, Khoái</p>
-        </div>
-
-        <!-- Bài 10 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%2010.webp" alt="Bìa Bài 10" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 10 · 24 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">现在几点？· Bây Giờ Mấy Giờ?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Thời, Điểm, Phân, Khắc</p>
-        </div>
-
-        <!-- Bài 11 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%2011.webp" alt="Bìa Bài 11" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 11 · 25 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">苹果多少钱一斤？· Táo Bao Nhiêu Tiền?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Thảo, Quả, Đa, Tiền</p>
-        </div>
-
-        <!-- Bài 12 -->
-        <div class="feature-card bg-[#FDFBF7] border border-[#EAE5DB] rounded-2xl p-4 overflow-hidden animate-on-scroll delay-400 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
-          <img src="anh_minh_hoa/Bia%20Bai%20Hoc/Bai%2012.webp" alt="Bìa Bài 12" decoding="async" width="480" height="480" class="w-full h-44 object-cover rounded-xl mb-3 shadow-inner group-hover:scale-105 transition-transform duration-500">
-          <div class="text-[11px] font-bold text-[#8C1D24] uppercase">Bài 12 · 28 Từ</div>
-          <h4 class="font-serifcjk text-sm font-bold text-gray-900 truncate">明天天气怎么样？· Thời Tiết Thế Nào?</h4>
-          <p class="text-[11px] text-gray-500 mt-1 truncate">Bộ Khí, Hầu, Hậu, Dương</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRÌNH DIỄN BÌA SÁCH CHÍNH THỨC & QUY CHUẨN MỸ THUẬT (INTERACTIVE COVER VIEWER) -->
-  <section id="hinh-anh-sach" class="py-24 px-6 bg-[#FAF8F5]">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12 animate-on-scroll">
-      <div class="animate-on-scroll">
-        <span class="seal-stamp mb-3">装帧设计 · BÌA SÁCH CHÍNH THỨC</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          Quy Chuẩn Thiết Kế Mỹ Thuật Bìa Sách
-        </h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto mt-3 leading-relaxed">
-          Bìa sách chính thức "Sách Chiết Tự 1" với tông màu đỏ son chu sa trang nhã, họa tiết kiến trúc Điện Kì Niên (Thiên Đàn) & hoa mai cổ điển. Bấm các góc nhìn bên dưới để thẩm định chi tiết:
-        </p>
-
-        <!-- Interactive Cover View Tabs (6 Views, Mobile Optimized) -->
-        <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-6 sm:mt-8">
-          <button onclick="switchCoverView('mockup')" id="tab-mockup" class="cover-tab-btn active px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-[#8C1D24] bg-[#8C1D24] text-white shadow-sm">
-            🌟 Bản Dựng 3D
-          </button>
-          <button onclick="switchCoverView('studio')" id="tab-studio" class="cover-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-gray-200 bg-white text-gray-700">
-            📸 Studio Bàn
-          </button>
-          <button onclick="switchCoverView('spread')" id="tab-spread" class="cover-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-gray-200 bg-white text-gray-700">
-            🖼️ Trải Phẳng
-          </button>
-          <button onclick="switchCoverView('front')" id="tab-front" class="cover-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-gray-200 bg-white text-gray-700">
-            📖 Bìa Trước
-          </button>
-          <button onclick="switchCoverView('back')" id="tab-back" class="cover-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-gray-200 bg-white text-gray-700">
-            📝 Bìa Sau
-          </button>
-          <button onclick="switchCoverView('spine')" id="tab-spine" class="cover-tab-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold tracking-wide border border-gray-200 bg-white text-gray-700">
-            📏 Gáy 12mm
-          </button>
-        </div>
-      </div>
-
-      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EAE5DB] shadow-md animate-on-scroll zoom-in delay-200">
-        <!-- Main Image Display Container -->
-        <div class="flex flex-col justify-center items-center min-h-[420px] sm:min-h-[500px] bg-[#FAF8F5] rounded-2xl p-4 sm:p-8 border border-gray-100 relative overflow-hidden">
-          <img 
-            id="cover-display-img"
-            src="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp" loading="lazy" decoding="async" 
-            alt="Bìa Sách Chiết Tự 1"
-            class="max-h-[520px] w-auto max-w-full rounded-xl transition-all duration-300 object-contain drop-shadow-xl cursor-zoom-in hover:scale-[1.01]" onclick="openCoverLightbox()" title="Bấm để phóng to chi tiết 300 DPI"
-          >
-          <div id="cover-display-badge" class="absolute top-4 left-4 bg-black/75 backdrop-blur-md text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full shadow-sm flex items-center space-x-1.5">
-            <span>🌟</span>
-            <span>Bản Dựng Phối Cảnh 3D · Tác Giả Vũ Kim Anh (武金英)</span>
-          </div>
-          <div class="text-[11px] text-[#8C1D24] font-semibold mt-2 flex items-center space-x-1 cursor-pointer" onclick="openCoverLightbox()"><span>🔍 Bấm vào ảnh để phóng to thẩm định chi tiết 300 DPI</span></div>
-          <div id="cover-display-desc" class="mt-4 text-xs text-gray-500 font-medium text-center max-w-xl">
-            Bản dựng 3D nổi bật độ dày gáy sách 12mm, bóng đổ mặt sàn tự nhiên và vệt sáng phản quang trang nhã.
-          </div>      </div>
-    
-        </div>
-
-        <div class="grid sm:grid-cols-3 gap-6 mt-8 pt-6 border-t border-gray-100 text-center">
-          <div class="p-4 rounded-2xl hover:bg-[#FAF8F5] transition">
-            <span class="font-serifcjk text-base font-bold text-[#8C1D24] block mb-1">Mặt Trước (Front Cover)</span>
-            <p class="text-xs text-gray-500 leading-relaxed">Tên sách nổi bật, con dấu triện son [武金英], biểu tượng Điện Kì Niên (Thiên Đàn) & mai đỏ thanh khiết.</p>
-          </div>
-          <div class="p-4 rounded-2xl hover:bg-[#FAF8F5] transition">
-            <span class="font-serifcjk text-base font-bold text-gray-800 block mb-1">Gáy Sách (Spine 12mm)</span>
-            <p class="text-xs text-gray-500 leading-relaxed">Độ dày chuẩn 12mm cho 185 trang in offset, tên sách và tên tác giả xoay dọc uy nghiêm, sang trọng.</p>
-          </div>
-          <div class="p-4 rounded-2xl hover:bg-[#FAF8F5] transition">
-            <span class="font-serifcjk text-base font-bold text-gray-800 block mb-1">Mặt Sau (Back Cover)</span>
-            <p class="text-xs text-gray-500 leading-relaxed">Khung kem trang nhã tóm lược 3 đột phá phương pháp, mã vạch ISBN thương mại và con dấu Tủ sách Đào tạo Độc quyền.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LỢI ÍCH QUẢN LÝ & DOANH THU -->
-  <section id="gia-tri" class="py-24 px-6 bg-white border-t border-[#EAE5DB]">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-      <div class="animate-on-scroll">
-        <span class="seal-stamp mb-3">投资回报 · HIỆU QUẢ QUẢN LÝ</span>
-        <h2 class="font-serifcjk text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
-          3 Giá Trị Chiến Lược Cho Ban Lãnh Đạo
-        </h2>
-        <p class="text-gray-500 text-sm max-w-2xl mx-auto mt-3">
-          Đầu tư áp dụng phương pháp Chiết tự mang lại tỷ suất hoàn vốn và lợi thế cạnh tranh dài hạn:
-        </p>      </div>
-    
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-gray-200">
-          <div class="w-12 h-12 rounded-2xl bg-red-100 text-[#8C1D24] font-bold text-xl flex items-center justify-center mb-6">
-            1
-          </div>
-          <h3 class="font-serifcjk text-lg font-bold text-gray-900 mb-3">Tăng Trưởng Tái Đăng Ký (Retention)</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">
-            Học viên không còn thấy Hán tự là gánh nặng. Tỷ lệ tiếp tục đăng ký khóa nâng cao tăng từ <strong>55% lên 88%</strong>, giúp tối ưu hóa chi phí Marketing trên mỗi học viên.
-          </p>
-        </div>
-
-        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-gray-200">
-          <div class="w-12 h-12 rounded-2xl bg-red-100 text-[#8C1D24] font-bold text-xl flex items-center justify-center mb-6">
-            2
-          </div>
-          <h3 class="font-serifcjk text-lg font-bold text-gray-900 mb-3">Vũ Khí Bản Quyền Độc Quyền (USP)</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">
-            Bộ học liệu đã được làm sạch 100% pháp lý theo Luật SHTT Việt Nam. Trung tâm sở hữu tài sản vô hình độc quyền, định vị phân khúc đào tạo cao cấp và uy tín.
-          </p>
-        </div>
-
-        <div class="p-8 rounded-3xl bg-[#FAF8F5] border border-gray-200">
-          <div class="w-12 h-12 rounded-2xl bg-red-100 text-[#8C1D24] font-bold text-xl flex items-center justify-center mb-6">
-            3
-          </div>
-          <h3 class="font-serifcjk text-lg font-bold text-gray-900 mb-3">Đồng Bộ Năng Lực Giáo Viên</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">
-            Mỗi bài đều có sẵn bóc tách bộ thủ, câu chuyện và bài tập não bộ chuẩn mực. Giáo viên mới cũng có thể giảng dạy xuất sắc ngay từ buổi đầu, dễ dàng nhân bản cơ sở.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BẢO MẬT HỌC LIỆU & QUY TRÌNH THẨM ĐỊNH (IP SECURITY & HARD COPY SAMPLE REQUEST) -->
-  <section id="ban-quyen" class="py-24 px-6 bg-[#8C1D24] text-white text-center relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    <div class="max-w-4xl mx-auto relative z-10">
-      <div class="inline-flex items-center space-x-2 bg-white/10 border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
-        <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        <span>Chính Sách Bảo Mật Bản Quyền Giáo Trình</span>
-      </div>
-
-      <h2 class="font-serifcjk text-3xl sm:text-5xl font-bold mb-6 leading-tight">
-        Học Liệu Bản Quyền Độc Quyền<br>Lưu Hành Nội Bộ
-      </h2>
-
-      <p class="text-white/85 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-10">
-        Toàn bộ hệ thống 12 bài học, 282 Hán tự chiết tự và ngân hàng câu hỏi bài tập 185 trang đã được đăng ký quyền tác giả theo Luật SHTT. Nhằm bảo vệ tuyệt đối tài sản trí tuệ và chống sao chép trái phép, website KHÔNG cung cấp liên kết tải file số hóa công khai trực tuyến.
-      </p>
-
-      <!-- Trust Badges & Action Options (Optimized for Mobile) -->
-      <div class="grid sm:grid-cols-2 gap-4 sm:gap-6 text-left max-w-3xl mx-auto mb-10">
-        <!-- Card 1: Ban Giám Đốc -->
-        <div class="bg-white/10 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/20 hover:border-white/40 transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-3 mb-3">
-              <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-amber-300 text-sm flex-shrink-0">1</span>
-              <h3 class="font-semibold text-white text-base">Dành Cho Ban Giám Đốc</h3>
-            </div>
-            <p class="text-xs text-white/80 leading-relaxed mb-5">
-              Quý Lãnh đạo và Hội đồng chuyên môn có thể đăng ký nhận cuốn sách mẫu in màu thực tế (Hard copy 185 trang) gửi trực tiếp về đơn vị để thẩm định chất lượng in ấn offset và mỹ thuật.
-            </p>
-          </div>
-          <a href="https://forms.gle/H9cDjkCnXv2kv3VR8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-2 bg-amber-400 hover:bg-amber-300 text-[#8C1D24] px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition shadow-md self-start active:scale-95">
-            <span>Đăng ký nhận sách mẫu in</span>
-            <span>&rarr;</span>
-          </a>
-        </div>
-
-        <!-- Card 2: Giảng Viên Đào Tạo -->
-        <div class="bg-white/10 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/20 hover:border-white/40 transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-3 mb-3">
-              <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-amber-300 text-sm flex-shrink-0">2</span>
-              <h3 class="font-semibold text-white text-base">Dành Cho Giảng Viên Đào Tạo</h3>
-            </div>
-            <p class="text-xs text-white/80 leading-relaxed mb-5">
-              Đội ngũ giáo viên muốn thẩm định slide bài giảng, ngân hàng bài tập hoặc đăng ký lớp dạy thử nghiệm vui lòng liên hệ Ban Đào Tạo để nhận tài khoản truy cập tài liệu số hóa có watermark bảo mật.
-            </p>
-          </div>
-          <a href="https://forms.gle/H9cDjkCnXv2kv3VR8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 text-white border border-white/35 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition shadow-md self-start active:scale-95">
-            <span>Liên hệ cấp quyền chuyên môn</span>
-            <span>&rarr;</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Contact Banner (Mobile-Friendly & Hotline Phone Number) -->
-      <div class="inline-flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/90 bg-black/25 px-5 py-3.5 sm:px-8 sm:py-3 rounded-2xl sm:rounded-full border border-white/10 shadow-inner max-w-full">
-        <span>Tác giả & Chủ nhiệm Đề án: <strong>Vũ Kim Anh</strong></span>
-        <span class="hidden sm:inline text-white/30">|</span>
-        <span>Đơn vị phát hành: <strong>Học Viện Tiếng Trung</strong></span>
-        <span class="hidden sm:inline text-white/30">|</span>
-        <span>Hotline / Zalo: <a href="https://zalo.me/0332756267" target="_blank" rel="noopener noreferrer" class="text-amber-300 hover:text-white font-bold underline underline-offset-2">0332.756.267</a> (<a href="tel:0332756267" class="hover:underline">Gọi điện</a>)</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-12 px-6 bg-white border-t border-[#EAE5DB] text-center text-xs text-gray-500">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center space-x-2">
-        <span class="seal-stamp text-[10px] py-0.5 px-2">武金英</span>
-        <span class="font-serifcjk font-bold text-gray-800">TÁC GIẢ: VŨ KIM ANH</span>
-      </div>
-      <div>
-        Dự Án Đào Tạo Hán Tự Chiết Tự Độc Quyền © 2026
-      </div>
-    </div>
-  </footer>
-
-  <!-- SCRIPT -->
-  <!-- SCRIPT -->
-  <script>
-    // 1. Reading Scroll Progress Bar
-    window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      const bar = document.getElementById('progress-bar');
-      if (bar) bar.style.width = scrolled + '%';
-
-      // Dynamic Navbar style on scroll
-      const nav = document.getElementById('main-nav');
-      if (nav) {
-        if (winScroll > 60) {
-          nav.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-sm', 'py-3');
-          nav.classList.remove('py-5', 'bg-white/80');
-        } else {
-          nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-sm', 'py-3');
-          nav.classList.add('py-5', 'bg-white/80');
-        }
-      }
-    });
-
-            // 2. High-Performance IntersectionObserver for Scroll Animations
-    const scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          entry.target.classList.add('active');
-        }
-      });
-    }, {
-      threshold: 0.05,
-      rootMargin: '150px 0px 150px 0px'
-    });
-
-    function initScrollAnimations() {
-      document.querySelectorAll('.animate-on-scroll, .reveal').forEach(el => {
-        const rect = el.getBoundingClientRect();
-        // If element is already in or near viewport, show immediately
-        if (rect.top < window.innerHeight + 100) {
-          el.classList.add('in-view');
-          el.classList.add('active');
-        }
-        scrollObserver.observe(el);
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', initScrollAnimations);
-    window.addEventListener('load', initScrollAnimations);
-    setTimeout(initScrollAnimations, 50);
-    setTimeout(initScrollAnimations, 300);
-
-    // 3. Metric Counter Animation on Scroll
-    let countersAnimated = false;
-    function animateCounters() {
-      if (countersAnimated) return;
-      countersAnimated = true;
-      document.querySelectorAll('.metric-number').forEach(counter => {
-        const target = parseFloat(counter.getAttribute('data-target') || '0');
-        const suffix = counter.getAttribute('data-suffix') || '';
-        let current = 0;
-        const step = target / 40;
-        const timer = setInterval(() => {
-          current += step;
-          if (current >= target) {
-            counter.textContent = target + suffix;
-            clearInterval(timer);
-          } else {
-            counter.textContent = Math.floor(current) + suffix;
-          }
-        }, 25);
-      });
-    }
-
-    const metricObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounters();
-        }
-      });
-    }, { threshold: 0.3 });
-
-    const metricSection = document.getElementById('tong-quan');
-    if (metricSection) metricObserver.observe(metricSection);
-
-    // 4. Lab Data with WebP illustrations & Hanzi Writer
-    const labData = [
-      {
-        char: "好",
-        pinyin: "/hǎo/",
-        meaning: "Tốt, đẹp, hay, khỏe",
-        structure: "Kết cấu Trái - Phải",
-        img: "anh_minh_hoa/Bai_1/anh%202.webp",
-        parts: [
-          { radical: "女 (Nữ)", desc: "Hình tượng người phụ nữ, người mẹ dịu hiền ôm con" },
-          { radical: "子 (Tử)", desc: "Đứa con thơ bé bỏng trong vòng tay yêu thương" }
-        ],
-        story: "Người mẹ (女) âu yếm ôm đứa con thơ (子) vào lòng. Trong triết lý nhân sinh phương Đông, gia đình có mẹ hiền con ngoan chính là điều trọn vẹn, tốt đẹp nhất (好)."
-      },
-      {
-        char: "休",
-        pinyin: "/xiū/",
-        meaning: "Nghỉ ngơi, ngừng lại, tĩnh dưỡng",
-        structure: "Kết cấu Trái - Phải",
-        img: "anh_minh_hoa/Bai_1/anh%201.webp",
-        parts: [
-          { radical: "亻 (Nhân đứng)", desc: "Hình tượng con người đang lao động mệt mỏi" },
-          { radical: "木 (Mộc)", desc: "Cây cối rợp bóng mát thanh bình bên đường" }
-        ],
-        story: "Người lao động (亻) sau nhiều giờ miệt mài ngoài trời nắng, tìm đến bóng râm rười rượi của gốc cây cổ thụ (木) ngồi tựa lưng nghỉ ngơi, hồi phục sinh lực (休)."
-      },
-      {
-        char: "明",
-        pinyin: "/míng/",
-        meaning: "Sáng sủa, ngày mai, thấu suốt",
-        structure: "Kết cấu Trái - Phải",
-        img: "anh_minh_hoa/Bai_8/anh%201.webp",
-        parts: [
-          { radical: "日 (Nhật)", desc: "Mặt trời chói chang quang đãng ban ngày" },
-          { radical: "月 (Nguyệt)", desc: "Vầng trăng dịu êm vằng vặc soi sáng màn đêm" }
-        ],
-        story: "Khi vầng thái dương rực rỡ (日) của ban ngày hòa quyện cùng ánh nguyệt thanh khiết (月) của ban đêm, khắp vũ trụ không còn góc tối nào ➔ SÁNG SỦA, MINH TRIẾT (明)."
-      },
-      {
-        char: "安",
-        pinyin: "/ān/",
-        meaning: "Bình an, yên ổn, tĩnh tại",
-        structure: "Kết cấu Trên - Dưới",
-        img: "anh_minh_hoa/Bai_5/anh%201.webp",
-        parts: [
-          { radical: "宀 (Miên)", desc: "Mái nhà chở che nắng mưa, bão giông cuộc đời" },
-          { radical: "女 (Nữ)", desc: "Bàn tay người phụ nữ đảm đang vun vén mái ấm" }
-        ],
-        story: "Dưới mái nhà êm ấm (宀), có bóng dáng người phụ nữ (女) tảo tần giữ gìn ngọn lửa yêu thương thì cả gia đình bốn mùa luôn được bình an, vạn sự yên hòa (安)."
-      }
-    ];
-
-    let labWriter = null;
-
-    function renderHanziCharacter(char) {
-      const target = document.getElementById('hanzi-character-target');
-      if (!target || typeof HanziWriter === 'undefined') return;
-      target.innerHTML = '';
-      
-      try {
-        const isMobile = window.innerWidth < 640;
-        const hwDim = isMobile ? 112 : 126;
-        labWriter = HanziWriter.create('hanzi-character-target', char, {
-          width: hwDim,
-          height: hwDim,
-          padding: isMobile ? 4 : 6,
-          showOutline: true,
-          strokeAnimationSpeed: 1.1,
-          delayBetweenStrokes: 130,
-          strokeColor: '#2D2926',      // Mực tàu đậm
-          radicalColor: '#8C1D24',     // Màu đỏ son cho Bộ Thủ
-          outlineColor: '#E2DCD5',     // Nét mờ chỉ dẫn
-          drawingColor: '#8C1D24',     // Nét khi người dùng vẽ
-          drawingWidth: isMobile ? 10 : 12,
-          showHintAfterMisses: 1
-        });
-        labWriter.animateCharacter();
-      } catch (err) {
-        console.warn('HanziWriter error:', err);
-      }
-    }
-
-    window.replayLabCharacter = function() {
-      if (labWriter) {
-        labWriter.cancelQuiz();
-        labWriter.animateCharacter();
-        setLabStatus('Đang diễn hoạt bút pháp thư pháp theo thứ tự nét thuận...');
-      }
-    };
-
-    window.practiceLabCharacter = function(char) {
-      if (!labWriter) return;
-      setLabStatus('✍️ Dùng chuột hoặc vuốt ngón tay đồ theo nét mờ để viết thử chữ...');
-      labWriter.quiz({
-        onMistake: function(strokeData) {
-          setLabStatus('⚠️ Chưa đúng thứ tự hoặc hướng nét! Thử lại nét này nhé.');
-        },
-        onCorrectStroke: function(strokeData) {
-          setLabStatus('✨ Nét vẽ rất chuẩn! Tiếp tục nét kế tiếp...');
-        },
-        onComplete: function(summaryData) {
-          setLabStatus(`🎉 Xuất sắc! Bạn đã viết hoàn thành chữ <strong>${char}</strong>!`);
-        }
-      });
-    };
-
-    function setLabStatus(msg) {
-      const el = document.getElementById('lab-quiz-status');
-      if (el) el.innerHTML = msg;
-    }
-
-    function changeChar(index) {
-      document.querySelectorAll('.char-nav-btn').forEach((btn, idx) => {
-        if (idx === index) {
-          btn.className = "char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-[#8C1D24] bg-[#8C1D24] text-white shadow-sm transition truncate";
-        } else {
-          btn.className = "char-nav-btn px-3.5 py-2 sm:px-6 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold border border-gray-300 bg-white text-gray-700 hover:border-[#8C1D24] transition truncate";
-        }
-      });
-
-      const d = labData[index];
-      const box = document.getElementById('lab-display');
-      if (!box) return;
-
-      box.innerHTML = `
-        <div class="grid lg:grid-cols-12 gap-8 items-center animate-on-scroll zoom-in in-view">
-          <!-- Left: Dual Visual Arts (Cổ Phong Painting + Hanzi Writer Canvas) -->
-          <div class="lg:col-span-5 flex flex-col items-center">
-            <div class="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md items-center">
-              <!-- 1. Tranh Cổ Phong Tượng Hình -->
-              <div class="relative rounded-2xl overflow-hidden shadow-md border border-[#EAE5DB] bg-white group">
-                <img src="${d.img}" alt="${d.char}" loading="lazy" decoding="async" class="w-full h-36 sm:h-44 object-cover transition-transform duration-500 group-hover:scale-105">
-                <div class="absolute bottom-1.5 right-1.5 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-bold text-white">
-                  Tranh Cổ Phong
-                </div>
-              </div>
-              
-              <!-- 2. Bút Pháp Thư Pháp Hanzi Writer -->
-              <div class="relative rounded-2xl border border-red-200/90 bg-[#FAF8F5] p-2 sm:p-2.5 flex flex-col items-center shadow-xs">
-                <div class="text-[10px] font-bold text-[#8C1D24] uppercase tracking-wider mb-1 flex items-center">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#8C1D24] mr-1 animate-pulse"></span>
-                  Bút Pháp Chuẩn
-                </div>
-                <!-- Tianzige (Ô Điền Tự Cách) -->
-                <div class="relative w-[120px] h-[120px] sm:w-[126px] sm:h-[126px] bg-white rounded-xl border border-red-100 flex items-center justify-center overflow-hidden shadow-inner">
-                  <svg class="absolute inset-0 w-full h-full pointer-events-none stroke-red-100" stroke-width="1" stroke-dasharray="2,2">
-                    <line x1="0" y1="50%" x2="100%" y2="50%" />
-                    <line x1="50%" y1="0" x2="50%" y2="100%" />
-                    <line x1="0" y1="0" x2="100%" y2="100%" stroke-dasharray="3,3" />
-                    <line x1="100%" y1="0" x2="0" y2="100%" stroke-dasharray="3,3" />
-                  </svg>
-                  <div id="hanzi-character-target" class="relative z-10 cursor-crosshair"></div>
-                </div>
-                <div class="flex items-center gap-1.5 mt-2 w-full">
-                  <button onclick="replayLabCharacter()" title="Xem lại thứ tự nét bút" class="flex-1 py-1 bg-[#8C1D24] text-white rounded text-[10px] sm:text-[11px] font-semibold hover:bg-[#6F1418] transition flex items-center justify-center shadow-xs">
-                    ▶ Nét Bút
-                  </button>
-                  <button onclick="practiceLabCharacter('${d.char}')" title="Tự tay tập viết chữ" class="flex-1 py-1 bg-white border border-[#8C1D24] text-[#8C1D24] rounded text-[10px] sm:text-[11px] font-semibold hover:bg-red-50 transition flex items-center justify-center">
-                    ✍️ Tập Viết
-                  </button>
-                </div>
-              </div>
+        <!-- Plane 3: Foreground Flying Radicals (Tách lớp theo trục Z) -->
+        <div class="floating-radical text-gold/30 text-7xl -top-10 left-12" data-sc-tilt="15" style="transform: translateZ(60px);">亻</div>
+        <div class="floating-radical text-cinnabar/35 text-8xl top-24 right-16" data-sc-tilt="-12" style="transform: translateZ(80px);">女</div>
+        <div class="floating-radical text-gold/25 text-6xl bottom-20 left-20" data-sc-tilt="10" style="transform: translateZ(40px);">冖</div>
+        <div class="floating-radical text-cinnabar/30 text-7xl bottom-16 right-28" data-sc-tilt="-15" style="transform: translateZ(70px);">子</div>
+        <div class="floating-radical text-gold/20 text-5xl top-1/2 left-6" style="transform: translateZ(50px);">小</div>
+
+        <!-- Center Content Stage: Typography & Dimensional Book -->
+        <div class="max-w-6xl mx-auto px-4 z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Text Lead -->
+          <div class="lg:col-span-7 text-left space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cinnabar/10 border border-cinnabar/30 text-cinnabar-glow text-xs font-semibold tracking-widest uppercase">
+              <span class="w-2 h-2 rounded-full bg-cinnabar animate-ping"></span>
+              Đề Án Cải Cách Giáo Dục Hán Ngữ 2026
             </div>
             
-            <!-- Character heading info & status -->
-            <div class="mt-4 text-center">
-              <div class="flex items-center justify-center space-x-2">
-                <span class="font-serifcjk text-4xl sm:text-5xl font-bold text-[#8C1D24]">${d.char}</span>
-                <span class="text-xl font-bold text-gray-800">${d.pinyin}</span>
-                <span class="inline-block text-xs font-semibold text-[#8C1D24] bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">${d.structure}</span>
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+              GIẢI MÃ HÁN TỰ BẰNG <br>
+              <span class="text-gold-gradient font-cjk">CHIẾT TỰ & TƯỢNG HÌNH</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-stone-300 font-light leading-relaxed max-w-xl">
+              Không chép phạt cơ học. Không học vẹt rời rạc. Đánh thức tư duy thị giác 3.000 năm của nền văn minh chữ Hán qua bộ sách bài tập đầu tiên tại Việt Nam chuẩn hóa kết cấu IDC quốc tế.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <a href="#signature" data-sc-magnet="0.25" class="px-8 py-4 rounded-xl bg-gradient-to-r from-gold via-gold-bright to-gold text-lacquer font-bold text-sm tracking-wider uppercase shadow-xl shadow-gold/20 hover:scale-105 transition-all">
+                Trải Nghiệm Tách Chữ ↓
+              </a>
+              <button onclick="openFlipModal()" class="px-7 py-4 rounded-xl bg-stone-900/90 border border-gold/30 hover:border-gold text-stone-200 font-medium text-sm flex items-center gap-3 transition-all hover:bg-stone-800">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <span>Mở Sách Lật 3D</span>
+              </button>
+            </div>
+
+            <!-- Highlights stats bar -->
+            <div class="grid grid-cols-3 gap-4 pt-6 border-t border-stone-800/80">
+              <div>
+                <div class="font-display text-2xl font-bold text-gold">282</div>
+                <div class="text-xs text-stone-400">Từ vựng bóc tách 100%</div>
               </div>
-              <div class="text-sm font-semibold text-gray-700 mt-1">${d.meaning}</div>
-              <div id="lab-quiz-status" class="text-xs text-[#8C1D24] font-medium mt-1.5 h-4 transition-all">
-                Nét đỏ son là <strong>Bộ thủ</strong> cấu thành chữ. Bấm "Tập Viết" để vẽ thử!
+              <div>
+                <div class="font-display text-2xl font-bold text-cinnabar-glow">214</div>
+                <div class="text-xs text-stone-400">Bộ thủ chuẩn học thuật</div>
               </div>
+              <div>
+                <div class="font-display text-2xl font-bold text-gold">100%</div>
+                <div class="text-xs text-stone-400">Tranh Cổ phong AI 1:1</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plane 2: Dimensional Book Subject with 3D Float -->
+          <div class="lg:col-span-5 flex justify-center relative hero-space" data-sc-tilt="12">
+            <div class="relative w-full max-w-[380px] group">
+              <!-- Aura Ambient Glow -->
+              <div class="absolute -inset-4 bg-gradient-to-tr from-cinnabar/30 via-gold/20 to-transparent rounded-3xl blur-2xl opacity-70 group-hover:opacity-100 transition-opacity"></div>
+              
+              <!-- 3D Book Mockup PNG Transparent -->
+              <img src="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp" 
+                   alt="Bìa Sách Chiết Tự Hán Tự 1" 
+                   class="w-full h-auto book-shadow relative z-10 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:-translate-y-2">
+              
+              <!-- Badge "Tập 1 - 12 Bài HSK 1+" -->
+              <div class="absolute -bottom-4 -left-4 z-20 px-4 py-2 rounded-xl bg-lacquer/90 border border-gold/40 text-gold-bright text-xs font-semibold backdrop-blur-md shadow-xl flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-gold"></span>
+                Tập 1 · Trọn vẹn 12 Bài khóa
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 2: TENSION & THE BROKEN PARADIGM (ScrollCraft: pin with cues)
+         3 Nhịp cuộn vạch trần nỗi đau học vẹt
+         ========================================================================== -->
+    <section data-sc-act="pin" data-sc-span="3.2" data-sc-drift="#141110" class="relative min-h-screen flex items-center justify-center">
+      <div data-sc-stage class="max-w-4xl mx-auto px-6 text-center space-y-12">
+        
+        <!-- Beat 1: The Situation -->
+        <div data-sc-cue="0 0.35 0" class="space-y-4">
+          <span class="text-cinnabar-glow font-mono text-xs uppercase tracking-widest">[ THỰC TRẠNG PHỔ BIẾN ]</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-stone-100 leading-snug">
+            Mỗi năm, hàng vạn người bỏ cuộc với tiếng Trung <br class="hidden sm:block">
+            chỉ vì một lý do: <span class="text-cinnabar-glow">"Chữ Hán quá khó nhớ!"</span>
+          </h2>
+          <p class="text-stone-400 text-lg max-w-2xl mx-auto">
+            Học viên phải chép phạt cơ học 50 đến 100 lần một chữ, còng lưng ghi nhớ những nét gạch rời rạc không logic.
+          </p>
+        </div>
+
+        <!-- Beat 2: The Actual Cost -->
+        <div data-sc-cue="0.30 0.68" class="space-y-4">
+          <span class="text-gold font-mono text-xs uppercase tracking-widest">[ NGUYÊN NHÂN CỐT LÕI ]</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-stone-100 leading-snug">
+            Não bộ con người sinh ra để nhớ <span class="text-gold-gradient">HÌNH ẢNH & Ý NGHĨA</span>, <br class="hidden sm:block">
+            chứ không phải những nét gạch trừu tượng vô hồn.
+          </h2>
+          <p class="text-stone-400 text-lg max-w-2xl mx-auto">
+            Khi học vẹt không có gốc rễ, học xong Bài 6 thì quên sạch Bài 2. Tỷ lệ học viên rớt lại sau 3 tháng lên tới 60%.
+          </p>
+        </div>
+
+        <!-- Beat 3: The Turn -->
+        <div data-sc-cue="0.65 0.98" class="space-y-4">
+          <span class="text-gold-bright font-mono text-xs uppercase tracking-widest">[ LỜI GIẢI MÃ NGUỒN ]</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white leading-snug">
+            Chiết Tự không phải mẹo vặt. <br class="hidden sm:block">
+            Đó là <span class="text-gold-gradient">mã nguồn 3.000 năm</span> của văn minh chữ Hán.
+          </h2>
+          <p class="text-stone-300 text-lg max-w-2xl mx-auto">
+            Khi bóc tách một chữ thành các bộ phận mang nghĩa và gắn với câu chuyện tượng hình, chữ Hán lập tức "sống dậy" và in sâu vĩnh viễn vào trí nhớ dài hạn.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 3: SIGNATURE MOVE (Scroll-Craft Core: The Hanzi Deconstruction Engine)
+         Trải nghiệm bóc tách giải phẫu chữ 你 & 好 tương tác
+         ========================================================================== -->
+    <section id="signature" data-sc-act="flow" data-sc-drift="#120E0D" class="py-24 relative overflow-hidden border-y border-gold/15">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center space-y-4 mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-semibold tracking-widest uppercase">
+            ✦ Signature Move Độc Bản
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-bold">
+            Trực Quan Hóa Bóc Tách: <span class="text-gold-gradient">Từ Nét Chữ Đến Câu Chuyện</span>
+          </h2>
+          <p class="text-stone-400 max-w-2xl mx-auto text-base sm:text-lg">
+            Hãy quan sát cách từ <strong class="text-gold font-cjk">【 你 】</strong> (Nǐ - Bạn) được giải phẫu theo cấu trúc quốc tế và chuyển hóa thành bức tranh tượng hình:
+          </p>
+        </div>
+
+        <!-- Interactive Deconstruction Box -->
+        <div class="oriental-card p-8 sm:p-12 max-w-4xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            
+            <!-- Left: Animated Hanzi Character -->
+            <div class="md:col-span-5 text-center space-y-4">
+              <div id="hanzi-target" class="cursor-pointer group relative" title="Nhấn để xem bút thuận viết chữ">
+                <div class="absolute inset-0 flex items-center justify-center text-stone-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  (Nhấp chuột để xem vẽ nét)
+                </div>
+              </div>
+              <div class="flex justify-center gap-3">
+                <button onclick="animateChar('你')" class="px-4 py-1.5 rounded-lg bg-cinnabar/20 border border-cinnabar/40 text-cinnabar-glow hover:bg-cinnabar hover:text-white text-xs font-semibold transition-all">
+                  ▶ Viết chữ 【 你 】
+                </button>
+                <button onclick="animateChar('好')" class="px-4 py-1.5 rounded-lg bg-gold/20 border border-gold/40 text-gold-bright hover:bg-gold hover:text-lacquer text-xs font-semibold transition-all">
+                  ▶ Viết chữ 【 好 】
+                </button>
+              </div>
+              <div class="text-xs text-stone-400">Thứ tự nét chuẩn XieHanzi & Bút lông mượt mà</div>
+              <div class="pt-2"><a href="bang_tuan_hoan_chiet_tu.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-gold via-gold-bright to-gold text-lacquer font-bold text-xs uppercase tracking-wider shadow-lg shadow-gold/20 hover:scale-105 transition-all">🧪 Mở Bảng Tuần Hoàn 214 Bộ Thủ & Ghép Chữ ➔</a></div>
+            </div>
+
+            <!-- Right: Anatomical Breakdown -->
+            <div class="md:col-span-7 space-y-6">
+              
+              <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-800 space-y-2">
+                <div class="flex items-center justify-between text-xs font-mono text-stone-400">
+                  <span>KẾT CẤU HÌNH THỂ (IDC)</span>
+                  <span class="text-gold font-bold">Trái - Phải (⿰)</span>
+                </div>
+                <div class="text-xl font-bold text-stone-100 flex items-center gap-3">
+                  <span class="text-3xl text-gold font-cjk">你</span>
+                  <span class="text-stone-500">=</span>
+                  <span class="px-2.5 py-1 rounded bg-cinnabar/20 text-cinnabar-glow font-cjk">亻 (Nhân đứng)</span>
+                  <span class="text-stone-500">+</span>
+                  <span class="px-2.5 py-1 rounded bg-gold/20 text-gold font-cjk">尔 (Nhĩ = 冖 + 小)</span>
+                </div>
+              </div>
+
+              <!-- Chiết tự story box -->
+              <div class="p-5 rounded-xl bg-cinnabar/10 border border-cinnabar/30 space-y-3">
+                <div class="flex items-center gap-2 text-xs font-bold text-cinnabar-glow tracking-wider uppercase">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  Câu Chuyện Tượng Hình Thuận Chiều Ghi Nhớ
+                </div>
+                <p class="text-sm sm:text-base text-stone-200 leading-relaxed italic">
+                  "Con người đứng bên cạnh (<strong class="text-gold font-cjk">亻</strong>), chính là người bạn thời thơ ấu cùng ta quấn dải khăn lụa (<strong class="text-gold font-cjk">冖</strong>) chơi đùa từ thuở nhỏ (<strong class="text-gold font-cjk">小</strong>) ➔ <span class="text-cinnabar-glow font-bold">BẠN, ANH, CẬU (你)</span>."
+                </p>
+              </div>
+
+              <!-- Illustration thumbnail -->
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-stone-950/60 border border-stone-800">
+                <img src="anh_minh_hoa/Bai_1/anh 1.webp" alt="Minh họa chữ Bạn 你" class="w-16 h-16 rounded-lg object-cover border border-gold/30">
+                <div class="text-xs space-y-1">
+                  <div class="font-bold text-stone-200">Tranh minh họa Cổ phong độc bản (Bài 1)</div>
+                  <div class="text-stone-400">Hình ảnh 2 đứa trẻ quàng khăn lụa nô đùa trong nắng sớm sân đình.</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 4: 4 TRỤ CỘT ĐỘT PHÁ CỦA SÁCH (ScrollCraft: flow + reveal + tilt)
+         ========================================================================== -->
+    <section id="pillars" data-sc-act="flow" data-sc-drift="#0C0A09" class="py-24 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        
+        <div class="text-center space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinnabar/10 border border-cinnabar/30 text-cinnabar-glow text-xs font-semibold tracking-widest uppercase">
+            ✦ Hệ Thống Phương Pháp Luận
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-bold">
+            4 Cột Trụ Khẳng Định <span class="text-gold-gradient">Vị Thế Độc Quyền</span>
+          </h2>
+          <p class="text-stone-400 max-w-2xl mx-auto text-base">
+            Không một cuốn vở bài tập tiếng Trung nào trên thị trường hiện nay có được sự đồng bộ và chuẩn xác về mặt sư phạm như bộ sách này:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Pillar 1 -->
+          <div class="oriental-card p-6 space-y-4" data-sc-tilt="8">
+            <div class="w-12 h-12 rounded-xl bg-gold/15 border border-gold/30 text-gold flex items-center justify-center font-display text-xl font-bold">
+              01
+            </div>
+            <h3 class="font-display text-lg font-bold text-stone-100">Chuẩn Hóa Kết Cấu IDC Quốc Tế</h3>
+            <p class="text-sm text-stone-400 leading-relaxed">
+              Mỗi chữ Hán đều được phân loại hình học chính xác (Trái-Phải, Trên-Dưới, Bao quanh, Giao nét), giúp người học định hình không gian chữ hoàn hảo.
+            </p>
+            <div class="text-xs text-gold font-mono pt-2 border-t border-stone-800">⿱ Trên Dưới · ⿰ Trái Phải · ⿴ Bao</div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="oriental-card p-6 space-y-4" data-sc-tilt="8">
+            <div class="w-12 h-12 rounded-xl bg-cinnabar/15 border border-cinnabar/30 text-cinnabar-glow flex items-center justify-center font-display text-xl font-bold">
+              02
+            </div>
+            <h3 class="font-display text-lg font-bold text-stone-100">Quy Tắc Thuận Chiều Bút Thuận</h3>
+            <p class="text-sm text-stone-400 leading-relaxed">
+              Vẽ từ đâu - Kể chuyện từ đó! Nếu chữ kết cấu Trên-Dưới, câu chuyện liên tưởng bắt buộc giới thiệu bộ trên trước rồi mới tới bộ dưới.
+            </p>
+            <div class="text-xs text-cinnabar-glow font-mono pt-2 border-t border-stone-800">Ví dụ: 要 = Tây 西 trước, Nữ 女 sau</div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="oriental-card p-6 space-y-4" data-sc-tilt="8">
+            <div class="w-12 h-12 rounded-xl bg-gold/15 border border-gold/30 text-gold flex items-center justify-center font-display text-xl font-bold">
+              03
+            </div>
+            <h3 class="font-display text-lg font-bold text-stone-100">100% Tranh Cổ Phong Độc Bản</h3>
+            <p class="text-sm text-stone-400 leading-relaxed">
+              Tất cả 282 từ vựng từ Bài 1 đến Bài 12 đều sở hữu tranh minh họa Cổ phong Thangka/Thủy mặc tỉ lệ 1:1, khắc sâu ấn tượng thị giác tuyệt đối.
+            </p>
+            <div class="text-xs text-gold font-mono pt-2 border-t border-stone-800">282 Tác phẩm nghệ thuật vẽ riêng</div>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="oriental-card p-6 space-y-4" data-sc-tilt="8">
+            <div class="w-12 h-12 rounded-xl bg-cinnabar/15 border border-cinnabar/30 text-cinnabar-glow flex items-center justify-center font-display text-xl font-bold">
+              04
+            </div>
+            <h3 class="font-display text-lg font-bold text-stone-100">Ma Trận Thử Thách Não Bộ 4 Trong 1</h3>
+            <p class="text-sm text-stone-400 leading-relaxed">
+              Không chỉ có lưới ô Mễ tập viết, mỗi bài đều có: Ma trận tìm từ nhanh 4x4, Bắt bệnh nét chữ sai, và Điền khuyết ngữ cảnh bài khóa HSK 1+.
+            </p>
+            <div class="text-xs text-cinnabar-glow font-mono pt-2 border-t border-stone-800">Phản xạ toàn diện 4 kỹ năng</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 5: 3D BOOK INTERIOR SPREAD (ScrollCraft: pan - Horizontal Rail)
+         Cuộn dọc để trượt ngang qua các trang ruột sách in màu
+         ========================================================================== -->
+    <section id="interior" data-sc-act="pan" data-sc-span="3.5" data-sc-drift="#141110" class="relative min-h-screen flex items-center overflow-hidden border-t border-gold/15">
+      <div data-sc-stage class="w-full h-full flex flex-col justify-center">
+        
+        <div class="max-w-7xl mx-auto px-6 mb-8 w-full flex items-end justify-between">
+          <div class="space-y-2">
+            <span class="text-gold font-mono text-xs uppercase tracking-widest">[ TRƯNG BÀY NỘI THẤT SÁCH ]</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold">
+              Thiết Kế Thực Tế: <span class="text-gold-gradient">Tỉ Mỉ Đến Từng Milimet</span>
+            </h2>
+          </div>
+          <div class="text-xs text-stone-400 hidden sm:block">Cuộn chuột để lướt ngang trang sách →</div>
+        </div>
+
+        <!-- Horizontal Rail -->
+        <div class="flex gap-8 px-8 overflow-x-auto no-scrollbar scroll-smooth w-full" data-sc-pan="0.08">
+          
+          <!-- Item 1: Studio Mockup -->
+          <article class="flex-shrink-0 w-[340px] sm:w-[420px] oriental-card p-4 space-y-3" data-sc-tilt="6">
+            <img src="anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Studio_Mockup.webp" alt="Bìa sách Studio Mockup" class="w-full h-[260px] object-cover rounded-xl border border-gold/20">
+            <div class="p-2 space-y-1">
+              <span class="text-[10px] font-mono text-gold uppercase">BÌA SÁCH CHUẨN XUẤT BẢN</span>
+              <h3 class="font-bold text-stone-100 text-base">Bìa Ép Kim Cổ Phong Sang Trọng</h3>
+              <p class="text-xs text-stone-400">Thiết kế theo tỷ lệ vàng sách xuất bản chuyên nghiệp, màu đỏ Chu Sa phong thủy đại cát.</p>
+            </div>
+          </article>
+
+          <!-- Item 2: Ruột trang 1 -->
+          <article class="flex-shrink-0 w-[340px] sm:w-[420px] oriental-card p-4 space-y-3" data-sc-tilt="6">
+            <img src="anh_minh_hoa/Ruot_Sach/trang_1_khoi_dong_chiet_tu.webp" alt="Trang 1 Khởi động chiết tự" class="w-full h-[260px] object-cover rounded-xl border border-gold/20">
+            <div class="p-2 space-y-1">
+              <span class="text-[10px] font-mono text-cinnabar-glow uppercase">TRANG 1 · KHỞI ĐỘNG BỘ THỦ</span>
+              <h3 class="font-bold text-stone-100 text-base">Giải Phẫu 7 Chữ Hán Cốt Lõi</h3>
+              <p class="text-xs text-stone-400">Trình bày khoa học: Bộ thủ cấu thành, câu chuyện tượng hình, ví dụ câu ngữ cảnh và ô Mễ chuẩn.</p>
+            </div>
+          </article>
+
+          <!-- Item 3: Ruột trang 2 -->
+          <article class="flex-shrink-0 w-[340px] sm:w-[420px] oriental-card p-4 space-y-3" data-sc-tilt="6">
+            <img src="anh_minh_hoa/Ruot_Sach/trang_2_toan_hoc_bat_benh.webp" alt="Trang 2 Bắt bệnh nét chữ" class="w-full h-[260px] object-cover rounded-xl border border-gold/20">
+            <div class="p-2 space-y-1">
+              <span class="text-[10px] font-mono text-gold uppercase">TRANG 2 · TOÁN HỌC & BẮT BỆNH</span>
+              <h3 class="font-bold text-stone-100 text-base">Phương Trình Ghép Chữ & Bắt Bệnh Sai</h3>
+              <p class="text-xs text-stone-400">Phép cộng logic các bộ thủ thành chữ mới và bảng cảnh báo các lỗi sai người Việt hay mắc.</p>
+            </div>
+          </article>
+
+          <!-- Item 4: Ruột trang 3 -->
+          <article class="flex-shrink-0 w-[340px] sm:w-[420px] oriental-card p-4 space-y-3" data-sc-tilt="6">
+            <img src="anh_minh_hoa/Ruot_Sach/trang_3_dien_tu_ma_tran.webp" alt="Trang 3 Ma trận tìm từ" class="w-full h-[260px] object-cover rounded-xl border border-gold/20">
+            <div class="p-2 space-y-1">
+              <span class="text-[10px] font-mono text-cinnabar-glow uppercase">TRANG 3 · THỬ THÁCH NÃO BỘ</span>
+              <h3 class="font-bold text-stone-100 text-base">Ma Trận Tìm Từ Nhanh 4x4 Grid</h3>
+              <p class="text-xs text-stone-400">Trò chơi vận động thị giác giúp học viên hào hứng, củng cố phản xạ nhận diện mặt chữ lập tức.</p>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 6: LỘ TRÌNH 12 BÀI HỌC BÀI BẢN
+         ========================================================================== -->
+    <section id="roadmap" data-sc-act="flow" data-sc-drift="#0C0A09" class="py-24 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <div class="text-center space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-semibold tracking-widest uppercase">
+            ✦ Lộ Trình HSK 1+ Tiêu Chuẩn
+          </div>
+          <h2 class="font-display text-3xl sm:text-5xl font-bold">
+            Trọn Bộ 12 Bài Khóa: <span class="text-gold-gradient">Xây Móng Vững Chắc</span>
+          </h2>
+          <p class="text-stone-400 max-w-2xl mx-auto text-base">
+            Mỗi bài học là một chủ đề thực tiễn trong đời sống, bóc tách đầy đủ từ vựng kèm tranh bìa chủ đề phong cách Cổ phong:
+          </p>
+        </div>
+
+        <!-- 12 Lessons Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          
+          <!-- Bài 1 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 1.webp" alt="Bài 1" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 1: 你好 ！</div>
+            <div class="text-[10px] text-stone-400">7 Từ vựng · Xin chào</div>
+          </div>
+
+          <!-- Bài 2 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 2.webp" alt="Bài 2" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 2: 你叫什么名字？</div>
+            <div class="text-[10px] text-stone-400">13 Từ vựng · Tên tuổi</div>
+          </div>
+
+          <!-- Bài 3 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 3.webp" alt="Bài 3" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 3: 很高兴认识你</div>
+            <div class="text-[10px] text-stone-400">18 Từ vựng · Làm quen</div>
+          </div>
+
+          <!-- Bài 4 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 4.webp" alt="Bài 4" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 4: 你去哪儿？</div>
+            <div class="text-[10px] text-stone-400">33 Từ vựng · Phương hướng</div>
+          </div>
+
+          <!-- Bài 5 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 5.webp" alt="Bài 5" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 5: 你家有几口人？</div>
+            <div class="text-[10px] text-stone-400">36 Từ vựng · Gia đình</div>
+          </div>
+
+          <!-- Bài 6 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 6.webp" alt="Bài 6" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 6: 你要吃什么？</div>
+            <div class="text-[10px] text-stone-400">20 Từ vựng · Ẩm thực</div>
+          </div>
+
+          <!-- Bài 7 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 7.webp" alt="Bài 7" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 7: 中国银行在哪儿？</div>
+            <div class="text-[10px] text-stone-400">24 Từ vựng · Vị trí</div>
+          </div>
+
+          <!-- Bài 8 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 8.webp" alt="Bài 8" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 8: 今天是几月几号？</div>
+            <div class="text-[10px] text-stone-400">22 Từ vựng · Thời gian</div>
+          </div>
+
+          <!-- Bài 9 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 9.webp" alt="Bài 9" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 9: 今天你有什么安排？</div>
+            <div class="text-[10px] text-stone-400">37 Từ vựng · Kế hoạch</div>
+          </div>
+
+          <!-- Bài 10 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 10.webp" alt="Bài 10" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 10: 我在学校食堂吃饭</div>
+            <div class="text-[10px] text-stone-400">27 Từ vựng · Trường học</div>
+          </div>
+
+          <!-- Bài 11 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 11.webp" alt="Bài 11" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 11: 你想买什么衣服？</div>
+            <div class="text-[10px] text-stone-400">26 Từ vựng · Mua sắm</div>
+          </div>
+
+          <!-- Bài 12 -->
+          <div class="oriental-card p-3 space-y-2 group hover:border-cinnabar transition-all">
+            <img src="anh_minh_hoa/Bia Bai Hoc/Bai 12.webp" alt="Bài 12" class="w-full h-28 object-cover rounded-lg group-hover:scale-105 transition-transform">
+            <div class="text-[11px] font-bold text-gold">Bài 12: 大学生可以打工吗？</div>
+            <div class="text-[10px] text-stone-400">19 Từ vựng · Làm thêm</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         ACT 7: PHÁP LÝ & BẢO HỘ TÁC QUYỀN
+         ========================================================================== -->
+    <section id="authority" data-sc-act="flow" data-sc-drift="#141110" class="py-20 border-t border-gold/15 bg-stone-950/60">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="oriental-card p-8 sm:p-10 border-gold/30 space-y-6">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gold/20 border border-gold/40 text-gold flex items-center justify-center font-serif text-2xl">
+              ⚖
+            </div>
+            <div>
+              <h3 class="font-display text-xl font-bold text-stone-100">Bảo Hộ Quyền Tác Giả & Tính Pháp Lý Vững Chắc</h3>
+              <p class="text-xs text-stone-400">Theo Luật Sở hữu trí tuệ Việt Nam 2005 (sửa đổi, bổ sung 2022)</p>
             </div>
           </div>
           
-          <!-- Right: Scientific Radical Breakdown & Mnemonic Story -->
-          <div class="lg:col-span-7">
-            <h4 class="font-serifcjk text-lg font-bold text-gray-900 mb-3 flex items-center">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#8C1D24] mr-2"></span>
-              Bóc Tách Bộ Thủ Khoa Học & Logic Tạo Chữ:
-            </h4>
-            <div class="space-y-2.5 mb-5">
-              ${d.parts.map(p => `
-                <div class="flex items-start bg-[#FAF8F5] p-3 rounded-xl border border-gray-200">
-                  <span class="font-serifcjk font-bold text-sm text-[#8C1D24] min-w-[100px] mr-2">${p.radical}:</span>
-                  <span class="text-xs sm:text-sm text-gray-600 leading-relaxed">${p.desc}</span>
-                </div>
-              `).join('')}
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-stone-300">
+            <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+              <div class="text-gold font-bold">1. Tác Phẩm Khoa Học</div>
+              <p>Bảo hộ toàn vẹn hệ thống bóc tách chiết tự hình học IDC và quy tắc thuận chiều tư duy ghi nhớ.</p>
             </div>
-            <div class="bg-red-50/70 p-4 rounded-xl border border-red-100">
-              <span class="text-xs font-bold text-[#8C1D24] uppercase tracking-wider block mb-1">💡 Câu Chuyện Ghi Nhớ Tượng Hình Độc Quyền:</span>
-              <p class="text-sm text-gray-700 font-medium leading-relaxed">${d.story}</p>
+            <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+              <div class="text-gold font-bold">2. Tác Phẩm Mỹ Thuật Ứng Dụng</div>
+              <p>Bảo hộ 100% bộ tranh minh họa Cổ phong Thangka/Thủy mặc sáng tác độc quyền cho 282 từ vựng.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-black/40 border border-stone-800 space-y-2">
+              <div class="text-gold font-bold">3. Bộ Đề Thi & Bài Tập Thực Hành</div>
+              <p>Bảo hộ cấu trúc 4 dạng bài tập rèn luyện não bộ và ma trận tìm từ vựng 4x4 độc bản.</p>
             </div>
           </div>
         </div>
-      `;
+      </div>
+    </section>
 
-      // Render HanziWriter animation
-      renderHanziCharacter(d.char);
-    }
 
-        // 5. Interactive Cover View Switcher Logic (100% UNIFIED & CONSISTENT)
-    window.coverViews = {
-      mockup: {
-        src: 'anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Mockup_Transparent.webp',
-        badge: '🌟 Bản Dựng Phối Cảnh 3D · Tác Giả Vũ Kim Anh (武金英)',
-        desc: 'Bản dựng 3D chuẩn xác tỷ lệ A4, vòm tròn Thiên Đàn giữ trọn nét thanh tú trong không gian 3 chiều.'
-      },
-      studio: {
-        src: 'anh_minh_hoa/Bia_Chinh/Bia_Sach_Chiet_Tu_1_Studio_Mockup.webp',
-        badge: '📸 Phối Cảnh Studio Bàn Làm Việc (Đứng & Nằm)',
-        desc: 'Bộ phối cảnh đồng bộ: cuốn đứng thể hiện mặt tiền và gáy sách, cuốn nằm thể hiện độ dày và bìa sau.'
-      },
-      spread: {
-        src: 'anh_minh_hoa/Bia_Chinh/Bia_Sach_Spread_Mockup.webp',
-        badge: '🖼️ Bìa Trải Phẳng Toàn Cảnh (Bìa Sau + Gáy 12mm + Bìa Trước)',
-        desc: 'Quy chuẩn trải rộng toàn bộ bìa sách liền mạch khổ in offset 300 DPI thương mại.'
-      },
-      front: {
-        src: 'anh_minh_hoa/Bia_Sach/bia_truoc_chuan.webp',
-        badge: '📖 Mặt Bìa Trước: "Sách Chiết Tự I" · Thiên Đàn & Mai Đỏ',
-        desc: 'Họa tiết Điện Kì Niên trong khuôn tròn kinh điển, hoa mai thanh nhã và con dấu triện son [武金英].'
-      },
-      back: {
-        src: 'anh_minh_hoa/Bia_Sach/bia_sau_chuan.webp',
-        badge: '📝 Mặt Bìa Sau: Phương Pháp Đột Phá & Mã Vạch ISBN',
-        desc: 'Khung kem trang nhã tóm lược 3 cam kết phương pháp, logo Tủ sách Đào tạo Độc quyền và ISBN.'
-      },
-      spine: {
-        src: 'anh_minh_hoa/Bia_Sach/gay_sach_chuan.webp',
-        badge: '📏 Gáy Sách: Độ Dày Chuẩn 12mm Cho 185 Trang Ruột',
-        desc: 'Gáy sách đỏ son với tên sách xoay dọc uy nghi và tên tác giả Vũ Kim Anh (武金英).'
-      }
-    };
+    <!-- ==========================================================================
+         ACT 8: COMMITMENT & CTA (ScrollCraft: pin + spotlight + magnet)
+         ========================================================================== -->
+    <section id="download" data-sc-act="pin" data-sc-span="1.3" data-sc-drift="#0C0A09" class="relative min-h-screen flex items-center justify-center">
+      <div data-sc-stage data-sc-spotlight class="max-w-4xl mx-auto px-6 text-center space-y-8">
+        
+        <div class="space-y-4">
+          <span class="text-cinnabar-glow font-mono text-xs uppercase tracking-widest">[ SẴN SÀNG TRIỂN KHAI ]</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+            Nâng Tầm Giảng Dạy Tiếng Trung <br>
+            Với <span class="text-gold-gradient">Chiết Tự Hán Tự 1</span>
+          </h2>
+          <p class="text-stone-300 text-base sm:text-lg max-w-xl mx-auto font-light">
+            Nhận ngay bản đọc thử PDF hoàn chỉnh trọn bộ 12 bài học hoặc đăng ký áp dụng giáo trình độc quyền cho trung tâm / trường học của bạn.
+          </p>
+        </div>
 
-    
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <!-- CTA 1: Download Sample PDF -->
+          <a href="../Tai_Lieu_Va_Bao_Cao/Sach_Bai_Tap_Chiet_Tu_Tron_Bo_12_Bai_NANG_CAP.docx" 
+             data-sc-magnet="0.25" 
+             class="px-8 py-4 rounded-xl bg-gradient-to-r from-cinnabar via-cinnabar-glow to-cinnabar text-white font-bold text-sm tracking-wider uppercase shadow-2xl shadow-cinnabar/40 hover:scale-105 transition-all border border-cinnabar-glow/30 flex items-center gap-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Tải Sách Trọn Bộ (Word/PDF)</span>
+          </a>
 
-    // ==========================================
-    // REPO ANIMATION 1: ATMOSPHERIC SAKURA & GOLDEN DUST CANVAS
-    // ==========================================
-    (function initSakuraParticles() {
-      const canvas = document.getElementById('sakura-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let animId = null;
-      let isVisible = true;
-      let w = 0, h = 0;
+          <!-- CTA 2: Open 3D Flipbook -->
+          <button onclick="openFlipModal()" 
+                  data-sc-magnet="0.25" 
+                  class="px-8 py-4 rounded-xl bg-stone-900 border border-gold/40 text-gold-bright hover:border-gold font-bold text-sm tracking-wider uppercase transition-all hover:bg-stone-800 flex items-center gap-3 shadow-xl">
+            <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <span>Đọc Thử Sách 3D Ngay</span>
+          </button>
+        </div>
 
-      function resize() {
-        const rect = canvas.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = canvas.width = rect.width * dpr;
-        h = canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-      }
+        <footer class="pt-12 text-xs text-stone-500 border-t border-stone-800/80 max-w-lg mx-auto">
+          © 2026 Đề án Giáo trình Chiết Tự Hán Ngữ 1 · Thiết kế với chuẩn nghệ thuật Scroll-Craft. Mọi quyền được bảo lưu.
+        </footer>
 
-      const count = window.innerWidth < 768 ? 20 : 36;
-      const particles = [];
+      </div>
+    </section>
 
-      class SakuraPetal {
-        constructor() {
-          this.reset(true);
-        }
-        reset(initial = false) {
-          const rect = canvas.getBoundingClientRect();
-          this.x = Math.random() * rect.width;
-          this.y = initial ? Math.random() * rect.height : -15;
-          this.size = Math.random() * 8 + 6;
-          this.speedY = Math.random() * 0.7 + 0.35;
-          this.speedX = Math.random() * 0.4 - 0.15;
-          this.rotation = Math.random() * Math.PI * 2;
-          this.rotSpeed = (Math.random() - 0.5) * 0.02;
-          this.flip = Math.random() * Math.PI;
-          this.flipSpeed = Math.random() * 0.03 + 0.01;
-          this.opacity = Math.random() * 0.35 + 0.35;
-          this.isGold = Math.random() < 0.22;
-        }
-        update() {
-          const rect = canvas.getBoundingClientRect();
-          this.y += this.speedY;
-          this.x += Math.sin(this.y * 0.008) * 0.5 + this.speedX;
-          this.rotation += this.rotSpeed;
-          this.flip += this.flipSpeed;
+  </main>
 
-          if (this.y > rect.height + 20 || this.x > rect.width + 20 || this.x < -20) {
-            this.reset(false);
-          }
-        }
-        draw(c) {
-          c.save();
-          c.translate(this.x, this.y);
-          c.rotate(this.rotation);
-          c.scale(Math.cos(this.flip), 1);
 
-          if (this.isGold) {
-            c.beginPath();
-            c.arc(0, 0, this.size * 0.22, 0, Math.PI * 2);
-            c.fillStyle = `rgba(218, 165, 32, ${this.opacity * 0.8})`;
-            c.shadowColor = 'rgba(218, 165, 32, 0.4)';
-            c.shadowBlur = 4;
-            c.fill();
-          } else {
-            // Authentic Botanical Sakura Petal (Cánh hoa đào Đông phương thực thụ - KHÔNG hình trái tim)
-            const h = this.size * 1.5;
-            const w = this.size * 0.85;
-            c.beginPath();
-            c.moveTo(0, 0); // Cuống cánh hoa
-            // Đường cong cánh hoa bên trái
-            c.bezierCurveTo(-w * 0.55, -h * 0.4, -w * 0.5, -h * 0.8, -w * 0.2, -h * 0.98);
-            // Vết khía chữ V rất nhẹ đặc trưng ở đỉnh cánh hoa anh đào
-            c.quadraticCurveTo(-w * 0.05, -h * 0.93, 0, -h * 0.90);
-            c.quadraticCurveTo(w * 0.05, -h * 0.93, w * 0.2, -h * 0.98);
-            // Đường cong cánh hoa bên phải quay về cuống
-            c.bezierCurveTo(w * 0.5, -h * 0.8, w * 0.55, -h * 0.4, 0, 0);
-            c.closePath();
+  <!-- ==========================================================================
+       MODAL XEM TRƯỚC SÁCH LẬT 3D (PageFlip)
+       ========================================================================== -->
+  <div id="flipbook-modal" class="fixed inset-0 z-50 bg-black/90 p-4 sm:p-8 flex flex-col items-center justify-center">
+    <div class="w-full max-w-4xl flex justify-between items-center mb-4">
+      <div class="text-gold font-display font-bold text-base sm:text-lg">Trải Nghiệm Lật Sách Chiết Tự 3D</div>
+      <button onclick="closeFlipModal()" class="px-4 py-2 rounded-lg bg-stone-800 text-stone-200 hover:text-white text-xs font-bold uppercase tracking-wider">
+        ✕ Đóng Lại
+      </button>
+    </div>
+    <div class="w-full max-w-4xl h-[70vh] flex items-center justify-center bg-stone-900/50 rounded-2xl border border-gold/20 overflow-hidden p-4">
+      <div id="flipbook-container" class="w-full h-full flex items-center justify-center">
+        <!-- Flipbook image pages -->
+        <img src="anh_minh_hoa/Ruot_Sach/trang_1_khoi_dong_chiet_tu.webp" class="max-h-full object-contain rounded-lg shadow-2xl" alt="Trang 1">
+      </div>
+    </div>
+  </div>
 
-            // Chuyển sắc cánh hoa: trắng phớt hồng ở gốc -> hồng phấn hoa đào dịu dàng ở đỉnh
-            const grad = c.createLinearGradient(0, 0, 0, -h);
-            grad.addColorStop(0, `rgba(255, 245, 247, ${this.opacity * 0.65})`);
-            grad.addColorStop(0.4, `rgba(248, 195, 208, ${this.opacity * 0.8})`);
-            grad.addColorStop(1, `rgba(235, 125, 145, ${this.opacity})`);
-            c.fillStyle = grad;
-            c.fill();
 
-            // Gân cánh hoa mảnh mờ tự nhiên
-            c.beginPath();
-            c.moveTo(0, 0);
-            c.quadraticCurveTo(w * 0.04, -h * 0.45, 0, -h * 0.72);
-            c.strokeStyle = `rgba(225, 115, 135, ${this.opacity * 0.3})`;
-            c.lineWidth = 0.6;
-            c.stroke();
-          }
-          c.restore();
-        }
-      }
-
-      resize();
-      window.addEventListener('resize', resize);
-      for (let i = 0; i < count; i++) particles.push(new SakuraPetal());
-
-      const hero = document.getElementById('tong-quan');
-      if (hero && 'IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            isVisible = e.isIntersecting;
-            if (isVisible && !animId) loop();
-          });
-        }, { threshold: 0.05 });
-        obs.observe(hero);
-      }
-
-      function loop() {
-        if (!isVisible) { animId = null; return; }
-        const rect = canvas.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].update();
-          particles[i].draw(ctx);
-        }
-        animId = requestAnimationFrame(loop);
-      }
-      loop();
-    })();
-
-    // ==========================================
-    // REPO ANIMATION 2: NODLIK / STPAGEFLIP 3D BOOK
-    // ==========================================
-    let globalPageFlip = null;
-    const pageLabels = [
-      'Trang 1 / 5 · Bìa Bài 2',
-      'Trang 2 / 5 · Bộ Thủ & Chiết Tự',
-      'Trang 3 / 5 · Toán Hán Tự & Bắt Bệnh',
-      'Trang 4 / 5 · Điền Từ & Ma Trận',
-      'Trang 5 / 5 · Bìa Sau & Đăng Ký'
-    ];
-
-    function updateThumbActive(pageIdx) {
-      document.querySelectorAll('.book-thumb-btn').forEach((btn, idx) => {
-        if (idx === pageIdx) {
-          btn.classList.add('bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]');
-          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-        } else {
-          btn.classList.remove('bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]');
-          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
-        }
+  <!-- ==========================================================================
+       SCRIPTS: HANZI WRITER & SCROLLCRAFT MOUNT
+       ========================================================================== -->
+  <script src="js/scrollcraft.js"></script>
+  <script>
+    // 1. Initialize Hanzi Writer Animation
+    var writer = null;
+    function initHanzi(char) {
+      var target = document.getElementById('hanzi-target');
+      target.innerHTML = '';
+      writer = HanziWriter.create('hanzi-target', char, {
+        width: 180,
+        height: 180,
+        padding: 10,
+        showOutline: true,
+        strokeColor: '#C23B2A',
+        outlineColor: 'rgba(212, 175, 55, 0.25)',
+        drawingColor: '#FF4D3B',
+        strokeAnimationSpeed: 1.2,
+        delayBetweenStrokes: 120
       });
+      writer.animateCharacter();
     }
 
-    function initPageFlipBook() {
-      const bookEl = document.getElementById('book-lesson-2');
-      if (!bookEl || typeof St === 'undefined' || !St.PageFlip) return;
-
-      const isMobile = window.innerWidth < 768;
-      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
-      // Expanded base dimensions for larger book display area
-      const baseWidth = isMobile ? 340 : (isTablet ? 420 : 490);
-      const baseHeight = isMobile ? 480 : (isTablet ? 580 : 660);
-
-      globalPageFlip = new St.PageFlip(bookEl, {
-        width: baseWidth,
-        height: baseHeight,
-        size: 'stretch',
-        minWidth: 260,
-        maxWidth: 580,
-        minHeight: 360,
-        maxHeight: 780,
-        maxShadowOpacity: 0.5,
-        showCover: true,
-        usePortrait: true,
-        mobileScrollSupport: false,
-        flippingTime: 700,
-        showPageCorners: true
-      });
-
-      const pages = bookEl.querySelectorAll('.book-page');
-      globalPageFlip.loadFromHTML(pages);
-
-      const ind = document.getElementById('book-page-indicator');
-      const prevBtn = document.getElementById('book-btn-prev');
-      const nextBtn = document.getElementById('book-btn-next');
-      const zoomBtn = document.getElementById('book-btn-zoom');
-
-      globalPageFlip.on('flip', (e) => {
-        const cur = e.data;
-        if (ind) ind.textContent = pageLabels[cur] || `Trang ${cur + 1} / 5`;
-        updateThumbActive(cur);
-      });
-
-      if (prevBtn) prevBtn.onclick = () => globalPageFlip.flipPrev();
-      if (nextBtn) nextBtn.onclick = () => globalPageFlip.flipNext();
-      if (zoomBtn) {
-        zoomBtn.onclick = () => {
-          const cur = globalPageFlip ? globalPageFlip.getCurrentPageIndex() : 1;
-          if (cur === 0) {
-            openCoverLightboxCustom('anh_minh_hoa/Bia Bai Hoc/Bai 2.webp', 'Bìa Tranh Cổ Phong Bài 2: 你叫什么名字？');
-          } else if (cur === 1) {
-            openPageLightbox('trang_1');
-          } else if (cur === 2) {
-            openPageLightbox('trang_2');
-          } else if (cur === 3) {
-            openPageLightbox('trang_3');
-          } else {
-            openCoverLightboxCustom('anh_minh_hoa/Bia Bai Hoc/Bai 2.webp', 'Bìa Sau: Sách Chiết Tự Hán Tự 1 - Tác giả Vũ Kim Anh');
-          }
-        };
+    function animateChar(char) {
+      if (writer) {
+        initHanzi(char);
       }
     }
 
-    window.jumpToBookPage = function(pageIndex) {
-      if (globalPageFlip) {
-        globalPageFlip.flip(pageIndex);
-      }
-    };
-
-    function openCoverLightboxCustom(src, caption) {
-      const lb = document.getElementById('cover-lightbox');
-      const lbImg = document.getElementById('lightbox-img');
-      const lbCap = document.getElementById('lightbox-caption');
-      if (lb && lbImg) {
-        lbImg.src = src;
-        if (lbCap) lbCap.textContent = caption;
-        lb.classList.remove('hidden');
-      }
+    // Modal controls
+    function openFlipModal() {
+      document.getElementById('flipbook-modal').style.display = 'flex';
+    }
+    function closeFlipModal() {
+      document.getElementById('flipbook-modal').style.display = 'none';
     }
 
-    // Call init on DOMContentLoaded or immediate
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPageFlipBook);
-    } else {
-      setTimeout(initPageFlipBook, 100);
-    }
-
-    // Open Page Lightbox for Lesson Pages
-    window.openPageLightbox = function(pageKey) {
-      const pages = {
-        trang_1: {
-          src: 'anh_minh_hoa/Ruot_Sach/trang_1_khoi_dong_chiet_tu.webp',
-          caption: 'Trang 1: Khởi Động Bộ Thủ & Giải Mã Chiết Tự (Bài 2: 你叫什么名字？)'
-        },
-        trang_2: {
-          src: 'anh_minh_hoa/Ruot_Sach/trang_2_toan_hoc_bat_benh.webp',
-          caption: 'Trang 2: Toán Học Chữ Hán & Bắt Bệnh Nét Dễ Nhầm Lẫn (Bài 2)'
-        },
-        trang_3: {
-          src: 'anh_minh_hoa/Ruot_Sach/trang_3_dien_tu_ma_tran.webp',
-          caption: 'Trang 3: Điền Từ Ngữ Cảnh & Trò Chơi Ma Trận Tìm Từ Não Bộ 4x4 (Bài 2)'
-        }
-      };
-      const d = pages[pageKey];
-      if (!d) return;
-      const lb = document.getElementById('cover-lightbox');
-      const lbImg = document.getElementById('lightbox-img');
-      const lbCap = document.getElementById('lightbox-caption');
-      if (lb && lbImg) {
-        lbImg.src = d.src;
-        if (lbCap) lbCap.textContent = d.caption;
-        lb.classList.remove('hidden');
-      }
-    };
-
-    window.openCoverLightbox = function() {
-      const currentImg = document.getElementById('cover-display-img');
-      const lb = document.getElementById('cover-lightbox');
-      const lbImg = document.getElementById('lightbox-img');
-      const lbCap = document.getElementById('lightbox-caption');
-      const badge = document.getElementById('cover-display-badge');
-      if (currentImg && lb && lbImg) {
-        lbImg.src = currentImg.src;
-        if (lbCap && badge) lbCap.textContent = badge.textContent.replace('🌟', '').trim();
-        lb.classList.remove('hidden');
-      }
-    };
-    window.closeCoverLightbox = function() {
-      const lb = document.getElementById('cover-lightbox');
-      if (lb) lb.classList.add('hidden');
-    };
-
-    window.switchCoverView = function(viewKey) {
-      const data = window.coverViews[viewKey];
-      if (!data) return;
-      const img = document.getElementById('cover-display-img');
-      const badge = document.getElementById('cover-display-badge');
-      const desc = document.getElementById('cover-display-desc');
+    // 2. Mount ScrollCraft Engine on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+      initHanzi('你');
       
-      if (img) {
-        img.style.opacity = '0';
-        img.style.transform = 'scale(0.96)';
-        setTimeout(() => {
-          img.src = data.src;
-          if (badge) badge.innerHTML = `<span>🌟</span><span>${data.badge}</span>`;
-          if (desc) desc.textContent = data.desc;
-          img.style.opacity = '1';
-          img.style.transform = 'scale(1)';
-        }, 160);
-      }
-
-      document.querySelectorAll('.cover-tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.classList.remove('bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]', 'shadow-sm');
-        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+      // Fallback progress bar scroll listener
+      window.addEventListener('scroll', function() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        var pBar = document.getElementById('progress-bar');
+        if (pBar) pBar.style.width = scrolled + '%';
       });
 
-      const activeBtn = document.getElementById('tab-' + viewKey);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-[#8C1D24]', 'text-white', 'border-[#8C1D24]', 'shadow-sm');
-        activeBtn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-      }
-    };
-
-    // 6. Modal Functions (Links to Google Form)
-    window.openRequestModal = function(type) {
-      window.open('https://forms.gle/H9cDjkCnXv2kv3VR8', '_blank');
-    };
-
-    window.closeRequestModal = function() {
-      const modal = document.getElementById('request-modal');
-      if (modal) modal.classList.add('hidden');
-    };
-
-    window.handleModalSubmit = function(e) {
-      e.preventDefault();
-      document.getElementById('modal-form-view').classList.add('hidden');
-      document.getElementById('modal-success-view').classList.remove('hidden');
-    };
-
-    // Close modal on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') window.closeRequestModal();
-    });
-
-    // Native Smooth Scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href');
-        if (targetId && targetId !== '#') {
-          const target = document.querySelector(targetId);
-          if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+      if (typeof ScrollCraft !== 'undefined' && ScrollCraft.mount) {
+        try {
+          ScrollCraft.mount(document.body);
+          console.log('[✓] ScrollCraft Engine mounted successfully!');
+        } catch(e) {
+          console.warn('[!] ScrollCraft warning:', e);
         }
-      });
-    });
-
-    // Initialize on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1. Load first character in Lab
-      changeChar(0);
-
-      // 3. Set default cover view
-      window.switchCoverView('mockup');
+      }
     });
   </script>
-
-
-  <!-- REQUEST SAMPLE MODAL -->
-  <div id="request-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl border border-[#EAE5DB]">
-      <button onclick="closeRequestModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
-      
-      <div id="modal-form-view">
-        <div class="flex items-center space-x-2 text-[#8C1D24] mb-2">
-          <span class="seal-stamp text-[10px] py-0.5 px-2">审阅</span>
-          <span class="text-xs font-bold tracking-widest uppercase">Yêu Cầu Thẩm Định Sách Mẫu</span>
-        </div>
-        <h3 class="font-serifcjk text-2xl font-bold text-gray-900 mb-2">Đăng Ký Bản Mẫu Giáo Trình</h3>
-        <p class="text-xs text-gray-500 mb-6">
-          Vui lòng để lại thông tin để Ban Đào Tạo gửi bản in mẫu thực tế hoặc liên hệ cấp quyền truy cập chuyên môn:
-        </p>
-
-        <form onsubmit="handleModalSubmit(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">Họ và Tên *</label>
-            <input type="text" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none">      </div>
-    
-          </div>
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 mb-1">Đơn vị / Cơ sở công tác *</label>
-              <input type="text" required placeholder="Ví dụ: Cơ sở 1 / Phòng Đào tạo" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 mb-1">Chức vụ *</label>
-              <input type="text" required placeholder="Ví dụ: Giảng viên / Quản lý" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none">
-            </div>      </div>
-    
-          </div>
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 mb-1">Số điện thoại / Zalo *</label>
-              <input type="tel" required placeholder="09xx xxx xxx" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-700 mb-1">Email công việc</label>
-              <input type="email" placeholder="email@domain.com" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none">
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">Nhu cầu thẩm định *</label>
-            <select id="modal-request-type" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:border-[#8C1D24] focus:outline-none bg-white">
-              <option value="hard-copy">Nhận cuốn sách mẫu in màu thực tế (Hard copy 185 trang)</option>
-              <option value="pilot-class">Tổ chức lớp dạy thử nghiệm phương pháp chiết tự</option>
-              <option value="watermark-access">Cấp tài khoản thẩm định tài liệu số hóa có watermark</option>
-            </select>
-          </div>
-          <div class="pt-2">
-            <button type="submit" class="w-full bg-[#8C1D24] hover:bg-[#6F1418] text-white py-3 rounded-xl text-sm font-semibold tracking-wide transition shadow-md">
-              Gửi Yêu Cầu Cấp Bản Mẫu
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div id="modal-success-view" class="hidden text-center py-8">
-        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-4">✓</div>
-        <h3 class="font-serifcjk text-2xl font-bold text-gray-900 mb-2">Đã Tiếp Nhận Yêu Cầu</h3>
-        <p class="text-sm text-gray-600 max-w-sm mx-auto leading-relaxed mb-6">
-          Cảm ơn Quý Lãnh đạo / Thầy Cô! Ban Đào Tạo & Khảo Thí sẽ liên hệ trực tiếp trong vòng 24 giờ để gửi cuốn sách mẫu in hoặc cấp quyền tài liệu số hóa bảo mật.
-        </p>
-        <button onclick="closeRequestModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2.5 rounded-full text-xs font-semibold transition">
-          Đóng cửa sổ
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- COVER IMAGE LIGHTBOX MODAL -->
-  <div id="cover-lightbox" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex flex-col items-center justify-center p-4 cursor-zoom-out" onclick="closeCoverLightbox()">
-    <button class="absolute top-6 right-6 text-white/80 hover:text-white text-3xl font-light leading-none p-2">&times;</button>
-    <img id="lightbox-img" src="" alt="Zoom Cover" class="max-h-[85vh] max-w-[90vw] object-contain rounded-2xl shadow-2xl transition-transform duration-300">
-    <div id="lightbox-caption" class="mt-4 bg-white/10 backdrop-blur-md text-white text-xs px-5 py-2 rounded-full border border-white/20 text-center max-w-xl">
-    </div>
-  </div>
 
 </body>
 </html>
