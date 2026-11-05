@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Phòng Thi Thử HSK 3.0 & Khảo Thí Chiết Tự – Chiết Tự Hán Ngữ 2026</title>
+  <meta name="description" content="Phòng thi thử HSK 3.0 trực tuyến có tính giờ, phần thi Nghe, Đọc hiểu và trắc nghiệm Chiết tự bộ thủ. Chấm điểm ngay lập tức và giải thích cặn kẽ.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            ricepaper: '#FAF6EE'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-stone-950 text-stone-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cinnabar selection:text-ricepaper">
+
+  <!-- Shared Top Navigation Slot -->
+  <div id="global-header-slot"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8">
+    
+    <!-- Hero / Title -->
+    <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinnabar/20 border border-cinnabar/30 text-cinnabar-glow text-xs font-semibold mb-2">
+          <span>📝 TRƯỜNG THI KHẢO THÍ</span>
+          <span>·</span>
+          <span>HSK 3.0 & CHIẾT TỰ HÁN NGỮ</span>
+        </div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-gold-bright tracking-wide">
+          PHÒNG THI THỬ HSK 3.0 TRỰC TUYẾN
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-2xl">
+          Đề thi chuẩn cấu trúc gồm 3 phần: Nghe hiểu (Phát âm bản xứ), Đọc hiểu và Đố vui Chiết tự cấu tạo chữ Hán. Tự động chấm điểm và hiển thị giải thích chi tiết.
+        </p>
+      </div>
+
+      <!-- Live Countdown Timer -->
+      <div id="exam-timer-box" class="flex items-center gap-3 bg-stone-900 border border-gold/30 px-4 py-2.5 rounded-2xl shadow-lg self-center sm:self-auto">
+        <span class="text-xs text-stone-400 uppercase font-bold tracking-wider">Thời gian còn lại:</span>
+        <div id="timer-display" class="font-mono text-xl font-bold text-cinnabar-glow">15:00</div>
+      </div>
+    </div>
+
+    <!-- Exam Level Selector Tabs -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 border-b border-stone-800 text-xs">
+      <span class="text-stone-400 font-bold shrink-0">Chọn cấp độ thi:</span>
+      <button onclick="switchLevel('hsk1')" id="tab-hsk1" class="lvl-tab px-4 py-2 rounded-xl bg-gold/20 text-gold-bright border border-gold/40 font-bold whitespace-nowrap shadow">
+        🎯 HSK 1 (Đồng Sinh · 10 câu)
+      </button>
+      <button onclick="switchLevel('hsk2')" id="tab-hsk2" class="lvl-tab px-4 py-2 rounded-xl bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 font-bold whitespace-nowrap">
+        📜 HSK 2 (Tú Tài · 10 câu)
+      </button>
+      <button onclick="switchLevel('chiet-tu')" id="tab-chiet-tu" class="lvl-tab px-4 py-2 rounded-xl bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 font-bold whitespace-nowrap">
+        🧪 Khảo Thí Chiết Tự Cổ Phong (Trạng Nguyên · 10 câu)
+      </button>
+    </div>
+
+    <!-- Exam Workspace -->
+    <div id="exam-workspace" class="space-y-6">
+      
+      <!-- Progress Bar -->
+      <div class="bg-stone-900 border border-stone-800 rounded-xl p-3 flex items-center justify-between gap-4 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-stone-400">Tiến độ bài làm:</span>
+          <span id="answered-count" class="font-bold text-gold">0</span> / <span id="total-questions">10</span> câu
+        </div>
+        <div class="flex-1 max-w-xs bg-stone-950 rounded-full h-2 overflow-hidden border border-stone-800">
+          <div id="progress-fill" class="bg-gradient-to-r from-cinnabar to-gold h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Questions Container -->
+      <div id="questions-list" class="space-y-6">
+        <!-- Injected Questions -->
+      </div>
+
+      <!-- Exam Submit Section -->
+      <div class="bg-stone-900/90 border border-gold/20 rounded-2xl p-6 text-center space-y-3">
+        <p class="text-xs text-stone-400">
+          Kiểm tra kỹ các đáp án trước khi bấm nộp bài. Hệ thống sẽ khóa bài thi và xuất bảng điểm phân tích ngay tức thì.
+        </p>
+        <button onclick="submitExam()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-cinnabar to-red-700 text-ricepaper text-sm font-bold shadow-xl hover:brightness-110 active:scale-95 transition-all inline-flex items-center gap-2 border border-cinnabar-glow/50">
+          <span>📜</span>
+          <span>NỘP BÀI & XEM KẾT QUẢ NGAY</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Result & Report Card (Hidden until submit) -->
+    <div id="result-box" class="hidden bg-stone-900 border-2 border-gold/40 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8 my-6">
+      
+      <!-- Header of Certificate -->
+      <div class="text-center space-y-2 border-b border-gold/20 pb-6 relative">
+        <div class="w-16 h-16 mx-auto rounded-full bg-cinnabar flex items-center justify-center text-ricepaper font-cjk font-bold text-3xl shadow-[0_0_25px_rgba(194,59,42,0.6)] border-2 border-gold">
+          榜
+        </div>
+        <div class="font-display font-extrabold text-2xl sm:text-3xl text-gold-bright tracking-wider">
+          BẢNG VÀNG THÀNH TÍCH KHẢO THÍ
+        </div>
+        <p class="text-xs text-stone-400">Đề án Cải cách Giáo dục Chiết Tự Hán Ngữ 2026</p>
+      </div>
+
+      <!-- Score Overview -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800">
+          <div class="text-[11px] text-stone-400 uppercase font-semibold">Tổng điểm đạt được:</div>
+          <div id="score-display" class="font-display font-black text-3xl sm:text-4xl text-cinnabar-glow my-1">
+            90 / 100
+          </div>
+          <div id="score-percent" class="text-xs text-emerald-400 font-semibold">Tỷ lệ đúng: 90%</div>
+        </div>
+
+        <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800">
+          <div class="text-[11px] text-stone-400 uppercase font-semibold">Danh hiệu sĩ tử:</div>
+          <div id="rank-display" class="font-display font-bold text-xl sm:text-2xl text-gold-bright my-2">
+            ĐỖ TRẠNG NGUYÊN
+          </div>
+          <div class="text-[11px] text-stone-400">Đạt chuẩn năng lực xuất sắc</div>
+        </div>
+
+        <div class="bg-stone-950 p-4 rounded-2xl border border-stone-800">
+          <div class="text-[11px] text-stone-400 uppercase font-semibold">Thời gian hoàn thành:</div>
+          <div id="time-spent-display" class="font-mono text-xl sm:text-2xl text-stone-200 my-2">
+            04:25
+          </div>
+          <div class="text-[11px] text-stone-400">Tốc độ phản xạ tốt</div>
+        </div>
+      </div>
+
+      <!-- Detailed Review per Question -->
+      <div class="space-y-4">
+        <h3 class="text-xs font-bold text-gold uppercase tracking-wider">
+          GIẢI THÍCH CHI TIẾT TỪNG CÂU HỎI & PHÂN TÍCH CHIẾT TỰ:
+        </h3>
+        <div id="review-list" class="space-y-3">
+          <!-- Injected review items -->
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-center gap-4 pt-4 border-t border-stone-800">
+        <button onclick="retryExam()" class="px-6 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold transition-all">
+          🔄 Thi Lại Đề Này
+        </button>
+        <a href="bang_tuan_hoan_chiet_tu.html" class="px-6 py-2.5 rounded-xl bg-gold/20 hover:bg-gold/30 text-gold-bright border border-gold/40 text-xs font-bold transition-all">
+          🧪 Xem Thêm Bảng Tuần Hoàn Bộ Thủ
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Shared Footer Slot -->
+  <div id="global-footer-slot"></div>
+
+  <!-- Load Nav scripts -->
+  <script src="js/common_nav.js"></script>
+
+  <script>
+    // Exam Questions Database
+    const EXAMS_DATA = {
+      hsk1: [
+        {
+          id: 1,
+          type: 'listen',
+          audioText: '你好！很高兴认识你。',
+          prompt: 'Phần 1: Nghe âm thanh và chọn câu dịch tiếng Việt chính xác nhất:',
+          choices: [
+            'A. Tạm biệt! Hẹn gặp lại bạn ngày mai.',
+            'B. Xin chào! Rất vui được quen biết bạn.',
+            'C. Cảm ơn bạn rất nhiều.',
+            'D. Xin hỏi bạn tên là gì?'
+          ],
+          correct: 1,
+          explain: 'Câu nghe được là: "你好！很高兴认识你。" (Nǐ hǎo! Hěn gāoxìng rènshi nǐ) nghĩa là "Xin chào! Rất vui được quen biết bạn."'
+        },
+        {
+          id: 2,
+          type: 'listen',
+          audioText: '我喜欢吃中国菜。',
+          prompt: 'Phần 1: Nghe âm thanh và chọn ý nghĩa câu nói:',
+          choices: [
+            'A. Tôi không thích uống trà.',
+            'B. Tôi đang đi chợ mua rau.',
+            'C. Tôi thích ăn món ăn Trung Quốc.',
+            'D. Món ăn này quá đắt rồi.'
+          ],
+          correct: 2,
+          explain: 'Câu nghe được là: "我喜欢吃中国菜。" (Wǒ xǐhuan chī Zhōngguó cài) nghĩa là "Tôi thích ăn món ăn Trung Quốc."'
+        },
+        {
+          id: 3,
+          type: 'read',
+          prompt: 'Phần 2: Chọn từ thích hợp điền vào chỗ trống: 他是我的好______。',
+          choices: [
+            'A. 朋友 (péngyou - bạn bè)',
+            'B. 苹果 (píngguǒ - quả táo)',
+            'C. 衣服 (yīfu - quần áo)',
+            'D. 医生 (yīshēng - bác sĩ)'
+          ],
+          correct: 0,
+          explain: '朋友 (péngyou) nghĩa là bạn bè. Câu hoàn chỉnh: "他是我的好朋友。" (Anh ấy là bạn tốt của tôi).'
+        },
+        {
+          id: 4,
+          type: 'read',
+          prompt: 'Phần 2: Phiên âm Pinyin của chữ 「学校」 là gì?',
+          choices: [
+            'A. xuéxí',
+            'B. xuéxiào',
+            'C. yīyuàn',
+            'D. shāngdiàn'
+          ],
+          correct: 1,
+          explain: '学校 phiên âm là xuéxiào (học hiệu - trường học).'
+        },
+        {
+          id: 5,
+          type: 'read',
+          prompt: 'Phần 2: Chữ Hán nào có nghĩa là "uống nước"?',
+          choices: [
+            'A. 吃饭 (chī fàn)',
+            'B. 喝水 (hē shuǐ)',
+            'C. 睡觉 (shuì jiào)',
+            'D. 看书 (kàn shū)'
+          ],
+          correct: 1,
+          explain: '喝水 (hē shuǐ) nghĩa là uống nước (chữ 喝 có bộ Khẩu 口, chữ 水 là nước).'
+        },
+        {
+          id: 6,
+          type: 'read',
+          prompt: 'Phần 2: Câu phủ định "Tôi không phải là học sinh" viết là:',
+          choices: [
+            'A. 我是学生。',
+            'B. 我不是学生。',
+            'C. 他不是老师。',
+            'D. 我们是朋友。'
+          ],
+          correct: 1,
+          explain: 'Phó từ phủ định 不 (bù) đứng trước 是 (shì) tạo thành 不是 (không phải).'
+        },
+        {
+          id: 7,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Chữ 「明」 (Minh - sáng sủa) được ghép từ hai bộ thủ nào?',
+          choices: [
+            'A. Bộ Nhật (日 - mặt trời) + Bộ Nguyệt (月 - mặt trăng)',
+            'B. Bộ Nhân (人) + Bộ Mộc (木)',
+            'C. Bộ Hỏa (火) + Bộ Thủy (水)',
+            'D. Bộ Kim (金) + Bộ Thổ (土)'
+          ],
+          correct: 0,
+          explain: 'Chiết tự: Chữ 明 gồm Nhật (日) đại diện ban ngày và Nguyệt (月) đại diện ban đêm, hai vầng nhật nguyệt cùng tỏa sáng rực rỡ.'
+        },
+        {
+          id: 8,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Bộ thủ nào sau đây luôn liên quan đến hành động của "bàn tay"?',
+          choices: [
+            'A. Bộ Thủy (氵)',
+            'B. Bộ Thủ (扌)',
+            'C. Bộ Thảo (艹)',
+            'D. Bộ Ngôn (讠)'
+          ],
+          correct: 1,
+          explain: 'Bộ Thủ (扌 - biến thể của 手) biểu thị các động tác bàn tay như: 打 (đánh), 提 (xách), 抱 (ôm), 推 (đẩy).'
+        },
+        {
+          id: 9,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Khi viết thêm một nét ngang 「一」 trên đỉnh đầu chữ 「大」 (Đại), ta được chữ gì?',
+          choices: [
+            'A. Chữ Thái (太)',
+            'B. Chữ Thiên (天)',
+            'C. Chữ Phu (夫)',
+            'D. Chữ Bản (本)'
+          ],
+          correct: 1,
+          explain: 'Đại (大) là hình người dang tay; thêm nét ngang 一 trên đỉnh đầu chỉ vòm trời bao la, tạo thành chữ Thiên (天 - bầu trời).'
+        },
+        {
+          id: 10,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Ba chữ Mộc 「木」 xếp chồng lên nhau thành chữ gì?',
+          choices: [
+            'A. Lâm (林 - rừng nhỏ)',
+            'B. Sâm (森 - rừng rậm)',
+            'C. Hâm (鑫 - giàu sang)',
+            'D. Tinh (晶 - lấp lánh)'
+          ],
+          correct: 1,
+          explain: 'Một cây là Mộc (木), hai cây thành rừng nhỏ là Lâm (林), ba cây tụ lại thành rừng rậm nguyên sinh là Sâm (森).'
+        }
+      ],
+      hsk2: [
+        {
+          id: 1,
+          type: 'listen',
+          audioText: '请问去火车站怎么走？',
+          prompt: 'Phần 1: Nghe âm thanh và chọn câu hỏi đúng:',
+          choices: [
+            'A. Xin hỏi đi đến ga tàu hỏa đi như thế nào?',
+            'B. Xin hỏi bây giờ là mấy giờ rồi?',
+            'C. Vé máy bay bao nhiêu tiền một người?',
+            'D. Khi nào xe buýt sẽ tới nơi?'
+          ],
+          correct: 0,
+          explain: 'Câu thoại: "请问去火车站怎么走？" (Qǐngwèn qù huǒchēzhàn zěnme zǒu?)'
+        },
+        {
+          id: 2,
+          type: 'listen',
+          audioText: '今天天气真好，我们去公园散步吧。',
+          prompt: 'Phần 1: Nghe âm thanh và chọn ý chính:',
+          choices: [
+            'A. Hôm nay trời mưa to không thể ra ngoài.',
+            'B. Thời tiết hôm nay rất đẹp, chúng ta đi công viên dạo bộ nhé.',
+            'C. Ngày mai tôi phải đi làm sớm.',
+            'D. Công viên đóng cửa rồi.'
+          ],
+          correct: 1,
+          explain: 'Câu thoại: "今天天气真好，我们去公园散步吧。"'
+        },
+        {
+          id: 3,
+          type: 'read',
+          prompt: 'Phần 2: Từ nào đối nghĩa với từ 「贵」 (guì - đắt đỏ)?',
+          choices: [
+            'A. 远 (yuǎn - xa)',
+            'B. 便宜 (piányi - rẻ)',
+            'C. 快 (kuài - nhanh)',
+            'D. 新 (xīn - mới)'
+          ],
+          correct: 1,
+          explain: '贵 (đắt) đối nghĩa với 便宜 (rẻ).'
+        },
+        {
+          id: 4,
+          type: 'read',
+          prompt: 'Phần 2: Chọn lượng từ thích hợp: 一______衣服。',
+          choices: [
+            'A. 张 (zhāng)',
+            'B. 件 (jiàn)',
+            'C. 本 (běn)',
+            'D. 支 (zhī)'
+          ],
+          correct: 1,
+          explain: 'Lượng từ dùng cho quần áo là 件 (jiàn): 一件衣服.'
+        },
+        {
+          id: 5,
+          type: 'read',
+          prompt: 'Phần 2: Điền liên từ thích hợp: 虽然他很累，______他还是坚持跑步。',
+          choices: [
+            'A. 所以',
+            'B. 但是',
+            'C. 因为',
+            'D. 如果'
+          ],
+          correct: 1,
+          explain: 'Cấu trúc cặp liên từ: 虽然...但是... (Tuy rằng... nhưng mà...).'
+        },
+        {
+          id: 6,
+          type: 'read',
+          prompt: 'Phần 2: Chữ 「休息」 (xiūxi) nghĩa là gì?',
+          choices: [
+            'A. Làm việc',
+            'B. Nghỉ ngơi',
+            'C. Tắm rửa',
+            'D. Nấu ăn'
+          ],
+          correct: 1,
+          explain: '休息 (xiūxi) nghĩa là nghỉ ngơi (chữ 休 có người 亻 tựa vào gốc cây 木).'
+        },
+        {
+          id: 7,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Chữ 「休」 (Hưu - nghỉ ngơi) có cấu tạo chiết tự như thế nào?',
+          choices: [
+            'A. Con người (亻) tựa lưng vào gốc cây (木) để dưỡng sức',
+            'B. Con người (亻) cầm chiếc xẻng',
+            'C. Mặt trời mọc trên núi cao',
+            'D. Nước chảy qua khe đá'
+          ],
+          correct: 0,
+          explain: 'Chữ 休 gồm bộ Nhân đứng (亻) và bộ Mộc (木), tượng hình người lao động mệt nhọc ghé lưng vào bóng râm gốc cây nghỉ ngơi.'
+        },
+        {
+          id: 8,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Bộ thủ nào sau đây mang ý nghĩa liên quan đến "lời nói, ngôn ngữ"?',
+          choices: [
+            'A. Bộ Môn (门)',
+            'B. Bộ Ngôn (讠 / 言)',
+            'C. Bộ Nhĩ (耳)',
+            'D. Bộ Tâm (心)'
+          ],
+          correct: 1,
+          explain: 'Bộ Ngôn (讠) xuất hiện trong các chữ về giao tiếp: 语 (ngữ), 说 (nói), 话 (lời), 读 (đọc), 讲 (giảng).'
+        },
+        {
+          id: 9,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Chữ 「男」 (Nam - người đàn ông) gồm hai thành phần nào ghép lại?',
+          choices: [
+            'A. Bộ Điền (田 - ruộng đồng) + Bộ Lực (力 - sức lực)',
+            'B. Bộ Nhật (日) + Bộ Nguyệt (月)',
+            'C. Bộ Thảo (艹) + Bộ Mộc (木)',
+            'D. Bộ Phụ (父) + Bộ Tử (子)'
+          ],
+          correct: 0,
+          explain: 'Chiết tự: Ở trên là Điền (田 - ruộng đồng), ở dưới là Lực (力 - sức vóc). Người dốc sức lao động cày cấy nơi đồng ruộng chính là người đàn ông (男).'
+        },
+        {
+          id: 10,
+          type: 'chiet_tu',
+          prompt: 'Phần 3: Chữ 「安」 (An - bình an, an toàn) có hình ảnh tượng hình gì?',
+          choices: [
+            'A. Con ngựa đứng dưới bóng râm',
+            'B. Người phụ nữ (女) an định, yên bình dưới mái nhà (宀)',
+            'C. Người gác cổng cầm khiên',
+            'D. Ngọn đèn sáng trong đêm tối'
+          ],
+          correct: 1,
+          explain: 'Chữ 安 gồm bộ Miên (宀 - mái nhà) và bộ Nữ (女). Trong nhà có người phụ nữ chăm sóc lo toan thì gia đạo êm ấm, bình an thịnh vượng.'
+        }
+      ],
+      'chiet-tu': [
+        {
+          id: 1,
+          type: 'chiet_tu',
+          prompt: 'Câu 1: Chữ 「旦」 (Đán - buổi sớm mai) có nét ngang 「一」 ở dưới đáy biểu thị điều gì?',
+          choices: [
+            'A. Mặt đất hoặc đường chân trời nơi vầng thái dương vừa nhô lên',
+            'B. Một dòng sông',
+            'C. Một cành cây',
+            'D. Một chiếc thuyền'
+          ],
+          correct: 0,
+          explain: 'Chữ 旦 gồm mặt trời (日) mọc nhô lên phía trên đường chân trời (一), biểu thị khoảnh khắc rạng đông (Nguyên đán, bình đán).'
+        },
+        {
+          id: 2,
+          type: 'chiet_tu',
+          prompt: 'Câu 2: Hai chữ Nhân 「人」 đứng nối gót nhau tạo thành chữ gì?',
+          choices: [
+            'A. Chữ Tòng (从 - đi theo, thuận theo)',
+            'B. Chữ Chúng (众 - đám đông)',
+            'C. Chữ Vu (巫 - thầy cúng)',
+            'D. Chữ Giới (介 - trung gian)'
+          ],
+          correct: 0,
+          explain: 'Một người đi trước, một người đi sau nối bước tạo thành chữ Tòng (从 - theo sau, phục tòng).'
+        },
+        {
+          id: 3,
+          type: 'chiet_tu',
+          prompt: 'Câu 3: Ba chữ Nhân 「人」 tụ hợp lại tạo thành chữ gì?',
+          choices: [
+            'A. Chữ Sâm (森)',
+            'B. Chữ Chúng (众 - quần chúng, đám đông)',
+            'C. Chữ Tinh (晶)',
+            'D. Chữ Diễm (焱)'
+          ],
+          correct: 1,
+          explain: 'Ba người tụ hội biểu thị số đông, quần chúng nhân dân: chữ Chúng (众).'
+        },
+        {
+          id: 4,
+          type: 'chiet_tu',
+          prompt: 'Câu 4: Chữ 「看」 (Khán - nhìn ngắm) gồm hai bộ phận nào?',
+          choices: [
+            'A. Bàn tay (手/龵) che phía trên mắt (目) để phóng tầm mắt nhìn xa',
+            'B. Ánh sáng chiếu vào trang sách',
+            'C. Hai con mắt mở to',
+            'D. Mặt trời chiếu rọi'
+          ],
+          correct: 0,
+          explain: 'Chữ 看 vẽ hình người đưa bàn tay (手) lên che lông mày phía trên con mắt (目) để nhìn rõ ra phương xa mà không bị chói.'
+        },
+        {
+          id: 5,
+          type: 'chiet_tu',
+          prompt: 'Câu 5: Chữ 「信」 (Tín - uy tín, lòng tin) gồm bộ Nhân (亻) và bộ gì?',
+          choices: [
+            'A. Bộ Ngôn (言 - lời nói)',
+            'B. Bộ Khẩu (口)',
+            'C. Bộ Tâm (心)',
+            'D. Bộ Nhật (日)'
+          ],
+          correct: 0,
+          explain: 'Nhân (亻) + Ngôn (言) = Tín (信). Người quân tử lời nói ra phải đáng tin cậy, giữ trọn chữ Tín.'
+        },
+        {
+          id: 6,
+          type: 'chiet_tu',
+          prompt: 'Câu 6: Nét chấm 「丶」 được thêm vào phía dưới chữ 「木」 (Mộc) tạo thành chữ gì?',
+          choices: [
+            'A. Bản (本 - gốc rễ)',
+            'B. Mạt (末 - ngọn cây)',
+            'C. Vị (未 - chưa tới)',
+            'D. Chu (朱 - cây chu sa)'
+          ],
+          correct: 0,
+          explain: 'Chữ Bản (本) thêm nét chỉ sự ở phần rễ cây (dưới gốc Mộc), biểu thị gốc rễ, nguồn cội.'
+        },
+        {
+          id: 7,
+          type: 'chiet_tu',
+          prompt: 'Câu 7: Nét ngang dài hơn ở trên đỉnh đầu chữ 「木」 tạo thành chữ gì?',
+          choices: [
+            'A. Mạt (末 - phần ngọn)',
+            'B. Bản (本 - phần gốc)',
+            'C. Sâm (森 - rừng)',
+            'D. Hòa (禾 - lúa)'
+          ],
+          correct: 0,
+          explain: 'Nét ngang phía trên ngọn cây Mộc dài hơn nét dưới biểu thị ngọn cây xum xuê: chữ Mạt (末 - đầu ngọn, mạt kỳ).'
+        },
+        {
+          id: 8,
+          type: 'chiet_tu',
+          prompt: 'Câu 8: Chữ 「家」 (Gia - gia đình, nhà ở) có bộ Miên (宀) ở trên và chữ gì ở dưới?',
+          choices: [
+            'A. Khuyển (犬 - con chó)',
+            'B. Thỉ (豕 - con lợn)',
+            'C. Ngưu (牛 - con trâu)',
+            'D. Dương (羊 - con dê)'
+          ],
+          correct: 1,
+          explain: 'Ở trên là mái nhà (宀), ở dưới là con lợn (豕). Thời cổ đại chăn nuôi định canh, dưới sàn nhà nuôi lợn mới được xem là một mái ấm định cư (家).'
+        },
+        {
+          id: 9,
+          type: 'chiet_tu',
+          prompt: 'Câu 9: Chữ 「鸣」 (Minh - tiếng chim hót) gồm hai bộ nào?',
+          choices: [
+            'A. Khẩu (口 - chiếc mỏ) + Điểu (鸟 - con chim)',
+            'B. Nhật (日) + Nguyệt (月)',
+            'C. Khẩu (口) + Kim (金)',
+            'D. Nhân (人) + Mã (马)'
+          ],
+          correct: 0,
+          explain: 'Miệng/mỏ (口) của loài chim (鸟) phát ra âm thanh trong trẻo: chữ Minh (鸣 - chim hót).'
+        },
+        {
+          id: 10,
+          type: 'chiet_tu',
+          prompt: 'Câu 10: Chữ 「晶」 (Tinh - lấp lánh, pha lê) gồm ba chữ nào hợp lại?',
+          choices: [
+            'A. Ba chữ Nhật (日 - ba mặt trời tỏa sáng)',
+            'B. Ba chữ Nguyệt (月)',
+            'C. Ba chữ Hỏa (火)',
+            'D. Ba chữ Thủy (水)'
+          ],
+          correct: 0,
+          explain: 'Ba vầng mặt trời (日) cùng hội tụ tỏa ánh hào quang lấp lánh chói lọi: chữ Tinh (晶 - tinh thể, trong suốt).'
+        }
+      ]
+    };
+
+    let currentLevel = 'hsk1';
+    let userAnswers = {};
+    let timerSeconds = 900; // 15 mins
+    let timerInterval = null;
+    let timeSpent = 0;
+
+    function switchLevel(lvl) {
+      currentLevel = lvl;
+      userAnswers = {};
+      
+      // Update tabs
+      ['hsk1', 'hsk2', 'chiet-tu'].forEach(id => {
+        const tab = document.getElementById(`tab-${id}`);
+        if (id === lvl) {
+          tab.className = 'lvl-tab px-4 py-2 rounded-xl bg-gold/20 text-gold-bright border border-gold/40 font-bold whitespace-nowrap shadow';
+        } else {
+          tab.className = 'lvl-tab px-4 py-2 rounded-xl bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 font-bold whitespace-nowrap';
+        }
+      });
+
+      document.getElementById('result-box').classList.add('hidden');
+      document.getElementById('exam-workspace').classList.remove('hidden');
+
+      startTimer();
+      renderQuestions();
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerSeconds = 900;
+      timeSpent = 0;
+
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        timeSpent++;
+
+        const mins = Math.floor(timerSeconds / 60);
+        const secs = timerSeconds % 60;
+        document.getElementById('timer-display').textContent = 
+          `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          alert('Đã hết giờ làm bài! Hệ thống tự động thu bài của bạn.');
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    function renderQuestions() {
+      const qList = EXAMS_DATA[currentLevel];
+      document.getElementById('total-questions').textContent = qList.length;
+      updateProgress();
+
+      let qHtml = '';
+
+      qList.forEach((q, idx) => {
+        let listenButton = '';
+        if (q.type === 'listen') {
+          listenButton = `
+            <div class="mb-3">
+              <button onclick="playExamAudio('${q.audioText}')" class="px-4 py-2 rounded-xl bg-cinnabar/20 border border-cinnabar/40 text-cinnabar-glow hover:bg-cinnabar hover:text-white text-xs font-bold transition-all flex items-center gap-2">
+                <span>🔊</span> <span>Bấm để nghe câu hỏi (Nghe âm thanh)</span>
+              </button>
+            </div>
+          `;
+        }
+
+        const choicesHtml = q.choices.map((c, cIdx) => {
+          const isChecked = userAnswers[idx] === cIdx;
+          return `
+            <label onclick="selectAnswer(${idx}, ${cIdx})" class="p-3.5 rounded-xl bg-stone-950 border border-stone-800 hover:border-gold/50 cursor-pointer flex items-center gap-3 transition-all ${isChecked ? 'border-gold bg-gold/10' : ''}">
+              <input type="radio" name="q-${idx}" ${isChecked ? 'checked' : ''} class="accent-cinnabar">
+              <span class="text-xs sm:text-sm text-stone-200 font-medium">${c}</span>
+            </label>
+          `;
+        }).join('');
+
+        qHtml += `
+          <div class="bg-stone-900/80 border border-stone-800 rounded-2xl p-5 sm:p-6 shadow-xl space-y-3">
+            <div class="flex items-center justify-between border-b border-stone-800/80 pb-2">
+              <span class="text-xs font-bold text-gold uppercase tracking-wider">CÂU HỎI SỐ ${idx + 1}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-800 text-stone-400">10 điểm</span>
+            </div>
+            
+            <div class="text-sm sm:text-base text-stone-100 font-medium">
+              ${q.prompt}
+            </div>
+
+            ${listenButton}
+
+            <div class="space-y-2 pt-2">
+              ${choicesHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('questions-list').innerHTML = qHtml;
+    }
+
+    function selectAnswer(qIdx, cIdx) {
+      userAnswers[qIdx] = cIdx;
+      updateProgress();
+      renderQuestions();
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(userAnswers).length;
+      const total = EXAMS_DATA[currentLevel].length;
+      document.getElementById('answered-count').textContent = answered;
+      const pct = (answered / total) * 100;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+    }
+
+    function playExamAudio(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+
+    function submitExam() {
+      if (timerInterval) clearInterval(timerInterval);
+
+      const qList = EXAMS_DATA[currentLevel];
+      let correctCount = 0;
+      let reviewHtml = '';
+
+      qList.forEach((q, idx) => {
+        const userChoice = userAnswers[idx];
+        const isCorrect = userChoice === q.correct;
+        if (isCorrect) correctCount++;
+
+        reviewHtml += `
+          <div class="p-4 rounded-xl border ${isCorrect ? 'border-emerald-500/30 bg-emerald-950/20' : 'border-rose-500/30 bg-rose-950/20'} space-y-2 text-xs">
+            <div class="flex items-center justify-between font-bold">
+              <span class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">
+                Câu ${idx + 1}: ${isCorrect ? '✓ Đúng (+10 điểm)' : '✗ Sai (0 điểm)'}
+              </span>
+              <span class="text-stone-400 font-normal">
+                Bạn chọn: ${userChoice !== undefined ? String.fromCharCode(65 + userChoice) : 'Bỏ trống'} · Đáp án đúng: ${String.fromCharCode(65 + q.correct)}
+              </span>
+            </div>
+            <div class="text-stone-300 font-medium">${q.prompt}</div>
+            <div class="text-stone-400 pt-1 border-t border-stone-800">
+              💡 <span class="text-gold font-semibold">Lời giải:</span> ${q.explain}
+            </div>
+          </div>
+        `;
+      });
+
+      const totalScore = correctCount * 10;
+      document.getElementById('score-display').textContent = `${totalScore} / 100`;
+      document.getElementById('score-percent').textContent = `Tỷ lệ đúng: ${totalScore}%`;
+
+      let rank = 'ĐỖ TRẠNG NGUYÊN (状元)';
+      if (totalScore < 60) rank = 'ĐỒNG SINH TẬP SỰ (Cần cố gắng)';
+      else if (totalScore < 80) rank = 'ĐỖ TÚ TÀI (秀才)';
+      else if (totalScore < 90) rank = 'ĐỖ CỬ NHÂN (举人)';
+      else if (totalScore < 100) rank = 'ĐỖ TIẾN SĨ (进士)';
+      document.getElementById('rank-display').textContent = rank;
+
+      const spentMins = Math.floor(timeSpent / 60);
+      const spentSecs = timeSpent % 60;
+      document.getElementById('time-spent-display').textContent = 
+        `${spentMins.toString().padStart(2, '0')}:${spentSecs.toString().padStart(2, '0')}`;
+
+      document.getElementById('review-list').innerHTML = reviewHtml;
+
+      document.getElementById('exam-workspace').classList.add('hidden');
+      document.getElementById('result-box').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function retryExam() {
+      switchLevel(currentLevel);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      switchLevel('hsk1');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Đọc Báo & Đoạn Văn Tiếng Trung Kèm Pinyin & Tra Từ – Chiết Tự Hán Ngữ</title>
+  <meta name="description" content="Trình đọc văn bản tiếng Trung thông minh: Hiển thị Pinyin trên từng chữ, dịch nghĩa song ngữ, tra cứu chiết tự bộ thủ tức thì và phát âm giọng đọc chuẩn.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Hanzi Writer CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            ricepaper: '#FAF6EE'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Ruby Pinyin styling */
+    ruby {
+      ruby-position: over;
+      display: inline-flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      vertical-align: bottom;
+      margin: 0 1.5px;
+      line-height: 1.1;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 0 1px;
+      transition: all 0.15s ease;
+    }
+    ruby:hover {
+      background-color: rgba(212, 175, 55, 0.2);
+    }
+    rt {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.6em;
+      color: #D4AF37;
+      font-weight: 600;
+      user-select: none;
+      line-height: 1.2;
+    }
+    .hide-pinyin rt {
+      display: none !important;
+    }
+    .reading-char {
+      transition: color 0.15s ease;
+    }
+    .speaking-highlight {
+      background-color: rgba(194, 59, 42, 0.35) !important;
+      border-radius: 4px;
+      color: #FF4D3B !important;
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-stone-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cinnabar selection:text-ricepaper">
+
+  <!-- Shared Top Navigation Slot -->
+  <div id="global-header-slot"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+    
+    <!-- Hero / Title -->
+    <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold-bright text-xs font-semibold mb-2">
+          <span>📰 ĐỌC VĂN BẢN THÔNG MINH</span>
+          <span>·</span>
+          <span>PINYIN RUBY & TRA TỪ TỨC THÌ</span>
+        </div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-gold-bright tracking-wide">
+          ĐỌC BÁO & ĐOẠN VĂN TIẾNG TRUNG
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-3xl">
+          Hiển thị Pinyin trên từng chữ Hán, nhấp vào từ bất kỳ để tra nghĩa, âm Hán Việt, cấu tạo chiết tự và nghe phát âm. Hỗ trợ dán văn bản tùy ý của bạn.
+        </p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2 self-center sm:self-auto">
+        <button onclick="toggleCustomInput()" class="px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-gold-bright border border-gold/30 text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 shadow">
+          <span>✍️</span>
+          <span>Dán bài của bạn</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Custom Text Paste Area (Hidden by default) -->
+    <div id="custom-input-box" class="hidden bg-stone-900 border border-gold/30 rounded-2xl p-5 mb-6 shadow-xl space-y-3">
+      <div class="flex items-center justify-between">
+        <label class="text-xs font-bold text-gold uppercase tracking-wider">Dán đoạn văn tiếng Trung cần đọc vào đây:</label>
+        <button onclick="toggleCustomInput()" class="text-stone-400 hover:text-white text-xs">✕ Đóng</button>
+      </div>
+      <textarea id="custom-text-input" rows="4" placeholder="Dán văn bản tiếng Trung vào đây (Ví dụ: 中国茶文化源远流长...)" 
+                class="w-full px-4 py-3 rounded-xl bg-stone-950 border border-stone-800 text-stone-100 placeholder-stone-600 focus:outline-none focus:border-gold text-sm font-cjk leading-relaxed"></textarea>
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] text-stone-400">Hệ thống sẽ tự động ghép Pinyin và cấu trúc tra từ.</span>
+        <button onclick="applyCustomText()" class="px-5 py-2 rounded-xl bg-cinnabar text-ricepaper text-xs font-bold hover:brightness-110 transition-all">
+          Bắt Đầu Đọc Bài Này
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Workspace: Split into Article Reader (Left) and Word Inspector (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Article Reader (8 cols) -->
+      <div class="lg:col-span-8 space-y-4">
+        
+        <!-- Preset Articles Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-stone-800 scrollbar-none text-xs">
+          <span class="text-stone-400 font-bold shrink-0">Chọn bài mẫu:</span>
+          <button onclick="loadArticle(0)" id="art-tab-0" class="art-tab px-3 py-1.5 rounded-lg bg-gold/20 text-gold-bright border border-gold/40 font-semibold whitespace-nowrap">
+            📜 Ngụ ngôn: Ôm cây đợi thỏ (守株待兔)
+          </button>
+          <button onclick="loadArticle(1)" id="art-tab-1" class="art-tab px-3 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 whitespace-nowrap">
+            🐉 Ngụ ngôn: Vẽ rắn thêm chân (画蛇添足)
+          </button>
+          <button onclick="loadArticle(2)" id="art-tab-2" class="art-tab px-3 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 whitespace-nowrap">
+            🍵 Văn hóa: Trà đạo Trung Hoa (中国茶文化)
+          </button>
+          <button onclick="loadArticle(3)" id="art-tab-3" class="art-tab px-3 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 whitespace-nowrap">
+            🌱 Triết lý Chiết Tự: Chữ Nhân (人), Đại (大), Thiên (天)
+          </button>
+        </div>
+
+        <!-- Reader Controls Toolbar -->
+        <div class="bg-stone-900/90 border border-stone-800 rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+          
+          <!-- Audio Playback Buttons -->
+          <div class="flex items-center gap-2">
+            <button id="btn-play-all" onclick="playCurrentArticleAudio()" class="px-3 py-1.5 rounded-lg bg-cinnabar text-ricepaper font-semibold hover:brightness-110 flex items-center gap-1.5 shadow">
+              <span id="play-icon">▶</span> <span id="play-text">Nghe đọc toàn bài</span>
+            </button>
+            <button onclick="stopAudio()" class="px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300">
+              ⏹ Dừng
+            </button>
+          </div>
+
+          <!-- Display Toggles -->
+          <div class="flex items-center gap-4">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-stone-300">
+              <input type="checkbox" id="toggle-pinyin" checked onchange="togglePinyinDisplay()" class="rounded accent-cinnabar">
+              <span>Hiện Pinyin</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-stone-300">
+              <input type="checkbox" id="toggle-vietnamese" checked onchange="toggleVietnameseDisplay()" class="rounded accent-cinnabar">
+              <span>Hiện Bản dịch tiếng Việt</span>
+            </label>
+          </div>
+
+          <!-- Font Sizing -->
+          <div class="flex items-center gap-1 bg-stone-950 p-1 rounded-lg border border-stone-800">
+            <button onclick="changeFontSize(-2)" class="px-2 py-0.5 text-stone-400 hover:text-white font-bold">A-</button>
+            <span id="font-size-label" class="text-[10px] text-stone-300 px-1">18px</span>
+            <button onclick="changeFontSize(2)" class="px-2 py-0.5 text-stone-400 hover:text-white font-bold">A+</button>
+          </div>
+
+        </div>
+
+        <!-- Article Card -->
+        <div class="bg-stone-900/80 border border-stone-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+          
+          <!-- Article Header -->
+          <div class="border-b border-stone-800 pb-4">
+            <div id="art-badge" class="inline-block px-2.5 py-0.5 rounded text-[11px] font-semibold bg-cinnabar/20 text-cinnabar-glow border border-cinnabar/30 mb-2">
+              HSK 3 · THÀNH NGỮ
+            </div>
+            <h2 id="art-title" class="font-display font-bold text-xl sm:text-2xl text-gold-bright tracking-wide">
+              <!-- Title with Ruby -->
+            </h2>
+            <div id="art-title-vi" class="text-xs sm:text-sm text-stone-400 italic mt-1">
+              <!-- Title Vietnamese -->
+            </div>
+          </div>
+
+          <!-- Article Content Body -->
+          <div id="art-content" class="text-stone-200 font-cjk leading-[2.5] tracking-wide text-lg space-y-6">
+            <!-- Injected paragraphs -->
+          </div>
+
+          <!-- Translation Box (Collapsible/Toggleable) -->
+          <div id="art-translation-box" class="pt-6 border-t border-stone-800 space-y-3">
+            <div class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-2">
+              <span>📖 BẢN DỊCH TIẾNG VIỆT SONG NGỮ</span>
+            </div>
+            <div id="art-translation-content" class="text-xs sm:text-sm text-stone-300 leading-relaxed space-y-2 bg-stone-950/60 p-4 rounded-xl border border-stone-800">
+              <!-- Injected Vietnamese paragraphs -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Right Column: Smart Word Inspector & Hanzi Stroke Animator (4 cols) -->
+      <div class="lg:col-span-4 sticky top-20 space-y-4">
+        
+        <div class="bg-stone-900/90 border border-gold/30 rounded-2xl p-5 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded bg-cinnabar text-ricepaper flex items-center justify-center font-cjk font-bold text-xs">析</span>
+              <span class="text-xs font-bold text-gold-bright uppercase tracking-wider">TRA TỪ CHIẾT TỰ TỨC THÌ</span>
+            </div>
+            <span class="text-[10px] text-stone-400">Chạm chữ bất kỳ để xem</span>
+          </div>
+
+          <!-- Selected Character Big View -->
+          <div class="flex items-center gap-4 bg-stone-950 p-4 rounded-xl border border-stone-800">
+            <!-- HanziWriter Canvas Slot -->
+            <div id="inspector-writer" class="w-20 h-20 rounded-lg bg-stone-900 border border-stone-700 flex items-center justify-center shrink-0">
+              <span class="font-cjk text-4xl text-cinnabar" id="inspector-char-preview">兔</span>
+            </div>
+
+            <!-- Phonetics & Audio -->
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span id="inspector-pinyin" class="text-base font-bold text-gold-bright font-mono">tù</span>
+                <button onclick="playInspectorAudio()" class="w-6 h-6 rounded-full bg-cinnabar/20 hover:bg-cinnabar text-ricepaper flex items-center justify-center text-xs transition-colors" title="Nghe phát âm">
+                  🔊
+                </button>
+              </div>
+              <div class="text-xs text-stone-300">
+                Hán Việt: <span id="inspector-han-viet" class="text-stone-100 font-bold">Thố</span>
+              </div>
+              <div class="text-[11px] text-stone-400 line-clamp-1" id="inspector-meaning">
+                con thỏ
+              </div>
+            </div>
+          </div>
+
+          <!-- Chiết Tự Decomposition & Narrative -->
+          <div class="space-y-2 bg-stone-950/70 p-3.5 rounded-xl border border-stone-800/80 text-xs">
+            <div class="font-semibold text-gold text-[11px] flex items-center gap-1.5">
+              <span>💡</span> <span>PHÂN TÍCH KẾT CẤU BỘ THỦ & TƯỢNG HÌNH:</span>
+            </div>
+            <div id="inspector-decomposition" class="text-stone-300 text-xs leading-relaxed">
+              Chữ 兔 (Thố) là chữ tượng hình vẽ hình con thỏ có tai dài, thân uốn cong và nét chấm 丶 ở đuôi.
+            </div>
+          </div>
+
+          <!-- Controls to replay stroke order -->
+          <div class="flex items-center gap-2">
+            <button id="btn-replay-stroke" onclick="replayInspectorStroke()" class="flex-1 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-gold-bright border border-gold/30 text-xs font-semibold transition-all flex items-center justify-center gap-1.5">
+              <span>▶</span> <span>Xem nét bút thuận</span>
+            </button>
+            <button onclick="quizInspectorStroke()" class="py-2 px-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-semibold transition-all" title="Tập viết chữ này">
+              ✍️ Tập viết
+            </button>
+          </div>
+
+          <!-- Quick Tip -->
+          <div class="text-[11px] text-stone-500 pt-2 border-t border-stone-800 italic">
+            Mẹo: Bạn có thể nhấp chuột vào bất cứ chữ nào trong bài đọc bên trái để tra cứu chiết tự và xem cách viết ngay tại đây!
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Shared Footer Slot -->
+  <div id="global-footer-slot"></div>
+
+  <!-- Load Database and Nav scripts -->
+  <script src="js/bang_tuan_hoan_data.js"></script>
+  <script src="js/common_nav.js"></script>
+
+  <script>
+    // Graded Articles Database
+    const ARTICLES = [
+      {
+        id: 'shou-zhu-dai-tu',
+        badge: 'HSK 3 · ĐIỂN CỐ THÀNH NGỮ',
+        title: [
+          { c: '守', py: 'shǒu' },
+          { c: '株', py: 'zhū' },
+          { c: '待', py: 'dài' },
+          { c: '兔', py: 'tù' }
+        ],
+        titleVi: 'Ôm cây đợi thỏ (Thủ chu đãi thố)',
+        paragraphs: [
+          [
+            { c: '宋', py: 'sòng' }, { c: '国', py: 'guó' }, { c: '有', py: 'yǒu' }, { c: '个', py: 'gè' }, { c: '农', py: 'nóng' }, { c: '夫', py: 'fū' }, { c: '，', py: '' },
+            { c: '他', py: 'tā' }, { c: '每', py: 'měi' }, { c: '天', py: 'tiān' }, { c: '都', py: 'dōu' }, { c: '在', py: 'zài' }, { c: '田', py: 'tián' }, { c: '里', py: 'lǐ' }, { c: '勤', py: 'qín' }, { c: '劳', py: 'láo' }, { c: '地', py: 'de' }, { c: '耕', py: 'gēng' }, { c: '作', py: 'zuò' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '有', py: 'yǒu' }, { c: '一', py: 'yī' }, { c: '天', py: 'tiān' }, { c: '，', py: '' }, { c: '一', py: 'yī' }, { c: '只', py: 'zhī' }, { c: '野', py: 'yě' }, { c: '兔', py: 'tù' }, { c: '子', py: 'zi' },
+            { c: '飞', py: 'fēi' }, { c: '快', py: 'kuài' }, { c: '地', py: 'de' }, { c: '跑', py: 'pǎo' }, { c: '过', py: 'guò' }, { c: '来', py: 'lái' }, { c: '，', py: '' },
+            { c: '不', py: 'bù' }, { c: '小', py: 'xiǎo' }, { c: '心', py: 'xīn' }, { c: '撞', py: 'zhuàng' }, { c: '在', py: 'zài' }, { c: '田', py: 'tián' }, { c: '边', py: 'biān' }, { c: '的', py: 'de' }, { c: '树', py: 'shù' }, { c: '桩', py: 'zhuāng' }, { c: '上', py: 'shang' }, { c: '，', py: '' },
+            { c: '折', py: 'zhé' }, { c: '断', py: 'duàn' }, { c: '了', py: 'le' }, { c: '脖', py: 'bó' }, { c: '子', py: 'zi' }, { c: '死', py: 'sǐ' }, { c: '了', py: 'le' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '农', py: 'nóng' }, { c: '夫', py: 'fū' }, { c: '高', py: 'gāo' }, { c: '兴', py: 'xìng' }, { c: '极', py: 'jí' }, { c: '了', py: 'le' }, { c: '，', py: '' },
+            { c: '捡', py: 'jiǎn' }, { c: '起', py: 'qǐ' }, { c: '兔', py: 'tù' }, { c: '子', py: 'zi' }, { c: '带', py: 'dài' }, { c: '回', py: 'huí' }, { c: '家', py: 'jiā' }, { c: '美', py: 'měi' }, { c: '美', py: 'měi' }, { c: '地', py: 'de' }, { c: '吃', py: 'chī' }, { c: '了', py: 'le' }, { c: '一', py: 'yī' }, { c: '顿', py: 'dùn' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '从', py: 'cóng' }, { c: '此', py: 'cǐ' }, { c: '以', py: 'yǐ' }, { c: '后', py: 'hòu' }, { c: '，', py: '' },
+            { c: '他', py: 'tā' }, { c: '放', py: 'fàng' }, { c: '下', py: 'xià' }, { c: '了', py: 'le' }, { c: '农', py: 'nóng' }, { c: '具', py: 'jù' }, { c: '，', py: '' },
+            { c: '整', py: 'zhěng' }, { c: '天', py: 'tiān' }, { c: '坐', py: 'zuò' }, { c: '在', py: 'zài' }, { c: '树', py: 'shù' }, { c: '桩', py: 'zhuāng' }, { c: '旁', py: 'páng' }, { c: '等', py: 'děng' }, { c: '着', py: 'zhe' }, { c: '，', py: '' },
+            { c: '希', py: 'xī' }, { c: '望', py: 'wàng' }, { c: '再', py: 'zài' }, { c: '捡', py: 'jiǎn' }, { c: '到', py: 'dào' }, { c: '撞', py: 'zhuàng' }, { c: '死', py: 'sǐ' }, { c: '的', py: 'de' }, { c: '兔', py: 'tù' }, { c: '子', py: 'zi' }, { c: '。', py: '' },
+            { c: '但', py: 'dàn' }, { c: '是', py: 'shì' }, { c: '，', py: '' }, { c: '他', py: 'tā' }, { c: '再', py: 'zài' }, { c: '也', py: 'yě' }, { c: '没', py: 'méi' }, { c: '等', py: 'děng' }, { c: '到', py: 'dào' }, { c: '兔', py: 'tù' }, { c: '子', py: 'zi' }, { c: '，', py: '' },
+            { c: '田', py: 'tián' }, { c: '里', py: 'lǐ' }, { c: '的', py: 'de' }, { c: '庄', py: 'zhuāng' }, { c: '稼', py: 'jia' }, { c: '却', py: 'què' }, { c: '全', py: 'quán' }, { c: '部', py: 'bù' }, { c: '荒', py: 'huāng' }, { c: '芜', py: 'wú' }, { c: '了', py: 'le' }, { c: '。', py: '' }
+          ]
+        ],
+        translation: [
+          'Nước Tống có một người nông dân, ngày nào ông cũng chăm chỉ làm lụng trên đồng ruộng.',
+          'Một hôm, có một con thỏ rừng chạy thục mạng qua, chẳng may đâm đầu vào gốc cây bên bờ ruộng, gãy cổ mà chết.',
+          'Người nông dân mừng rỡ khôn xiết, nhặt con thỏ mang về nhà làm một bữa no nê.',
+          'Từ đó trở đi, ông ta bỏ luôn cày cuốc, suốt ngày chỉ ngồi bên gốc cây chờ đợi, hy vọng lại nhặt được thỏ đâm đầu vào gốc cây. Thế nhưng ông chẳng bao giờ đợi được con thỏ nào nữa, mà đồng ruộng thì cỏ dại mọc đầy, hoa màu héo rũ hết cả.'
+        ]
+      },
+      {
+        id: 'hua-she-tian-zu',
+        badge: 'HSK 3 · THÀNH NGỮ ĐIỂN CỐ',
+        title: [
+          { c: '画', py: 'huà' },
+          { c: '蛇', py: 'shé' },
+          { c: '添', py: 'tiān' },
+          { c: '足', py: 'zú' }
+        ],
+        titleVi: 'Vẽ rắn thêm chân (Họa xà thiêm túc)',
+        paragraphs: [
+          [
+            { c: '古', py: 'gǔ' }, { c: '代', py: 'dài' }, { c: '楚', py: 'chǔ' }, { c: '国', py: 'guó' }, { c: '有', py: 'yǒu' }, { c: '几', py: 'jǐ' }, { c: '个', py: 'gè' }, { c: '人', py: 'rén' }, { c: '得', py: 'dé' }, { c: '到', py: 'dào' }, { c: '了', py: 'le' }, { c: '一', py: 'yī' }, { c: '壶', py: 'hú' }, { c: '好', py: 'hǎo' }, { c: '酒', py: 'jiǔ' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '大', py: 'dà' }, { c: '家', py: 'jiā' }, { c: '商', py: 'shāng' }, { c: '量', py: 'liang' }, { c: '说', py: 'shuō' }, { c: '：', py: '' },
+            { c: '“', py: '' }, { c: '我', py: 'wǒ' }, { c: '们', py: 'men' }, { c: '在', py: 'zài' }, { c: '地', py: 'dì' }, { c: '上', py: 'shang' }, { c: '画', py: 'huà' }, { c: '蛇', py: 'shé' }, { c: '，', py: '' },
+            { c: '谁', py: 'shéi' }, { c: '先', py: 'xiān' }, { c: '画', py: 'huà' }, { c: '好', py: 'hǎo' }, { c: '，', py: '' },
+            { c: '这', py: 'zhè' }, { c: '壶', py: 'hú' }, { c: '酒', py: 'jiǔ' }, { c: '就', py: 'jiù' }, { c: '归', py: 'guī' }, { c: '谁', py: 'shéi' }, { c: '喝', py: 'hē' }, { c: '。', py: '' }, { c: '”', py: '' }
+          ],
+          [
+            { c: '有', py: 'yǒu' }, { c: '一', py: 'yī' }, { c: '个', py: 'gè' }, { c: '人', py: 'rén' }, { c: '很', py: 'hěn' }, { c: '快', py: 'kuài' }, { c: '画', py: 'huà' }, { c: '好', py: 'hǎo' }, { c: '了', py: 'le' }, { c: '，', py: '' },
+            { c: '他', py: 'tā' }, { c: '拿', py: 'ná' }, { c: '起', py: 'qǐ' }, { c: '酒', py: 'jiǔ' }, { c: '壶', py: 'hú' }, { c: '，', py: '' },
+            { c: '却', py: 'què' }, { c: '得', py: 'dé' }, { c: '意', py: 'yì' }, { c: '地', py: 'de' }, { c: '说', py: 'shuō' }, { c: '：', py: '' },
+            { c: '“', py: '' }, { c: '我', py: 'wǒ' }, { c: '还', py: 'hái' }, { c: '能', py: 'néng' }, { c: '给', py: 'gěi' }, { c: '蛇', py: 'shé' }, { c: '添', py: 'tiān' }, { c: '上', py: 'shang' }, { c: '四', py: 'sì' }, { c: '只', py: 'zhī' }, { c: '脚', py: 'jiǎo' }, { c: '呢', py: 'ne' }, { c: '！', py: '' }, { c: '”', py: '' }
+          ],
+          [
+            { c: '当', py: 'dāng' }, { c: '他', py: 'tā' }, { c: '给', py: 'gěi' }, { c: '蛇', py: 'shé' }, { c: '画', py: 'huà' }, { c: '脚', py: 'jiǎo' }, { c: '的', py: 'de' }, { c: '时', py: 'shí' }, { c: '候', py: 'hou' }, { c: '，', py: '' },
+            { c: '另', py: 'lìng' }, { c: '一', py: 'yī' }, { c: '个', py: 'gè' }, { c: '人', py: 'rén' }, { c: '也', py: 'yě' }, { c: '画', py: 'huà' }, { c: '完', py: 'wán' }, { c: '了', py: 'le' }, { c: '，', py: '' },
+            { c: '夺', py: 'duó' }, { c: '过', py: 'guò' }, { c: '酒', py: 'jiǔ' }, { c: '壶', py: 'hú' }, { c: '说', py: 'shuō' }, { c: '：', py: '' },
+            { c: '“', py: '' }, { c: '蛇', py: 'shé' }, { c: '本', py: 'běn' }, { c: '来', py: 'lái' }, { c: '就', py: 'jiù' }, { c: '没', py: 'méi' }, { c: '有', py: 'yǒu' }, { c: '脚', py: 'jiǎo' }, { c: '，', py: '' },
+            { c: '你', py: 'nǐ' }, { c: '怎', py: 'zěn' }, { c: '么', py: 'me' }, { c: '能', py: 'néng' }, { c: '给', py: 'gěi' }, { c: '它', py: 'tā' }, { c: '画', py: 'huà' }, { c: '脚', py: 'jiǎo' }, { c: '呢', py: 'ne' }, { c: '？', py: '' }, { c: '”', py: '' },
+            { c: '说', py: 'shuō' }, { c: '完', py: 'wán' }, { c: '便', py: 'biàn' }, { c: '把', py: 'bǎ' }, { c: '酒', py: 'jiǔ' }, { c: '喝', py: 'hē' }, { c: '光', py: 'guāng' }, { c: '了', py: 'le' }, { c: '。', py: '' }
+          ]
+        ],
+        translation: [
+          'Thời cổ đại ở nước Sở, có mấy người cùng được thưởng một bình rượu quý.',
+          'Mọi người bàn nhau: "Chúng ta cùng vẽ rắn xuống đất, ai vẽ xong trước thì bình rượu này thuộc về người đó."',
+          'Có một người vẽ xong rất nhanh, anh ta cầm lấy bình rượu, nhưng lại đắc chí bảo: "Ta còn có thể vẽ thêm bốn cái chân cho rắn nữa cơ!"',
+          'Đang lúc anh ta vẽ chân cho rắn, thì một người khác cũng vẽ xong, liền giật lấy bình rượu bảo: "Rắn vốn dĩ làm gì có chân, sao ngươi lại vẽ chân cho nó?" Nói xong liền uống cạn bình rượu.'
+        ]
+      },
+      {
+        id: 'cha-wen-hua',
+        badge: 'HSK 4 · VĂN HÓA TRUNG HOA',
+        title: [
+          { c: '中', py: 'zhōng' },
+          { c: '国', py: 'guó' },
+          { c: '茶', py: 'chá' },
+          { c: '文', py: 'wén' },
+          { c: '化', py: 'huà' }
+        ],
+        titleVi: 'Văn hóa Trà đạo Trung Hoa (Trung Quốc Trà Văn Hóa)',
+        paragraphs: [
+          [
+            { c: '中', py: 'zhōng' }, { c: '国', py: 'guó' }, { c: '是', py: 'shì' }, { c: '茶', py: 'chá' }, { c: '的', py: 'de' }, { c: '故', py: 'gù' }, { c: '乡', py: 'xiāng' }, { c: '。', py: '' },
+            { c: '中', py: 'zhōng' }, { c: '国', py: 'guó' }, { c: '人', py: 'rén' }, { c: '饮', py: 'yǐn' }, { c: '茶', py: 'chá' }, { c: '，', py: '' },
+            { c: '据', py: 'jù' }, { c: '说', py: 'shuō' }, { c: '始', py: 'shǐ' }, { c: '于', py: 'yú' }, { c: '神', py: 'shén' }, { c: '农', py: 'nóng' }, { c: '时', py: 'shí' }, { c: '代', py: 'dài' }, { c: '，', py: '' },
+            { c: '少', py: 'shǎo' }, { c: '说', py: 'shuō' }, { c: '也', py: 'yě' }, { c: '有', py: 'yǒu' }, { c: '四', py: 'sì' }, { c: '千', py: 'qiān' }, { c: '七', py: 'qī' }, { c: '百', py: 'bǎi' }, { c: '多', py: 'duō' }, { c: '年', py: 'nián' }, { c: '了', py: 'le' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '茶', py: 'chá' }, { c: '不', py: 'bù' }, { c: '仅', py: 'jǐn' }, { c: '是', py: 'shì' }, { c: '一', py: 'yī' }, { c: '种', py: 'zhǒng' }, { c: '健', py: 'jiàn' }, { c: '康', py: 'kāng' }, { c: '的', py: 'de' }, { c: '饮', py: 'yǐn' }, { c: '品', py: 'pǐn' }, { c: '，', py: '' },
+            { c: '更', py: 'gèng' }, { c: '是', py: 'shì' }, { c: '一', py: 'yī' }, { c: '种', py: 'zhǒng' }, { c: '心', py: 'xīn' }, { c: '境', py: 'jìng' }, { c: '与', py: 'yǔ' }, { c: '哲', py: 'zhé' }, { c: '学', py: 'xué' }, { c: '。', py: '' },
+            { c: '品', py: 'pǐn' }, { c: '茶', py: 'chá' }, { c: '讲', py: 'jiǎng' }, { c: '究', py: 'jiu' }, { c: '“', py: '' }, { c: '和', py: 'hé' }, { c: '、', py: '' }, { c: '敬', py: 'jìng' }, { c: '、', py: '' }, { c: '清', py: 'qīng' }, { c: '、', py: '' }, { c: '寂', py: 'jì' }, { c: '”', py: '' }, { c: '，', py: '' },
+            { c: '在', py: 'zài' }, { c: '清', py: 'qīng' }, { c: '香', py: 'xiāng' }, { c: '中', py: 'zhōng' }, { c: '体', py: 'tǐ' }, { c: '会', py: 'huì' }, { c: '生', py: 'shēng' }, { c: '活', py: 'huó' }, { c: '的', py: 'de' }, { c: '宁', py: 'níng' }, { c: '静', py: 'jìng' }, { c: '与', py: 'yǔ' }, { c: '平', py: 'píng' }, { c: '和', py: 'hé' }, { c: '。', py: '' }
+          ]
+        ],
+        translation: [
+          'Trung Quốc là quê hương của cây trà. Người Trung Quốc uống trà tương truyền bắt đầu từ thời Thần Nông, ít nhất cũng đã có hơn 4700 năm lịch sử.',
+          'Trà không chỉ là một thức uống bổ dưỡng cho sức khỏe, mà còn là một cảnh giới tinh thần và triết lý sống. Thưởng trà chú trọng vào bốn chữ "Hòa, Kính, Thanh, Tịch", cảm nhận sự an yên và thanh thản giữa hương trà thoang thoảng.'
+        ]
+      },
+      {
+        id: 'chiet-tu-triet-ly',
+        badge: 'GIÁO TRÌNH CHIẾT TỰ · TẬP 1',
+        title: [
+          { c: '人', py: 'rén' },
+          { c: '大', py: 'dà' },
+          { c: '天', py: 'tiān' },
+          { c: '的', py: 'de' },
+          { c: '宇', py: 'yǔ' },
+          { c: '宙', py: 'zhòu' },
+          { c: '观', py: 'guān' }
+        ],
+        titleVi: 'Vũ trụ quan qua chữ Nhân (人), Đại (大), Thiên (天)',
+        paragraphs: [
+          [
+            { c: '古', py: 'gǔ' }, { c: '人', py: 'rén' }, { c: '造', py: 'zào' }, { c: '字', py: 'zì' }, { c: '，', py: '' },
+            { c: '仰', py: 'yǎng' }, { c: '观', py: 'guān' }, { c: '天', py: 'tiān' }, { c: '文', py: 'wén' }, { c: '，', py: '' },
+            { c: '俯', py: 'fǔ' }, { c: '察', py: 'chá' }, { c: '地', py: 'dì' }, { c: '理', py: 'lǐ' }, { c: '。', py: '' },
+            { c: '人', py: 'rén' }, { c: '字', py: 'zì' }, { c: '像', py: 'xiàng' }, { c: '一', py: 'yī' }, { c: '个', py: 'gè' }, { c: '侧', py: 'cè' }, { c: '身', py: 'shēn' }, { c: '立', py: 'lì' }, { c: '正', py: 'zhèng' }, { c: '的', py: 'de' }, { c: '人', py: 'rén' }, { c: '，', py: '' },
+            { c: '顶', py: 'dǐng' }, { c: '天', py: 'tiān' }, { c: '立', py: 'lì' }, { c: '地', py: 'dì' }, { c: '。', py: '' }
+          ],
+          [
+            { c: '人', py: 'rén' }, { c: '把', py: 'bǎ' }, { c: '两', py: 'liǎng' }, { c: '臂', py: 'bì' }, { c: '张', py: 'zhāng' }, { c: '开', py: 'kāi' }, { c: '，', py: '' },
+            { c: '就', py: 'jiù' }, { c: '变', py: 'biàn' }, { c: '成', py: 'chéng' }, { c: '了', py: 'le' }, { c: '“', py: '' }, { c: '大', py: 'dà' }, { c: '”', py: '' }, { c: '字', py: 'zì' }, { c: '；', py: '' },
+            { c: '在', py: 'zài' }, { c: '大', py: 'dà' }, { c: '字', py: 'zì' }, { c: '头', py: 'tóu' }, { c: '顶', py: 'dǐng' }, { c: '加', py: 'jiā' }, { c: '一', py: 'yī' }, { c: '横', py: 'héng' }, { c: '，', py: '' },
+            { c: '指', py: 'zhǐ' }, { c: '人', py: 'rén' }, { c: '头', py: 'tóu' }, { c: '顶', py: 'dǐng' }, { c: '之', py: 'zhī' }, { c: '苍', py: 'cāng' }, { c: '穹', py: 'qióng' }, { c: '，', py: '' },
+            { c: '便', py: 'biàn' }, { c: '成', py: 'chéng' }, { c: '了', py: 'le' }, { c: '“', py: '' }, { c: '天', py: 'tiān' }, { c: '”', py: '' }, { c: '字', py: 'zì' }, { c: '。', py: '' },
+            { c: '这', py: 'zhè' }, { c: '就', py: 'jiù' }, { c: '是', py: 'shì' }, { c: '中', py: 'zhōng' }, { c: '华', py: 'huá' }, { c: '先', py: 'xiān' }, { c: '民', py: 'mín' }, { c: '天', py: 'tiān' }, { c: '人', py: 'rén' }, { c: '合', py: 'hé' }, { c: '一', py: 'yī' }, { c: '的', py: 'de' }, { c: '智', py: 'zhì' }, { c: '慧', py: 'huì' }, { c: '。', py: '' }
+          ]
+        ],
+        translation: [
+          'Người xưa tạo ra chữ Hán, ngẩng đầu quan sát thiên văn, cúi đầu xem xét địa lý. Chữ Nhân (人) tượng hình một người đứng nghiêng vững chãi, đầu đội trời chân đạp đất.',
+          'Khi con người dang rộng hai tay hết cỡ thì hóa thành chữ Đại (大 - to lớn); trên đỉnh đầu người to lớn vạch thêm một nét ngang chỉ vòm trời bao la thì hóa thành chữ Thiên (天 - trời cao). Đó chính là trí tuệ sâu sắc về đạo lý Thiên Nhân Hợp Nhất của cổ nhân.'
+        ]
+      }
+    ];
+
+    let currentArticleIndex = 0;
+    let currentSpeechUtterance = null;
+    let inspectorWriterInstance = null;
+    let currentFontSize = 18;
+
+    function loadArticle(idx) {
+      currentArticleIndex = idx;
+      // Update tab active state
+      for (let i = 0; i < ARTICLES.length; i++) {
+        const tab = document.getElementById(`art-tab-${i}`);
+        if (i === idx) {
+          tab.className = 'art-tab px-3 py-1.5 rounded-lg bg-gold/20 text-gold-bright border border-gold/40 font-semibold whitespace-nowrap shadow';
+        } else {
+          tab.className = 'art-tab px-3 py-1.5 rounded-lg bg-stone-900 text-stone-300 hover:text-gold border border-stone-800 whitespace-nowrap';
+        }
+      }
+
+      const art = ARTICLES[idx];
+      document.getElementById('art-badge').textContent = art.badge;
+      
+      // Render Title with Ruby
+      const titleHtml = art.title.map(t => `<ruby>${t.c}<rt>${t.py}</rt></ruby>`).join('');
+      document.getElementById('art-title').innerHTML = titleHtml;
+      document.getElementById('art-title-vi').textContent = art.titleVi;
+
+      // Render Paragraphs
+      let pContentHtml = '';
+      art.paragraphs.forEach((pArr, pIdx) => {
+        let pText = pArr.map((item, wIdx) => {
+          if (!item.py) {
+            // Punctuation
+            return `<span class="punctuation text-stone-500">${item.c}</span>`;
+          } else {
+            return `<ruby onclick="inspectWord('${item.c}', '${item.py}')" class="reading-char" id="char-${pIdx}-${wIdx}">${item.c}<rt>${item.py}</rt></ruby>`;
+          }
+        }).join('');
+        pContentHtml += `<p class="paragraph-row">${pText}</p>`;
+      });
+
+      document.getElementById('art-content').innerHTML = pContentHtml;
+
+      // Render Translation
+      let transHtml = art.translation.map((t, i) => `<p><span class="text-gold font-bold mr-1.5">[${i+1}]</span>${t}</p>`).join('');
+      document.getElementById('art-translation-content').innerHTML = transHtml;
+
+      // Inspect first character by default
+      const firstChar = art.title[0];
+      if (firstChar) {
+        inspectWord(firstChar.c, firstChar.py);
+      }
+    }
+
+    // Inspect Word details in Right panel
+    function inspectWord(char, py) {
+      const charPreview = document.getElementById('inspector-char-preview');
+      const pinyinEl = document.getElementById('inspector-pinyin');
+      const hanVietEl = document.getElementById('inspector-han-viet');
+      const meaningEl = document.getElementById('inspector-meaning');
+      const decompEl = document.getElementById('inspector-decomposition');
+
+      pinyinEl.textContent = py || '';
+      
+      // Search from CHIET_TU_DATABASE
+      let meta = null;
+      if (window.CHIET_TU_DATABASE) {
+        if (window.CHIET_TU_DATABASE.reactions) {
+          meta = window.CHIET_TU_DATABASE.reactions.find(r => r.char === char);
+        }
+        if (!meta && window.CHIET_TU_DATABASE.radicals) {
+          const rad = window.CHIET_TU_DATABASE.radicals.find(r => r.char === char);
+          if (rad) {
+            meta = {
+              char: rad.char,
+              pinyin: rad.pinyin,
+              han_viet: rad.han_viet,
+              meaning: rad.meaning,
+              narrative: `Bộ thủ cốt lõi ${rad.char} (${rad.han_viet}) - Thuộc chủ đề: ${rad.theme || 'cơ bản'}.`
+            };
+          }
+        }
+      }
+
+      hanVietEl.textContent = meta?.han_viet || 'Đang cập nhật';
+      meaningEl.textContent = meta?.meaning || 'Biểu thị ngữ nghĩa trong văn cảnh đoạn văn';
+      decompEl.innerHTML = meta?.narrative || `Chữ <b>${char}</b> (Phiên âm: <i>${py}</i>). Được ghép từ các nét và bộ thủ chuẩn, thể hiện ý niệm tượng hình và hội ý.`;
+
+      // Render HanziWriter
+      const writerBox = document.getElementById('inspector-writer');
+      writerBox.innerHTML = '';
+      try {
+        inspectorWriterInstance = HanziWriter.create('inspector-writer', char, {
+          width: 76,
+          height: 76,
+          padding: 5,
+          showOutline: true,
+          strokeColor: '#C23B2A',
+          outlineColor: '#333333',
+          strokeAnimationSpeed: 1.4,
+          delayBetweenStrokes: 100
+        });
+        inspectorWriterInstance.animateCharacter();
+      } catch (e) {
+        writerBox.innerHTML = `<span class="font-cjk text-4xl text-cinnabar">${char}</span>`;
+      }
+
+      // Audio click
+      playAudio(py || char);
+    }
+
+    function replayInspectorStroke() {
+      if (inspectorWriterInstance) {
+        inspectorWriterInstance.animateCharacter();
+      }
+    }
+
+    function quizInspectorStroke() {
+      if (inspectorWriterInstance) {
+        inspectorWriterInstance.quiz();
+      }
+    }
+
+    function playInspectorAudio() {
+      const py = document.getElementById('inspector-pinyin').textContent;
+      if (py) playAudio(py);
+    }
+
+    // Audio Playback with Web Speech API
+    function playAudio(text, rate = 0.85) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = rate;
+      window.speechSynthesis.speak(u);
+    }
+
+    let isPlayingFull = false;
+    function playCurrentArticleAudio() {
+      const btnText = document.getElementById('play-text');
+      const btnIcon = document.getElementById('play-icon');
+
+      if (isPlayingFull) {
+        stopAudio();
+        return;
+      }
+
+      const art = ARTICLES[currentArticleIndex];
+      // Gather full Chinese text
+      let fullText = '';
+      art.paragraphs.forEach(p => {
+        p.forEach(w => {
+          fullText += w.c;
+        });
+      });
+
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+
+      currentSpeechUtterance = new SpeechSynthesisUtterance(fullText);
+      currentSpeechUtterance.lang = 'zh-CN';
+      currentSpeechUtterance.rate = 0.85;
+
+      currentSpeechUtterance.onstart = () => {
+        isPlayingFull = true;
+        btnText.textContent = 'Tạm dừng đọc';
+        btnIcon.textContent = '⏸';
+      };
+
+      currentSpeechUtterance.onend = currentSpeechUtterance.onerror = () => {
+        isPlayingFull = false;
+        btnText.textContent = 'Nghe đọc toàn bài';
+        btnIcon.textContent = '▶';
+      };
+
+      window.speechSynthesis.speak(currentSpeechUtterance);
+    }
+
+    function stopAudio() {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      isPlayingFull = false;
+      document.getElementById('play-text').textContent = 'Nghe đọc toàn bài';
+      document.getElementById('play-icon').textContent = '▶';
+    }
+
+    // Display Toggles
+    function togglePinyinDisplay() {
+      const show = document.getElementById('toggle-pinyin').checked;
+      const contentEl = document.getElementById('art-content');
+      if (show) {
+        contentEl.classList.remove('hide-pinyin');
+      } else {
+        contentEl.classList.add('hide-pinyin');
+      }
+    }
+
+    function toggleVietnameseDisplay() {
+      const show = document.getElementById('toggle-vietnamese').checked;
+      const box = document.getElementById('art-translation-box');
+      box.style.display = show ? 'block' : 'none';
+    }
+
+    function changeFontSize(delta) {
+      currentFontSize = Math.max(14, Math.min(28, currentFontSize + delta));
+      document.getElementById('font-size-label').textContent = `${currentFontSize}px`;
+      const contentEl = document.getElementById('art-content');
+      contentEl.style.fontSize = `${currentFontSize}px`;
+    }
+
+    // Custom Paste Article Logic
+    function toggleCustomInput() {
+      const box = document.getElementById('custom-input-box');
+      box.classList.toggle('hidden');
+    }
+
+    function applyCustomText() {
+      const text = document.getElementById('custom-text-input').value.trim();
+      if (!text) return;
+
+      const pArr = [];
+      const lines = text.split('\n');
+      
+      lines.forEach(line => {
+        const lineChars = [];
+        Array.from(line).forEach(ch => {
+          if (/[\u4e00-\u9fa5]/.test(ch)) {
+            lineChars.push({ c: ch, py: '' });
+          } else if (ch.trim()) {
+            lineChars.push({ c: ch, py: '' });
+          }
+        });
+        if (lineChars.length > 0) {
+          pArr.push(lineChars);
+        }
+      });
+
+      const customArt = {
+        id: 'custom-' + Date.now(),
+        badge: 'VĂN BẢN NGƯỜI DÙNG NHẬP',
+        title: [{ c: '自', py: 'zì' }, { c: '选', py: 'xuǎn' }, { c: '文', py: 'wén' }, { c: '章', py: 'zhāng' }],
+        titleVi: 'Bài đọc tự chọn của bạn',
+        paragraphs: pArr,
+        translation: ['(Văn bản do bạn tự nhập – chạm vào chữ Hán bất kỳ để tra cứu từ điển và bộ thủ)']
+      };
+
+      ARTICLES.unshift(customArt);
+      toggleCustomInput();
+      loadArticle(0);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadArticle(0);
+    });
+  </script>
+</body>
+</html>

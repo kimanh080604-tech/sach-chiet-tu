@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Kinh Thành Chiết Tự 3D – Bản Đồ Nhập Vai Tương Tác</title>
+  <meta name="description" content="Thành phố cổ trang 3D tương tác: Khám phá các khu vực đời sống, đối thoại với NPC, học từ vựng tiếng Trung theo tình huống thực tế và luyện thi HSK.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            ricepaper: '#FAF6EE'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 3D Isometric building hover and pin pulse */
+    .city-node {
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .city-node:hover {
+      transform: translateY(-8px) scale(1.03);
+      filter: drop-shadow(0 15px 25px rgba(212, 175, 55, 0.35));
+    }
+    @keyframes pulse-pin {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animated-pin {
+      animation: pulse-pin 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-stone-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cinnabar selection:text-ricepaper">
+
+  <!-- Shared Top Navigation Slot -->
+  <div id="global-header-slot"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+    
+    <!-- Hero / Title -->
+    <div class="mb-6 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinnabar/20 border border-cinnabar/30 text-cinnabar-glow text-xs font-semibold mb-2">
+          <span>🏯 BẢN ĐỒ NHẬP VAI 2.5D</span>
+          <span>·</span>
+          <span>HỌC TỪ VỰNG QUA TÌNH HUỐNG THỰC TẾ</span>
+        </div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-gold-bright tracking-wide flex items-center gap-2">
+          <span>KINH THÀNH CHIẾT TỰ 3D</span>
+          <span class="font-cjk text-xl text-cinnabar">「金榜城」</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-2xl">
+          Bước vào kinh thành Cổ phong tân thời: Khám phá từng địa điểm, trò chuyện với cư dân NPC bằng giọng đọc bản xứ, thu thập từ vựng và giải mã bộ thủ chiết tự.
+        </p>
+      </div>
+
+      <!-- Quick Stats & Fast Travel -->
+      <div class="flex items-center gap-3 self-center sm:self-auto text-xs bg-stone-900 border border-stone-800 p-2.5 rounded-xl">
+        <div class="text-stone-400">
+          Khám phá: <span id="zones-explored" class="text-gold font-bold">1</span> / 7 khu vực
+        </div>
+        <div class="h-4 w-px bg-stone-700"></div>
+        <div class="text-stone-400">
+          Từ vựng đã mở: <span id="vocab-unlocked" class="text-emerald-400 font-bold">4</span> từ
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.5D Isometric Interactive City Map Viewport -->
+    <div class="relative bg-gradient-to-b from-stone-900 via-stone-950 to-stone-900 border-2 border-gold/30 rounded-3xl p-4 sm:p-6 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden mb-8">
+      
+      <!-- Ambient Watermark & Compass -->
+      <div class="absolute top-4 right-4 z-10 pointer-events-none opacity-40 flex items-center gap-2 text-stone-500 font-display text-xs">
+        <span class="font-cjk text-lg">北</span>
+        <span>· N · KINH THÀNH ĐỒ</span>
+      </div>
+
+      <!-- The 2.5D Isometric SVG Map Canvas -->
+      <div class="w-full aspect-[16/10] sm:aspect-[16/9] max-h-[580px] relative">
+        <svg viewBox="0 0 1000 600" class="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Ground gradient -->
+            <radialGradient id="groundGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1e1b18"/>
+              <stop offset="100%" stop-color="#0c0a09"/>
+            </radialGradient>
+            <!-- Water canal gradient -->
+            <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1e3a5f"/>
+              <stop offset="50%" stop-color="#0f2b48"/>
+              <stop offset="100%" stop-color="#0a1926"/>
+            </linearGradient>
+            <!-- Gold glow filter -->
+            <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Ground Base -->
+          <rect x="0" y="0" width="1000" height="600" fill="url(#groundGrad)"/>
+
+          <!-- River / Canal (Biện Hà) -->
+          <path d="M 0 350 Q 250 280 480 340 T 1000 320 L 1000 390 Q 750 370 480 410 T 0 430 Z" fill="url(#waterGrad)" opacity="0.8"/>
+          <!-- Bridge (Cầu đá Hồng Kiều) -->
+          <rect x="440" y="310" width="80" height="95" rx="6" fill="#3f3f46" stroke="#d4af37" stroke-width="1.5" opacity="0.9"/>
+          <line x1="480" y1="310" x2="480" y2="405" stroke="#71717a" stroke-dasharray="4,4"/>
+
+          <!-- Cobblestone Roads Connecting Zones -->
+          <path d="M 160 480 Q 280 440 450 360 T 520 280 T 500 120" fill="none" stroke="#57534e" stroke-width="8" stroke-dasharray="12,6" opacity="0.6"/>
+          <path d="M 450 360 Q 650 380 820 440" fill="none" stroke="#57534e" stroke-width="8" stroke-dasharray="12,6" opacity="0.6"/>
+          <path d="M 520 280 Q 720 240 820 180" fill="none" stroke="#57534e" stroke-width="8" stroke-dasharray="12,6" opacity="0.6"/>
+          <path d="M 520 280 Q 320 240 200 180" fill="none" stroke="#57534e" stroke-width="8" stroke-dasharray="12,6" opacity="0.6"/>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 1: CỔNG CHU TƯỚC (Nam Thành - x: 160, y: 480) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('cong-chu-tuoc')">
+            <!-- Shadow -->
+            <ellipse cx="160" cy="510" rx="60" ry="25" fill="#000000" opacity="0.6"/>
+            <!-- Building / Gate -->
+            <path d="M 120 460 L 160 420 L 200 460 L 200 500 L 120 500 Z" fill="#8c1d24" stroke="#c23b2a" stroke-width="2"/>
+            <path d="M 100 460 L 160 400 L 220 460 Z" fill="#d4af37" stroke="#f3e5ab" stroke-width="1.5"/>
+            <!-- Door arch -->
+            <path d="M 145 500 A 15 20 0 0 1 175 500 Z" fill="#0c0a09"/>
+            <!-- Animated Pin -->
+            <g class="animated-pin">
+              <circle cx="160" cy="380" r="16" fill="#c23b2a" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="160" y="385" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">门</text>
+            </g>
+            <!-- Label banner -->
+            <rect x="105" y="520" width="110" height="24" rx="6" fill="#1c1917" stroke="#c23b2a" stroke-width="1.2"/>
+            <text x="160" y="536" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#f3e5ab" text-anchor="middle">1. CỔNG CHU TƯỚC</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 2: HÀN LÂM VIỆN (Thư viện văn tự - x: 200, y: 180) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('han-lam-vien')">
+            <ellipse cx="200" cy="210" rx="55" ry="22" fill="#000000" opacity="0.6"/>
+            <!-- Pagoda / Library -->
+            <rect x="165" y="150" width="70" height="50" fill="#292524" stroke="#78716c" stroke-width="1.5"/>
+            <path d="M 150 150 L 200 110 L 250 150 Z" fill="#d4af37" stroke="#f3e5ab" stroke-width="1.5"/>
+            <path d="M 160 110 L 200 80 L 240 110 Z" fill="#c23b2a" stroke="#ff4d3b" stroke-width="1.2"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 0.3s">
+              <circle cx="200" cy="65" r="16" fill="#2563eb" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="200" y="70" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">书</text>
+            </g>
+            <rect x="145" y="220" width="110" height="24" rx="6" fill="#1c1917" stroke="#2563eb" stroke-width="1.2"/>
+            <text x="200" y="236" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#93c5fd" text-anchor="middle">2. HÀN LÂM VIỆN</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 3: NGỰ TRÀ QUÁN (Ẩm thực bên sông - x: 380, y: 260) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('ngu-tra-quan')">
+            <ellipse cx="380" cy="285" rx="50" ry="20" fill="#000000" opacity="0.6"/>
+            <!-- Teahouse pavilion -->
+            <rect x="350" y="235" width="60" height="40" fill="#44403c" stroke="#a8a29e" stroke-width="1.5"/>
+            <path d="M 335 235 L 380 200 L 425 235 Z" fill="#15803d" stroke="#86efac" stroke-width="1.5"/>
+            <!-- Lanterns -->
+            <circle cx="340" cy="245" r="4" fill="#ef4444"/>
+            <circle cx="420" cy="245" r="4" fill="#ef4444"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 0.6s">
+              <circle cx="380" cy="180" r="16" fill="#15803d" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="380" y="185" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">茶</text>
+            </g>
+            <rect x="325" y="295" width="110" height="24" rx="6" fill="#1c1917" stroke="#15803d" stroke-width="1.2"/>
+            <text x="380" y="311" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#86efac" text-anchor="middle">3. NGỰ TRÀ QUÁN</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 4: ĐỒNG NHÂN ĐƯỜNG (Hiệu thuốc & Ngũ hành - x: 820, y: 180) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('dong-nhan-duong')">
+            <ellipse cx="820" cy="210" rx="55" ry="22" fill="#000000" opacity="0.6"/>
+            <rect x="785" y="150" width="70" height="50" fill="#3f3f46" stroke="#a1a1aa" stroke-width="1.5"/>
+            <path d="M 770 150 L 820 110 L 870 150 Z" fill="#059669" stroke="#6ee7b7" stroke-width="1.5"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 0.9s">
+              <circle cx="820" cy="90" r="16" fill="#059669" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="820" y="95" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">药</text>
+            </g>
+            <rect x="755" y="220" width="130" height="24" rx="6" fill="#1c1917" stroke="#059669" stroke-width="1.2"/>
+            <text x="820" y="236" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#6ee7b7" text-anchor="middle">4. ĐỒNG NHÂN ĐƯỜNG</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 5: CHỢ ĐÊM BIỆN KINH (Thương mại & Mua sắm - x: 820, y: 440) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('cho-dem-bien-kinh')">
+            <ellipse cx="820" cy="470" rx="65" ry="25" fill="#000000" opacity="0.6"/>
+            <!-- Stalls -->
+            <rect x="770" y="415" width="45" height="35" fill="#78350f" stroke="#d97706" stroke-width="1.5"/>
+            <polygon points="760,415 792,390 825,415" fill="#d97706"/>
+            <rect x="825" y="420" width="45" height="35" fill="#831843" stroke="#db2777" stroke-width="1.5"/>
+            <polygon points="815,420 847,395 880,420" fill="#db2777"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 1.2s">
+              <circle cx="820" cy="370" r="16" fill="#d97706" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="820" y="375" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">市</text>
+            </g>
+            <rect x="755" y="480" width="130" height="24" rx="6" fill="#1c1917" stroke="#d97706" stroke-width="1.2"/>
+            <text x="820" y="496" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#fde68a" text-anchor="middle">5. CHỢ ĐÊM BIỆN KINH</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 6: DỊCH TRẠM HOÀNG GIA (Giao thông & Hỏi đường - x: 620, y: 310) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('dich-tram')">
+            <ellipse cx="620" cy="335" rx="50" ry="20" fill="#000000" opacity="0.6"/>
+            <rect x="590" y="280" width="60" height="40" fill="#451a03" stroke="#b45309" stroke-width="1.5"/>
+            <path d="M 580 280 L 620 250 L 660 280 Z" fill="#b45309" stroke="#fbbf24" stroke-width="1.5"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 1.5s">
+              <circle cx="620" cy="230" r="16" fill="#7c3aed" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="620" y="235" font-family="'Noto Serif SC', serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">驿</text>
+            </g>
+            <rect x="560" y="345" width="120" height="24" rx="6" fill="#1c1917" stroke="#7c3aed" stroke-width="1.2"/>
+            <text x="620" y="361" font-family="'Cinzel', serif" font-size="11" font-weight="bold" fill="#c4b5fd" text-anchor="middle">6. DỊCH TRẠM XE</text>
+          </g>
+
+          <!-- ============================================================== -->
+          <!-- ZONE 7: TRƯỜNG THI KHẢO THÍ HSK (Bắc Cung - x: 500, y: 120) -->
+          <!-- ============================================================== -->
+          <g class="city-node" onclick="openZoneModal('truong-thi')">
+            <ellipse cx="500" cy="140" rx="75" ry="28" fill="#000000" opacity="0.7"/>
+            <!-- Imperial Examination Palace -->
+            <rect x="450" y="80" width="100" height="50" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+            <path d="M 430 80 L 500 40 L 570 80 Z" fill="#d4af37" stroke="#fef08a" stroke-width="2"/>
+            <!-- Top dragon finials -->
+            <circle cx="500" cy="35" r="5" fill="#f59e0b"/>
+            <!-- Pin -->
+            <g class="animated-pin" style="animation-delay: 1.8s">
+              <circle cx="500" cy="20" r="18" fill="#dc2626" stroke="#ffffff" stroke-width="2" filter="url(#goldGlow)"/>
+              <text x="500" y="26" font-family="'Noto Serif SC', serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">试</text>
+            </g>
+            <rect x="430" y="150" width="140" height="26" rx="6" fill="#1c1917" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="500" y="167" font-family="'Cinzel', serif" font-size="11" font-weight="extrabold" fill="#fca5a5" text-anchor="middle">7. TRƯỜNG THI HSK</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- Quick Hint Bar at bottom -->
+      <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-stone-400 border-t border-stone-800/80 pt-3">
+        <div class="flex items-center gap-2">
+          <span>💡 Mẹo: Nhấp vào bất kỳ tòa nhà nào trên bản đồ để đối thoại và làm nhiệm vụ tiếng Trung.</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="openZoneModal('cong-chu-tuoc')" class="text-gold hover:underline">Vào Cổng Thành</button>
+          <span>·</span>
+          <button onclick="openZoneModal('truong-thi')" class="text-cinnabar-glow hover:underline">Vào Trường Thi HSK</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Interactive Zone Explorer Modal (In-game Dialog & Vocab) -->
+    <div id="zone-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+      <div class="bg-stone-900 border border-gold/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <button onclick="closeZoneModal()" class="absolute top-5 right-5 text-stone-400 hover:text-white text-2xl font-bold">✕</button>
+        
+        <!-- Header: Zone Identity -->
+        <div class="flex items-center gap-3 mb-4">
+          <div id="modal-zone-icon" class="w-12 h-12 rounded-2xl bg-cinnabar/20 border border-cinnabar/40 text-cinnabar text-2xl flex items-center justify-center font-cjk font-bold">
+            门
+          </div>
+          <div>
+            <div id="modal-zone-badge" class="text-[10px] font-bold uppercase tracking-widest text-gold">KHU VỰC 1</div>
+            <h2 id="modal-zone-title" class="text-xl sm:text-2xl font-bold text-stone-100 font-display">
+              CỔNG CHU TƯỚC · 南大门
+            </h2>
+          </div>
+        </div>
+
+        <p id="modal-zone-desc" class="text-xs sm:text-sm text-stone-300 mb-6 leading-relaxed bg-stone-950 p-3.5 rounded-xl border border-stone-800">
+          Nơi bắt đầu cuộc hành trình. Các sứ giả và thương nhân khắp nơi hội tụ về kinh thành.
+        </p>
+
+        <!-- NPC Conversation Dialog -->
+        <div class="bg-gradient-to-r from-stone-950 to-stone-900 border border-stone-800 rounded-2xl p-4 sm:p-5 mb-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-800/80 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base" id="npc-avatar">🛡️</span>
+              <span class="text-xs font-bold text-gold" id="npc-name">Lính Gác Cổng Thành (卫兵)</span>
+            </div>
+            <button onclick="playNpcDialogueAudio()" class="px-2.5 py-1 rounded bg-cinnabar text-ricepaper text-[11px] font-semibold hover:brightness-110 flex items-center gap-1 shadow">
+              <span>🔊</span> <span>Phát âm câu thoại</span>
+            </button>
+          </div>
+
+          <div class="space-y-1">
+            <div id="npc-cn" class="font-cjk text-lg sm:text-xl text-stone-100 font-semibold tracking-wide">
+              站住！来者何人？请出示通关文牒。
+            </div>
+            <div id="npc-py" class="font-mono text-xs text-gold">
+              Zhànzhù! Lái zhě hé rén? Qǐng chūshì tōngguān wéndié.
+            </div>
+            <div id="npc-vi" class="text-xs text-stone-400 italic">
+              "Đứng lại! Người đến là ai? Xin vui lòng xuất trình giấy thông hành."
+            </div>
+          </div>
+        </div>
+
+        <!-- Vocabulary unlocked in this zone -->
+        <div class="space-y-3 mb-6">
+          <div class="text-xs font-bold text-gold uppercase tracking-wider flex items-center justify-between">
+            <span>TỪ VỰNG & BỘ THỦ KHU VỰC NÀY:</span>
+            <span class="text-[11px] text-stone-400 font-normal">Chạm loa để nghe</span>
+          </div>
+
+          <div id="modal-vocab-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Injected cards -->
+          </div>
+        </div>
+
+        <!-- Action CTA -->
+        <div class="flex items-center justify-between pt-4 border-t border-stone-800">
+          <button onclick="closeZoneModal()" class="px-4 py-2 rounded-xl bg-stone-800 text-stone-300 text-xs font-semibold hover:bg-stone-700">
+            Trở lại bản đồ
+          </button>
+          <div id="modal-action-slot">
+            <!-- Dynamic button -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Shared Footer Slot -->
+  <div id="global-footer-slot"></div>
+
+  <!-- Load Nav scripts -->
+  <script src="js/common_nav.js"></script>
+
+  <script>
+    // City Zones Data Model
+    const CITY_ZONES = {
+      'cong-chu-tuoc': {
+        icon: '门',
+        badge: 'KHU VỰC 1 · KHỞI ĐẦU HÀNH TRÌNH',
+        title: 'CỔNG CHU TƯỚC · 南大门',
+        desc: 'Cửa ngõ chính diện phía Nam kinh thành. Nơi các sứ giả, thương nhân và sĩ tử vào thành, học cách chào hỏi và xuất trình danh tính.',
+        npc: {
+          avatar: '🛡️',
+          name: 'Lính Gác Cổng Thành (城门守卫)',
+          cn: '你好！请问你叫什么名字？从哪里来？',
+          py: 'Nǐ hǎo! Qǐngwèn nǐ jiào shénme míngzì? Cóng nǎlǐ lái?',
+          vi: '"Xin chào! Xin hỏi bạn tên là gì? Từ đâu đến vậy?"'
+        },
+        vocabs: [
+          { cn: '你好', py: 'nǐhǎo', vi: 'xin chào', rad: '亻 (Nhân đứng) + 尔', chietTu: 'Chữ 你 gồm bộ Nhân đứng (亻) chỉ người đối diện.' },
+          { cn: '请问', py: 'qǐngwèn', vi: 'xin hỏi', rad: '讠 (Ngôn) + 门 (Môn)', chietTu: 'Chữ 问 gồm bộ Môn (门) mở cửa và Khẩu (口) cất lời hỏi thăm.' },
+          { cn: '名字', py: 'míngzi', vi: 'tên gọi', rad: '夕 (Tịch) + 口 (Khẩu)', chietTu: 'Chữ 名 gồm Tịch (trời tối) và Khẩu (phải xưng tên để nhận ra nhau).' },
+          { cn: '欢迎', py: 'huānyíng', vi: 'chào mừng', rad: '又 + 欠, 辶 (Xước)', chietTu: 'Chữ 迎 gồm bộ Xước (辶) bước đi đón chào khách từ xa.' }
+        ]
+      },
+      'han-lam-vien': {
+        icon: '书',
+        badge: 'KHU VỰC 2 · VĂN TỰ & TRI THỨC',
+        title: 'HÀN LÂM THƯ VIỆN · 翰林院',
+        desc: 'Tàng thư các lưu giữ hơn 10 vạn cuốn điển tịch, nơi nghiên cứu 214 bộ thủ tượng hình và quy tắc cấu trúc chữ Hán từ giáp cốt văn.',
+        npc: {
+          avatar: '📜',
+          name: 'Hàn Lâm Học Sĩ (翰林学士)',
+          cn: '汉字博大精深，拆其形体，方知先民造字之玄机。',
+          py: 'Hànzì bódà jīngshēn, chāi qí xíngtǐ, fāng zhī xiānmín zàozì zhī xuánjī.',
+          vi: '"Chữ Hán uyên thâm quảng đại, bóc tách hình thể mới thấu tỏ huyền cơ tạo chữ của tiền nhân."'
+        },
+        vocabs: [
+          { cn: '汉字', py: 'hànzì', vi: 'chữ Hán', rad: '氵 (Thủy) + 宀 (Miên) + 子', chietTu: 'Chữ 字 có bộ Miên (宀 - mái nhà) và Tử (子 - con trẻ sinh sôi nảy nở).' },
+          { cn: '毛笔', py: 'máobǐ', vi: 'bút lông', rad: '⺮ (Trúc) + 毛 (Mao)', chietTu: 'Bút (笔) gồm cán làm bằng thân tre Trúc (⺮) và ngòi bằng lông thú 毛.' },
+          { cn: '宣纸', py: 'xuānzhǐ', vi: 'giấy tuyên chỉ', rad: '纟 (Mịch - sợi tơ)', chietTu: 'Chữ 纸 có bộ Mịch (纟) nguồn gốc nghề làm giấy từ tơ lụa vụn.' },
+          { cn: '学习', py: 'xuéxí', vi: 'học tập', rad: '羽 (Dực - cánh chim)', chietTu: 'Chữ 习 có nét vẽ cánh chim con ngày ngày tập bay cho cứng cáp.' }
+        ]
+      },
+      'ngu-tra-quan': {
+        icon: '茶',
+        badge: 'KHU VỰC 3 · ẨM THỰC & ĐÀM ĐẠO',
+        title: 'NGỰ TRÀ QUÁN · 御茶坊',
+        desc: 'Quán trà ven sông Biện Hà, điểm gặp gỡ tao nhã của danh sĩ kinh thành để thưởng trà Long Tỉnh, đàm đạo thi ca và gọi món ẩm thực.',
+        npc: {
+          avatar: '🍵',
+          name: 'Chưởng Quầy Trà Quán (茶掌柜)',
+          cn: '客官里面请！今天想喝龙井茶，还是尝尝桂花糕？',
+          py: 'Kèguān lǐmiàn qǐng! Jīntiān xiǎng hē Lóngjǐng chá, háishì chángchang guìhuā gāo?',
+          vi: '"Mời khách quan vào trong! Hôm nay ngài muốn uống trà Long Tỉnh hay nếm thử bánh hoa quế?"'
+        },
+        vocabs: [
+          { cn: '喝茶', py: 'hēchá', vi: 'uống trà', rad: '口 (Khẩu) + 艹 (Thảo) + 木', chietTu: 'Trà (茶) là loài cây thảo mộc có người (人) sinh sống ở giữa đất trời.' },
+          { cn: '点菜', py: 'diǎncài', vi: 'gọi món', rad: '灬 (Hỏa) + 艹 (Thảo)', chietTu: 'Thái (菜) món ăn có rau cỏ nấu chín trên ngọn lửa hồng.' },
+          { cn: '好吃', py: 'hǎochī', vi: 'ngon miệng', rad: '女 + 子, 口 + 乞', chietTu: 'Chữ 好 gồm người mẹ (女) bồng đứa con thơ (子) là điều tốt lành viên mãn.' },
+          { cn: '买单', py: 'mǎidān', vi: 'thanh toán tiền', rad: '乛 + 头 (Mãi)', chietTu: 'Mua (买) bán (卖) gắn liền với vỏ ốc tiền tệ thời xưa.' }
+        ]
+      },
+      'dong-nhan-duong': {
+        icon: '药',
+        badge: 'KHU VỰC 4 · ĐÔNG Y & NGŨ HÀNH',
+        title: 'ĐỒNG NHÂN ĐƯỜNG · 同仁堂',
+        desc: 'Hiệu thuốc danh tiếng ngàn năm với hàng trăm ngăn thảo dược, vận dụng thuyết Ngũ hành tương sinh tương khắc chữa lành thân tâm.',
+        npc: {
+          avatar: '🌿',
+          name: 'Lão Danh Y (老中医)',
+          cn: '金木水火土，五行相生。气血调和，人自安康。',
+          py: 'Jīn mù shuǐ huǒ tǔ, wǔxíng xiāngshēng. Qìxuè tiáohé, rén zì ānkāng.',
+          vi: '"Kim Mộc Thủy Hỏa Thổ, ngũ hành tương sinh. Khí huyết điều hòa thì thân thể tự an khang."'
+        },
+        vocabs: [
+          { cn: '身体', py: 'shēntǐ', vi: 'thân thể', rad: '身 (Thân) + 亻 + 本', chietTu: 'Thân (身) vẽ người bụng mang dạ chửa, Thể (体) lấy người làm gốc (本).' },
+          { cn: '健康', py: 'jiànkāng', vi: 'khỏe mạnh', rad: '亻 (Nhân) + 建, 广 + 隶', chietTu: 'Kiện (健) bước đi vững chãi, Khang (康) cuộc sống đủ đầy yên vui.' },
+          { cn: '医生', py: 'yīshēng', vi: 'bác sĩ', rad: '匚 + 矢 + 酉 (Y)', chietTu: 'Y (医) thời xưa có mũi tên (矢) và bình rượu thuốc (酉) để trị thương.' },
+          { cn: '五行', py: 'wǔxíng', vi: 'ngũ hành', rad: '五 + 行 (Hành)', chietTu: 'Hành (行) hai ngã đường giao nhau chỉ sự chuyển động không ngừng.' }
+        ]
+      },
+      'cho-dem-bien-kinh': {
+        icon: '市',
+        badge: 'KHU VỰC 5 · THƯƠNG MẠI & CHỢ ĐÊM',
+        title: 'CHỢ ĐÊM BIỆN KINH · 汴京夜市',
+        desc: 'Khu thương mại sầm uất đèn lồng đỏ rực, nơi luyện kỹ năng mặc cả, mua sắm đồ thủ công, gấm vóc và đổi tiền tệ.',
+        npc: {
+          avatar: '🏮',
+          name: 'Tiểu Thương Chợ Đêm (小摊商)',
+          cn: '走过路过不要错过！这件真丝旗袍只要八十文钱！',
+          py: 'Zǒuguò lùguò búyào cuòguò! Zhè jiàn zhēnsī qípáo zhǐ yào bāshí wén qián!',
+          vi: '"Đi qua chớ bỏ lỡ! Bộ sườn xám tơ tằm này chỉ có tám mươi đồng tiền!"'
+        },
+        vocabs: [
+          { cn: '多少钱', py: 'duōshao qián', vi: 'bao nhiêu tiền', rad: '夕 + 夕, 钅 (Kim)', chietTu: 'Đa (多) gồm hai chữ Tịch (nhiều đêm tích lũy), Tiền (钱) có bộ Kim (钅).' },
+          { cn: '太贵了', py: 'tài guì le', vi: 'đắt quá rồi', rad: '贝 (Bối - vỏ ốc bảo vật)', chietTu: 'Quý (贵) có chữ Trung (中) trên vỏ ốc Bối (贝) chỉ vật giá trị cao.' },
+          { cn: '便宜点', py: 'piányi diǎn', vi: 'rẻ chút đi', rad: '亻 (Nhân đứng) + 便', chietTu: 'Tiện (便) làm cho con người cảm thấy thuận lợi và nhẹ nhàng.' },
+          { cn: '老板', py: 'lǎobǎn', vi: 'ông chủ', rad: '耂 (Lão) + 木 + 反', chietTu: 'Bản (板) tấm gỗ ghi sổ sách của người đứng đầu hiệu buôn.' }
+        ]
+      },
+      'dich-tram': {
+        icon: '驿',
+        badge: 'KHU VỰC 6 · GIAO THÔNG & HỎI ĐƯỜNG',
+        title: 'DỊCH TRẠM HOÀNG GIA · 官道驿站',
+        desc: 'Trạm dừng chân ngựa xe trên quan lộ, nơi học sinh học cách hỏi đường, định hướng Đông Tây Nam Bắc và các phương tiện di chuyển.',
+        npc: {
+          avatar: '🐎',
+          name: 'Dịch Thừa (驿丞官)',
+          cn: '官道四通八达。敢问这位客官，是要去东门还是往洛阳？',
+          py: 'Guāndào sìtōngbādá. Gǎn wèn zhè wèi kèguān, shì yào qù dōngmén háishì wǎng Luòyáng?',
+          vi: '"Quan lộ thông suốt bốn phương tám hướng. Dám hỏi khách quan muốn tới cửa Đông hay đi Lạc Dương?"'
+        },
+        vocabs: [
+          { cn: '怎么走', py: 'zěnme zǒu', vi: 'đi đường nào', rad: '走 (Tẩu - chạy/đi)', chietTu: 'Tẩu (走) hình người vung tay sải bước đi thật nhanh.' },
+          { cn: '远近', py: 'yuǎnjìn', vi: 'xa gần', rad: '辶 (Xước - bước chân)', chietTu: 'Viễn (远) và Cận (近) đều có bộ Xước chỉ khoảng cách đường sá.' },
+          { cn: '车站', py: 'chēzhàn', vi: 'trạm xe/bến xe', rad: '车 (Xa - cỗ xe) + 立 + 占', chietTu: 'Xa (车) mô phỏng cỗ xe ngựa hai bánh nhìn từ trên xuống.' },
+          { cn: '一直走', py: 'yìzhí zǒu', vi: 'đi thẳng mãi', rad: '十 + 罒 + 一 (Trực)', chietTu: 'Trực (直) ánh mắt nhìn thẳng về phía trước không thiên lệch.' }
+        ]
+      },
+      'truong-thi': {
+        icon: '试',
+        badge: 'KHU VỰC 7 · ĐẤU TRƯỜNG KHẢO THÍ HSK',
+        title: 'TRƯỜNG THI KHẢO THÍ HSK · 贡院考场',
+        desc: 'Kỳ thi Hương, thi Hội và thi Đình danh giá. Nơi thử thách toàn diện vốn từ HSK, ngữ pháp và bản lĩnh chữ Hán của sĩ tử.',
+        npc: {
+          avatar: '📜',
+          name: 'Quan Chủ Khảo (主考官)',
+          cn: '十年寒窗苦读，只为一朝金榜题名！准备好迎接考试了吗？',
+          py: 'Shí nián hánchuāng kǔdú, zhǐ wèi yī zhāo jīnbǎng tímíng! Zhǔnbèi hǎo yíngjiē kǎoshì le ma?',
+          vi: '"Mười năm đèn sách khổ luyện, chỉ đợi một sớm đề tên bảng vàng! Sĩ tử đã sẵn sàng bước vào trường thi chưa?"'
+        },
+        vocabs: [
+          { cn: '考试', py: 'kǎoshì', vi: 'thi cử', rad: '耂 (Lão) + 讠(Ngôn) + 式', chietTu: 'Khảo (考) hỏi han người già; Thí (试) dùng lời lẽ và công thức thử sức.' },
+          { cn: '通过', py: 'tōngguò', vi: 'vượt qua/đỗ', rad: '辶 (Xước) + 甬', chietTu: 'Thông (通) đi suốt không bị ngăn trở; Quá (过) bước qua ải khó.' },
+          { cn: '第一名', py: 'dì yī míng', vi: 'hạng nhất/Trạng nguyên', rad: '竹 + 第, 一, 夕 + 口', chietTu: 'Đệ (第) thứ tự tre măng vươn lên thành cây vững chãi.' },
+          { cn: '加油', py: 'jiāyóu', vi: 'cố lên!', rad: '力 (Lực) + 氵+ 由 (Du - dầu)', chietTu: 'Gia du (加油) tiếp thêm dầu cho đèn sáng, dốc hết sức lực.' }
+        ]
+      }
+    };
+
+    let exploredSet = new Set(['cong-chu-tuoc']);
+
+    function openZoneModal(zoneId) {
+      const zone = CITY_ZONES[zoneId];
+      if (!zone) return;
+
+      exploredSet.add(zoneId);
+      document.getElementById('zones-explored').textContent = exploredSet.size;
+      document.getElementById('vocab-unlocked').textContent = exploredSet.size * 4;
+
+      document.getElementById('modal-zone-icon').textContent = zone.icon;
+      document.getElementById('modal-zone-badge').textContent = zone.badge;
+      document.getElementById('modal-zone-title').textContent = zone.title;
+      document.getElementById('modal-zone-desc').textContent = zone.desc;
+
+      document.getElementById('npc-avatar').textContent = zone.npc.avatar;
+      document.getElementById('npc-name').textContent = zone.npc.name;
+      document.getElementById('npc-cn').textContent = zone.npc.cn;
+      document.getElementById('npc-py').textContent = zone.npc.py;
+      document.getElementById('npc-vi').textContent = zone.npc.vi;
+
+      // Vocabs
+      const listEl = document.getElementById('modal-vocab-list');
+      listEl.innerHTML = zone.vocabs.map(v => `
+        <div onclick="playAudio('${v.py}')" class="p-3 bg-stone-950 border border-stone-800 hover:border-gold/50 rounded-xl cursor-pointer transition-all group">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-cjk text-lg font-bold text-stone-100 group-hover:text-cinnabar">${v.cn}</span>
+            <span class="font-mono text-xs font-semibold text-gold">${v.py}</span>
+          </div>
+          <div class="text-xs text-stone-300 mb-1">Nghĩa: <span class="font-semibold text-stone-100">${v.vi}</span></div>
+          <div class="text-[10px] text-stone-500 italic border-t border-stone-800/80 pt-1">
+            💡 ${v.chietTu}
+          </div>
+        </div>
+      `).join('');
+
+      // Modal action
+      const actionSlot = document.getElementById('modal-action-slot');
+      if (zoneId === 'truong-thi') {
+        actionSlot.innerHTML = `
+          <a href="thi_thu_hsk.html" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cinnabar to-red-700 text-ricepaper text-xs font-bold hover:brightness-110 flex items-center gap-1.5 shadow-lg">
+            <span>📝</span> <span>Bước Vào Làm Bài Thi HSK</span>
+          </a>
+        `;
+      } else {
+        actionSlot.innerHTML = `
+          <button onclick="playNpcDialogueAudio()" class="px-4 py-2 rounded-xl bg-gold/20 hover:bg-gold/30 text-gold-bright border border-gold/40 text-xs font-bold transition-all">
+            Luyện nói câu này
+          </button>
+        `;
+      }
+
+      document.getElementById('zone-modal').classList.remove('hidden');
+      playNpcDialogueAudio();
+    }
+
+    function closeZoneModal() {
+      document.getElementById('zone-modal').classList.add('hidden');
+    }
+
+    function playAudio(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+
+    function playNpcDialogueAudio() {
+      const cn = document.getElementById('npc-cn').textContent;
+      if (cn) playAudio(cn);
+    }
+  </script>
+</body>
+</html>

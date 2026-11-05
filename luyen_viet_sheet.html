@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sheet Luyện Viết Chữ Hán Ô Mễ A4 – Chiết Tự Hán Ngữ 2026</title>
+  <meta name="description" content="Công cụ tạo phiếu luyện viết chữ Hán ô Mễ (米字格), ô Điền (田字格) chuẩn khổ A4 kèm nét bút thuận, pinyin, Hán Việt và phân tích bộ thủ. Hỗ trợ in PDF ngay.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;600;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Hanzi Writer CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            ricepaper: '#FAF6EE',
+            ink: '#141210'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            brush: ['"Ma Shan Zheng"', 'cursive', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Print Stylesheet for Perfect A4 */
+    @page {
+      size: A4 portrait;
+      margin: 10mm 10mm 12mm 10mm;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      #global-header-slot, #global-footer-slot, .no-print {
+        display: none !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .print-break {
+        page-break-before: always;
+      }
+      .sheet-container {
+        border: 1.5px solid #C23B2A !important;
+        padding: 12px !important;
+      }
+    }
+
+    /* SVG Grid lines */
+    .grid-cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-stone-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cinnabar selection:text-ricepaper">
+
+  <!-- Shared Top Navigation Slot -->
+  <div id="global-header-slot"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+    
+    <!-- Hero / Title -->
+    <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinnabar/15 border border-cinnabar/30 text-cinnabar-glow text-xs font-semibold mb-2">
+          <span>✍️ VỞ BÀI TẬP VÀ LUYỆN VIẾT</span>
+          <span>·</span>
+          <span>A4 PRINT READY</span>
+        </div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-gold-bright tracking-wide">
+          SHEET LUYỆN VIẾT CHỮ HÁN Ô MỄ A4
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-2xl">
+          Tạo phiếu tập viết chữ Hán chuẩn khổ A4 theo nét bút thuận. Phù hợp tự học, luyện chữ hoặc giáo viên in phiếu bài tập cho học viên.
+        </p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-3 self-center sm:self-auto">
+        <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cinnabar to-red-700 text-ricepaper text-xs sm:text-sm font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 border border-cinnabar-glow/40">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+          </svg>
+          <span>In A4 / Xuất PDF</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Controls Panel (No Print) -->
+    <div class="bg-stone-900/90 border border-gold/20 rounded-2xl p-5 mb-8 shadow-xl no-print space-y-5">
+      
+      <!-- Input Text -->
+      <div>
+        <label class="block text-xs font-semibold text-gold uppercase tracking-wider mb-2">
+          1. Nhập danh sách chữ Hán cần luyện (Gõ chữ Hán hoặc câu):
+        </label>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" id="chars-input" value="学习汉语天天向上" placeholder="Ví dụ: 学习汉语, 千里之行始于足下..." 
+                 class="flex-1 px-4 py-2.5 rounded-xl bg-stone-950 border border-stone-700 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-gold font-cjk tracking-widest text-lg transition-all">
+          <button id="btn-generate" class="px-6 py-2.5 rounded-xl bg-gold/20 hover:bg-gold/30 text-gold-bright border border-gold/40 text-xs font-bold transition-all whitespace-nowrap">
+            Tạo Sheet Ngay
+          </button>
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div>
+        <div class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">
+          Chọn nhanh bộ từ mẫu theo giáo trình:
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="setChars('人大人夫太太木末未本林森')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 border border-stone-700">
+            📖 Bài 1: Nhân, Đại, Thiên, Mộc (10 chữ)
+          </button>
+          <button onclick="setChars('日月明旦暮晶早阳')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 border border-stone-700">
+            📖 Bài 2: Nhật, Nguyệt, Minh (8 chữ)
+          </button>
+          <button onclick="setChars('你好我是他她们的吗不很')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 border border-stone-700">
+            🎯 HSK 1 Cơ bản (11 chữ)
+          </button>
+          <button onclick="setChars('亻氵扌艹口女宀心木火')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 border border-stone-700">
+            🧪 10 Bộ Thủ Tần Suất Cao
+          </button>
+          <button onclick="setChars('千里之行始于足下')" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-[11px] text-stone-300 border border-stone-700">
+            📜 Ngạn ngữ: Thiên lý chi hành
+          </button>
+        </div>
+      </div>
+
+      <!-- Options Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-3 border-t border-stone-800">
+        <!-- Grid Type -->
+        <div>
+          <label class="block text-[11px] font-semibold text-stone-300 mb-1.5">Kiểu ô kẻ:</label>
+          <select id="grid-type" class="w-full px-3 py-2 rounded-xl bg-stone-950 border border-stone-700 text-xs text-stone-200 focus:outline-none focus:border-gold">
+            <option value="mi" selected>Ô Mễ (米字格 - 8 hướng chuẩn thư pháp)</option>
+            <option value="tian">Ô Điền (田字格 - 4 góc tọa độ)</option>
+            <option value="square">Ô Vuông (口字格 - Viền đơn)</option>
+          </select>
+        </div>
+
+        <!-- Mode -->
+        <div>
+          <label class="block text-[11px] font-semibold text-stone-300 mb-1.5">Cách bố trí dòng:</label>
+          <select id="layout-mode" class="w-full px-3 py-2 rounded-xl bg-stone-950 border border-stone-700 text-xs text-stone-200 focus:outline-none focus:border-gold">
+            <option value="steps" selected>Nét bút thuận + Ô tô mờ + Ô tự viết</option>
+            <option value="standard">Ô mẫu lớn + Pinyin + Nghĩa + Ô tô mờ</option>
+            <option value="dense">Luyện viết dày đặc (Nhiều ô/trang)</option>
+          </select>
+        </div>
+
+        <!-- Trace Density -->
+        <div>
+          <label class="block text-[11px] font-semibold text-stone-300 mb-1.5">Số ô tô nét mờ mỗi dòng:</label>
+          <select id="trace-count" class="w-full px-3 py-2 rounded-xl bg-stone-950 border border-stone-700 text-xs text-stone-200 focus:outline-none focus:border-gold">
+            <option value="4">4 ô mờ (Còn lại tự viết)</option>
+            <option value="6" selected>6 ô mờ (Cân bằng)</option>
+            <option value="8">8 ô mờ (Cho người mới bắt đầu)</option>
+            <option value="0">0 ô mờ (Toàn bộ ô trắng)</option>
+          </select>
+        </div>
+
+        <!-- Toggles -->
+        <div class="flex flex-col justify-center gap-1.5">
+          <label class="inline-flex items-center gap-2 text-xs text-stone-300 cursor-pointer">
+            <input type="checkbox" id="show-pinyin" checked class="rounded accent-cinnabar">
+            <span>Hiện Pinyin & Hán Việt</span>
+          </label>
+          <label class="inline-flex items-center gap-2 text-xs text-stone-300 cursor-pointer">
+            <input type="checkbox" id="show-meaning" checked class="rounded accent-cinnabar">
+            <span>Hiện Nghĩa tiếng Việt</span>
+          </label>
+          <label class="inline-flex items-center gap-2 text-xs text-stone-300 cursor-pointer">
+            <input type="checkbox" id="show-radicals" checked class="rounded accent-cinnabar">
+            <span>Hiện Phân tích Chiết Tự</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Student info in header -->
+      <div class="pt-3 border-t border-stone-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div>
+          <span class="text-[10px] text-stone-400 block">Họ và tên học viên:</span>
+          <input type="text" id="info-name" value="Nguyễn Văn A" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-1 text-xs text-stone-200">
+        </div>
+        <div>
+          <span class="text-[10px] text-stone-400 block">Lớp / Khóa học:</span>
+          <input type="text" id="info-class" value="Hán Ngữ Chiết Tự K01" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-1 text-xs text-stone-200">
+        </div>
+        <div>
+          <span class="text-[10px] text-stone-400 block">Ngày luyện:</span>
+          <input type="text" id="info-date" value="2026-11-05" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-1 text-xs text-stone-200">
+        </div>
+        <div>
+          <span class="text-[10px] text-stone-400 block">Điểm / Đánh giá:</span>
+          <input type="text" id="info-grade" value="______ / 100" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-1 text-xs text-stone-200">
+        </div>
+      </div>
+    </div>
+
+    <!-- Printable Sheet Preview Area -->
+    <div id="sheets-output" class="space-y-8">
+      <!-- Generated pages will appear here -->
+    </div>
+
+  </main>
+
+  <!-- HanziWriter Interactive Modal (When user clicks on character in preview) -->
+  <div id="char-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-stone-900 border border-gold/40 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative">
+      <button onclick="closeCharModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white text-xl">✕</button>
+      <div id="modal-char-title" class="text-xs uppercase tracking-wider text-gold font-bold mb-3">TẬP VIẾT TƯƠNG TÁC</div>
+      <div id="modal-hanzi-writer" class="w-48 h-48 mx-auto bg-stone-950 rounded-xl border border-stone-700 flex items-center justify-center mb-4"></div>
+      
+      <div id="modal-char-meta" class="mb-5 text-left bg-stone-950/80 p-3 rounded-xl border border-stone-800 text-xs space-y-1">
+        <!-- Injected info -->
+      </div>
+
+      <div class="flex items-center justify-center gap-2">
+        <button id="btn-animate" class="px-3.5 py-2 rounded-xl bg-cinnabar text-ricepaper text-xs font-semibold hover:brightness-110 transition-all flex items-center gap-1.5">
+          <span>▶</span> <span>Xem viết mẫu</span>
+        </button>
+        <button id="btn-quiz" class="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-gold-bright border border-gold/30 text-xs font-semibold transition-all flex items-center gap-1.5">
+          <span>✍️</span> <span>Tập viết thử</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer Slot -->
+  <div id="global-footer-slot"></div>
+
+  <!-- Load Database and Nav scripts -->
+  <script src="js/bang_tuan_hoan_data.js"></script>
+  <script src="js/common_nav.js"></script>
+
+  <script>
+    // Grid generator functions
+    function createGridSvg(type, color = '#C23B2A') {
+      if (type === 'mi') {
+        return `
+          <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full pointer-events-none">
+            <rect x="0" y="0" width="100" height="100" fill="transparent" stroke="${color}" stroke-width="1.2"/>
+            <line x1="0" y1="50" x2="100" y2="50" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.65"/>
+            <line x1="50" y1="0" x2="50" y2="100" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.65"/>
+            <line x1="0" y1="0" x2="100" y2="100" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.45"/>
+            <line x1="100" y1="0" x2="0" y2="100" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.45"/>
+          </svg>
+        `;
+      } else if (type === 'tian') {
+        return `
+          <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full pointer-events-none">
+            <rect x="0" y="0" width="100" height="100" fill="transparent" stroke="${color}" stroke-width="1.2"/>
+            <line x1="0" y1="50" x2="100" y2="50" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.65"/>
+            <line x1="50" y1="0" x2="50" y2="100" stroke="${color}" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.65"/>
+          </svg>
+        `;
+      } else {
+        return `
+          <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full pointer-events-none">
+            <rect x="0" y="0" width="100" height="100" fill="transparent" stroke="${color}" stroke-width="1.2"/>
+          </svg>
+        `;
+      }
+    }
+
+    // Lookup metadata from CHIET_TU_DATABASE
+    function lookupChar(char) {
+      if (!window.CHIET_TU_DATABASE) return null;
+      // Search reactions
+      if (window.CHIET_TU_DATABASE.reactions) {
+        const found = window.CHIET_TU_DATABASE.reactions.find(r => r.char === char);
+        if (found) return found;
+      }
+      // Search radicals
+      if (window.CHIET_TU_DATABASE.radicals) {
+        const foundRad = window.CHIET_TU_DATABASE.radicals.find(r => r.char === char);
+        if (foundRad) {
+          return {
+            char: foundRad.char,
+            pinyin: foundRad.pinyin,
+            han_viet: foundRad.han_viet,
+            meaning: foundRad.meaning,
+            narrative: `Bộ thủ cốt lõi ${foundRad.char} (${foundRad.han_viet}) - ${foundRad.meaning}`
+          };
+        }
+      }
+      return null;
+    }
+
+    function renderWorksheet() {
+      const input = document.getElementById('chars-input').value.trim();
+      const gridType = document.getElementById('grid-type').value;
+      const layoutMode = document.getElementById('layout-mode').value;
+      const traceCount = parseInt(document.getElementById('trace-count').value, 10);
+      const showPinyin = document.getElementById('show-pinyin').checked;
+      const showMeaning = document.getElementById('show-meaning').checked;
+      const showRadicals = document.getElementById('show-radicals').checked;
+
+      const studentName = document.getElementById('info-name').value || 'Học viên';
+      const studentClass = document.getElementById('info-class').value || 'Chiết Tự 2026';
+      const studentDate = document.getElementById('info-date').value || new Date().toISOString().slice(0, 10);
+      const studentGrade = document.getElementById('info-grade').value || '_____ / 100';
+
+      // Filter Chinese characters only
+      const chars = Array.from(input.replace(/[^\u4e00-\u9fa5]/g, ''));
+      if (chars.length === 0) {
+        document.getElementById('sheets-output').innerHTML = `
+          <div class="bg-stone-900 border border-stone-800 rounded-2xl p-12 text-center text-stone-400">
+            Vui lòng nhập ít nhất một chữ Hán hợp lệ vào ô phía trên để tạo sheet luyện viết!
+          </div>
+        `;
+        return;
+      }
+
+      // Group into pages of 6-8 characters each for standard A4
+      const charsPerPage = layoutMode === 'dense' ? 10 : 6;
+      const pages = [];
+      for (let i = 0; i < chars.length; i += charsPerPage) {
+        pages.push(chars.slice(i, i + charsPerPage));
+      }
+
+      const totalPages = pages.length;
+      let pagesHtml = '';
+
+      pages.forEach((pageChars, pageIndex) => {
+        let rowsHtml = '';
+
+        pageChars.forEach(char => {
+          const meta = lookupChar(char) || {
+            char: char,
+            pinyin: '',
+            han_viet: '',
+            meaning: '',
+            narrative: ''
+          };
+
+          // Build row cells
+          const totalCells = 12; // 12 columns per row
+          let cellsHtml = '';
+
+          for (let c = 0; c < totalCells; c++) {
+            const isTrace = c < traceCount;
+            const textStyle = isTrace 
+              ? 'text-stone-300 font-cjk opacity-45' 
+              : 'text-transparent';
+            const cellChar = isTrace ? char : '';
+
+            cellsHtml += `
+              <div class="grid-cell relative w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center border border-transparent">
+                ${createGridSvg(gridType, '#C23B2A')}
+                <span class="absolute font-cjk text-xl sm:text-2xl select-none ${textStyle}">
+                  ${cellChar}
+                </span>
+              </div>
+            `;
+          }
+
+          rowsHtml += `
+            <div class="py-2.5 border-b border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <!-- Left: Target character & info -->
+              <div class="flex items-center gap-3 min-w-[200px]">
+                <!-- Big Sample Box -->
+                <div onclick="openCharModal('${char}')" class="cursor-pointer group relative w-12 h-12 sm:w-14 sm:h-14 bg-stone-50 border-2 border-cinnabar rounded-md flex items-center justify-center shrink-0 shadow-sm hover:scale-105 transition-transform" title="Bấm để xem video nét bút thuận">
+                  ${createGridSvg(gridType, '#C23B2A')}
+                  <span class="font-cjk font-bold text-2xl sm:text-3xl text-stone-900 group-hover:text-cinnabar">
+                    ${char}
+                  </span>
+                  <span class="absolute -bottom-1.5 -right-1 text-[8px] bg-cinnabar text-ricepaper px-1 rounded no-print">
+                    ▶
+                  </span>
+                </div>
+
+                <!-- Text meta -->
+                <div class="leading-tight">
+                  <div class="flex items-center gap-2">
+                    ${showPinyin && meta.pinyin ? `<span class="text-xs font-bold text-cinnabar tracking-wider font-mono">${meta.pinyin}</span>` : ''}
+                    ${showPinyin && meta.han_viet ? `<span class="text-xs font-semibold text-stone-800">(${meta.han_viet})</span>` : ''}
+                  </div>
+                  ${showMeaning && meta.meaning ? `<div class="text-[11px] text-stone-700 mt-0.5 line-clamp-1">${meta.meaning}</div>` : ''}
+                  ${showRadicals && meta.narrative ? `<div class="text-[10px] text-stone-500 italic mt-0.5 line-clamp-1">💡 ${meta.narrative}</div>` : ''}
+                </div>
+              </div>
+
+              <!-- Right: Practice cells -->
+              <div class="flex items-center gap-1 overflow-x-auto py-1">
+                ${cellsHtml}
+              </div>
+            </div>
+          `;
+        });
+
+        // Assemble Page
+        pagesHtml += `
+          <div class="print-page bg-ricepaper text-stone-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-stone-300 max-w-4xl mx-auto my-6">
+            <!-- Sheet Outer Frame -->
+            <div class="sheet-container border-2 border-cinnabar/80 p-4 sm:p-6 rounded-lg relative">
+              
+              <!-- Header -->
+              <div class="border-b-2 border-cinnabar/40 pb-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded bg-cinnabar text-ricepaper flex items-center justify-center font-cjk font-bold text-xl shadow">
+                    字
+                  </div>
+                  <div>
+                    <h2 class="font-display font-extrabold text-base sm:text-lg text-cinnabar tracking-wider">
+                      VỞ BÀI TẬP & LUYỆN VIẾT CHỮ HÁN
+                    </h2>
+                    <p class="text-[10px] text-stone-600 font-medium">
+                      Đề Án Cải Cách Giáo Dục Chiết Tự 2026 · Chuẩn Bút Thuận Quốc Tế
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Student Info Box -->
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-stone-800 bg-stone-100/80 p-2 rounded border border-stone-200">
+                  <div><span class="font-bold text-stone-900">Họ tên:</span> ${studentName}</div>
+                  <div><span class="font-bold text-stone-900">Lớp:</span> ${studentClass}</div>
+                  <div><span class="font-bold text-stone-900">Ngày:</span> ${studentDate}</div>
+                  <div><span class="font-bold text-stone-900">Điểm:</span> ${studentGrade}</div>
+                </div>
+              </div>
+
+              <!-- Main character practice rows -->
+              <div class="space-y-1">
+                ${rowsHtml}
+              </div>
+
+              <!-- Footer of Sheet -->
+              <div class="mt-6 pt-3 border-t border-stone-200 flex items-center justify-between text-[10px] text-stone-500">
+                <div class="flex items-center gap-2">
+                  <span class="font-cjk font-bold text-cinnabar">「拆字書法」</span>
+                  <span>Phương pháp nhớ sâu qua hình tượng & quy tắc thuận bút</span>
+                </div>
+                <div>
+                  Trang ${pageIndex + 1} / ${totalPages}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('sheets-output').innerHTML = pagesHtml;
+    }
+
+    function setChars(str) {
+      document.getElementById('chars-input').value = str;
+      renderWorksheet();
+    }
+
+    // Modal HanziWriter
+    let currentWriter = null;
+    function openCharModal(char) {
+      const modal = document.getElementById('char-modal');
+      const box = document.getElementById('modal-hanzi-writer');
+      const metaBox = document.getElementById('modal-char-meta');
+      box.innerHTML = '';
+      modal.classList.remove('hidden');
+
+      const meta = lookupChar(char) || { char, pinyin: '', han_viet: '', meaning: '', narrative: '' };
+      metaBox.innerHTML = `
+        <div class="font-cjk text-lg font-bold text-gold-bright">${char} <span class="text-sm font-sans font-normal text-cinnabar">${meta.pinyin}</span></div>
+        <div class="text-stone-300">Âm Hán Việt: <span class="text-stone-100 font-semibold">${meta.han_viet || 'Đang cập nhật'}</span></div>
+        <div class="text-stone-300">Nghĩa: <span class="text-stone-100">${meta.meaning || 'Nghĩa biểu thị trong bài học'}</span></div>
+        ${meta.narrative ? `<div class="text-gold text-[11px] pt-1 border-t border-stone-800">💡 Chiết tự: ${meta.narrative}</div>` : ''}
+      `;
+
+      try {
+        currentWriter = HanziWriter.create('modal-hanzi-writer', char, {
+          width: 170,
+          height: 170,
+          padding: 10,
+          showOutline: true,
+          strokeColor: '#C23B2A',
+          outlineColor: '#333333',
+          strokeAnimationSpeed: 1.2,
+          delayBetweenStrokes: 150
+        });
+        currentWriter.animateCharacter();
+      } catch (e) {
+        box.innerHTML = `<span class="font-cjk text-6xl text-cinnabar">${char}</span>`;
+      }
+
+      document.getElementById('btn-animate').onclick = () => {
+        if (currentWriter) currentWriter.animateCharacter();
+      };
+      document.getElementById('btn-quiz').onclick = () => {
+        if (currentWriter) currentWriter.quiz();
+      };
+    }
+
+    function closeCharModal() {
+      document.getElementById('char-modal').classList.add('hidden');
+      if (currentWriter) {
+        currentWriter = null;
+      }
+    }
+
+    // Setup events
+    document.getElementById('btn-generate').addEventListener('click', renderWorksheet);
+    document.getElementById('grid-type').addEventListener('change', renderWorksheet);
+    document.getElementById('layout-mode').addEventListener('change', renderWorksheet);
+    document.getElementById('trace-count').addEventListener('change', renderWorksheet);
+    document.getElementById('show-pinyin').addEventListener('change', renderWorksheet);
+    document.getElementById('show-meaning').addEventListener('change', renderWorksheet);
+    document.getElementById('show-radicals').addEventListener('change', renderWorksheet);
+    document.getElementById('chars-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') renderWorksheet();
+    });
+
+    // Initial render
+    window.addEventListener('DOMContentLoaded', () => {
+      renderWorksheet();
+    });
+  </script>
+</body>
+</html>

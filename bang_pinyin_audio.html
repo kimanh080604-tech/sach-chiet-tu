@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bảng Pinyin Có Âm Thanh Toàn Diện – Chiết Tự Hán Ngữ 2026</title>
+  <meta name="description" content="Bảng phát âm Pinyin tiếng Trung có âm thanh: 22 Thanh mẫu, 37 Vận mẫu, 4 Thanh điệu và sơ đồ cao độ ngữ điệu chuẩn phổ thông Bắc Kinh.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lacquer: '#0C0A09',
+            cinnabar: {
+              DEFAULT: '#C23B2A',
+              glow: '#FF4D3B',
+              dark: '#8C1D24',
+              light: '#FDF2F2'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              bright: '#F3E5AB',
+              dark: '#997A23'
+            },
+            ricepaper: '#FAF6EE'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            cjk: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            sans: ['"Be Vietnam Pro"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Table scrollbar */
+    .table-scroll::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    .table-scroll::-webkit-scrollbar-track {
+      background: #1c1917;
+      border-radius: 4px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: #78716c;
+      border-radius: 4px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+
+    /* Fixed table header and first column */
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 20;
+    }
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .sticky-corner {
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 40;
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-stone-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cinnabar selection:text-ricepaper">
+
+  <!-- Shared Top Navigation Slot -->
+  <div id="global-header-slot"></div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+    
+    <!-- Hero / Title -->
+    <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold-bright text-xs font-semibold mb-2">
+          <span>🔊 BẢNG NGỮ ÂM TƯƠNG TÁC</span>
+          <span>·</span>
+          <span>CHUẨN BẮC KINH MANDARIN</span>
+        </div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl text-gold-bright tracking-wide">
+          BẢNG PINYIN CÓ ÂM THANH TOÀN DIỆN
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-3xl">
+          Tra cứu 22 Thanh mẫu (Initial), 37 Vận mẫu (Final), 4 Thanh điệu và chữ Hán tương ứng. Nhấp vào bất kỳ ô nào để phát âm âm thanh giọng chuẩn bản xứ.
+        </p>
+      </div>
+
+      <!-- Ear Training Quiz Mode Button -->
+      <div class="flex items-center gap-2 self-center sm:self-auto">
+        <button onclick="openQuizModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-800 text-ricepaper text-xs sm:text-sm font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 border border-emerald-500/30">
+          <span>🎧</span>
+          <span>Luyện Tai Đoán Thanh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tone Contour & Pitch Visualizer -->
+    <div class="bg-stone-900/90 border border-gold/20 rounded-2xl p-5 mb-8 shadow-xl">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+        
+        <!-- Left: Tone selectors -->
+        <div class="w-full lg:w-1/2">
+          <div class="text-xs font-bold text-gold uppercase tracking-wider mb-3 flex items-center justify-between">
+            <span>CHỌN THANH ĐIỆU CẦN LUYỆN:</span>
+            <span class="text-[11px] text-stone-400 font-normal">Nhấp để đổi thanh điệu trên bảng</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <!-- Tone 1 -->
+            <button onclick="setTone(1)" id="tone-btn-1" class="tone-btn p-3 rounded-xl border border-gold bg-gold/20 text-gold-bright flex flex-col items-center justify-center transition-all">
+              <span class="text-xs font-bold uppercase">Thanh 1 (阴平)</span>
+              <span class="font-serif text-xl font-bold my-1">ā</span>
+              <span class="text-[10px] text-stone-300">Cao bằng · 55</span>
+            </button>
+            <!-- Tone 2 -->
+            <button onclick="setTone(2)" id="tone-btn-2" class="tone-btn p-3 rounded-xl border border-stone-800 bg-stone-950 text-stone-300 hover:border-gold/40 flex flex-col items-center justify-center transition-all">
+              <span class="text-xs font-bold uppercase">Thanh 2 (阳平)</span>
+              <span class="font-serif text-xl font-bold my-1">á</span>
+              <span class="text-[10px] text-stone-400">Lên cao · 35</span>
+            </button>
+            <!-- Tone 3 -->
+            <button onclick="setTone(3)" id="tone-btn-3" class="tone-btn p-3 rounded-xl border border-stone-800 bg-stone-950 text-stone-300 hover:border-gold/40 flex flex-col items-center justify-center transition-all">
+              <span class="text-xs font-bold uppercase">Thanh 3 (上声)</span>
+              <span class="font-serif text-xl font-bold my-1">ǎ</span>
+              <span class="text-[10px] text-stone-400">Xuống lên · 214</span>
+            </button>
+            <!-- Tone 4 -->
+            <button onclick="setTone(4)" id="tone-btn-4" class="tone-btn p-3 rounded-xl border border-stone-800 bg-stone-950 text-stone-300 hover:border-gold/40 flex flex-col items-center justify-center transition-all">
+              <span class="text-xs font-bold uppercase">Thanh 4 (去声)</span>
+              <span class="font-serif text-xl font-bold my-1">à</span>
+              <span class="text-[10px] text-stone-400">Dứt khoát · 51</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Pitch Contour Diagram (5-degree) -->
+        <div class="w-full lg:w-1/2 bg-stone-950 p-4 rounded-xl border border-stone-800 flex items-center justify-between gap-4">
+          <div class="text-left text-xs space-y-1">
+            <div class="font-bold text-stone-200">Sơ đồ cao độ Ngũ độ (五度标记法):</div>
+            <div class="text-[11px] text-stone-400">
+              • Độ cao 5: Mức âm vực cao nhất<br>
+              • Độ cao 1: Mức âm vực trầm nhất<br>
+              • Bấm nút nghe thử âm mẫu:
+            </div>
+            <div class="pt-1 flex items-center gap-2">
+              <button onclick="playToneSample(1)" class="px-2 py-1 rounded bg-stone-800 text-[11px] text-gold hover:bg-stone-700">🔊 mā</button>
+              <button onclick="playToneSample(2)" class="px-2 py-1 rounded bg-stone-800 text-[11px] text-gold hover:bg-stone-700">🔊 má</button>
+              <button onclick="playToneSample(3)" class="px-2 py-1 rounded bg-stone-800 text-[11px] text-gold hover:bg-stone-700">🔊 mǎ</button>
+              <button onclick="playToneSample(4)" class="px-2 py-1 rounded bg-stone-800 text-[11px] text-gold hover:bg-stone-700">🔊 mà</button>
+            </div>
+          </div>
+
+          <!-- SVG Visual Chart -->
+          <div class="w-40 h-28 shrink-0">
+            <svg viewBox="0 0 160 110" class="w-full h-full">
+              <!-- Grid lines 5 to 1 -->
+              <line x1="25" y1="15" x2="150" y2="15" stroke="#44403c" stroke-dasharray="2,2" stroke-width="0.8"/>
+              <text x="12" y="18" fill="#a8a29e" font-size="9">5</text>
+              <line x1="25" y1="35" x2="150" y2="35" stroke="#44403c" stroke-dasharray="2,2" stroke-width="0.8"/>
+              <text x="12" y="38" fill="#a8a29e" font-size="9">4</text>
+              <line x1="25" y1="55" x2="150" y2="55" stroke="#44403c" stroke-dasharray="2,2" stroke-width="0.8"/>
+              <text x="12" y="58" fill="#a8a29e" font-size="9">3</text>
+              <line x1="25" y1="75" x2="150" y2="75" stroke="#44403c" stroke-dasharray="2,2" stroke-width="0.8"/>
+              <text x="12" y="78" fill="#a8a29e" font-size="9">2</text>
+              <line x1="25" y1="95" x2="150" y2="95" stroke="#44403c" stroke-dasharray="2,2" stroke-width="0.8"/>
+              <text x="12" y="98" fill="#a8a29e" font-size="9">1</text>
+              <line x1="25" y1="10" x2="25" y2="100" stroke="#78716c" stroke-width="1.2"/>
+
+              <!-- Tone 1 line (red) -->
+              <line x1="35" y1="15" x2="85" y2="15" stroke="#C23B2A" stroke-width="2.5" stroke-linecap="round"/>
+              <text x="90" y="18" fill="#FF4D3B" font-size="8" font-weight="bold">1 (55)</text>
+
+              <!-- Tone 2 line (amber) -->
+              <path d="M 35 55 Q 60 45 85 15" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+              <text x="90" y="32" fill="#F3E5AB" font-size="8" font-weight="bold">2 (35)</text>
+
+              <!-- Tone 3 line (green) -->
+              <path d="M 35 75 Q 55 98 75 75 Q 85 55 95 35" fill="none" stroke="#2E9E76" stroke-width="2.5" stroke-linecap="round"/>
+              <text x="100" y="45" fill="#2E9E76" font-size="8" font-weight="bold">3 (214)</text>
+
+              <!-- Tone 4 line (blue) -->
+              <path d="M 35 15 L 85 95" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round"/>
+              <text x="90" y="98" fill="#60A5FA" font-size="8" font-weight="bold">4 (51)</text>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-80">
+        <input type="text" id="pinyin-search" placeholder="Gõ tìm âm (ví dụ: ba, zhi, xue, ma)..." 
+               class="w-full px-4 py-2.5 pl-10 rounded-xl bg-stone-900 border border-stone-800 text-xs text-stone-100 placeholder-stone-500 focus:outline-none focus:border-gold transition-all">
+        <svg class="w-4 h-4 text-stone-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+
+      <!-- Speed & Voice Setting -->
+      <div class="flex items-center gap-3 text-xs text-stone-300">
+        <div class="flex items-center gap-2">
+          <span class="text-stone-400">Tốc độ đọc:</span>
+          <select id="voice-rate" class="px-2.5 py-1.5 rounded-lg bg-stone-900 border border-stone-800 text-xs text-stone-200">
+            <option value="0.7">0.7x (Chậm)</option>
+            <option value="0.85" selected>0.85x (Chuẩn)</option>
+            <option value="1.0">1.0x (Tự nhiên)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Pinyin Table -->
+    <div class="bg-stone-900/90 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden">
+      <div class="table-scroll overflow-x-auto max-h-[650px] relative">
+        <table class="w-full border-collapse text-center text-xs">
+          <thead id="pinyin-thead" class="sticky-header bg-stone-950 text-stone-300 border-b border-stone-800 shadow-md">
+            <!-- Injected by JS: Initial Consonants (Thanh Mẫu) -->
+          </thead>
+          <tbody id="pinyin-tbody" class="divide-y divide-stone-800/60 font-mono">
+            <!-- Injected by JS: Final Vowels Rows (Vận Mẫu) -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footnote / Legend -->
+    <div class="mt-4 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-400">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cinnabar"></span> Ô có chữ Hán & nghĩa tiếng Việt</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-stone-700"></span> Ô trống (không có âm tương ứng trong tiếng Trung)</span>
+      </div>
+      <div>
+        Mẹo: Bấm phím cách hoặc nhấp chuột để phát lại âm đang nghe.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Cell Detail Modal (Shows all 4 tones & Zhuyin on click) -->
+  <div id="detail-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-stone-900 border border-gold/40 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white text-xl">✕</button>
+      
+      <div class="text-xs uppercase tracking-wider text-gold font-bold mb-1">CHI TIẾT ÂM TIẾT PINYIN</div>
+      <div id="modal-syllable-title" class="text-3xl font-bold text-stone-100 font-mono mb-4">ba</div>
+
+      <div class="space-y-2 mb-6" id="modal-tones-list">
+        <!-- Injected 4 tones -->
+      </div>
+
+      <div class="pt-3 border-t border-stone-800 flex items-center justify-between">
+        <button id="modal-play-all" class="px-4 py-2 rounded-xl bg-cinnabar text-ricepaper text-xs font-semibold hover:brightness-110 flex items-center gap-1.5">
+          <span>🔊</span> <span>Nghe cả 4 thanh theo thứ tự</span>
+        </button>
+        <button onclick="closeDetailModal()" class="px-3 py-2 rounded-xl bg-stone-800 text-stone-300 text-xs hover:bg-stone-700">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal (Ear Training Mini Game) -->
+  <div id="quiz-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-stone-900 border border-emerald-500/40 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative">
+      <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white text-xl">✕</button>
+      
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
+        <span>🎧</span> <span>THỬ THÁCH ĐOÁN THANH ĐIỆU</span>
+      </div>
+      
+      <div class="text-xs text-stone-400 mb-4">
+        Hãy lắng nghe âm thanh và chọn đúng âm Pinyin kèm thanh điệu tương ứng:
+      </div>
+
+      <!-- Play Audio Button -->
+      <button onclick="playQuizTargetAudio()" class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-3xl shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all mb-6">
+        🔊
+      </button>
+
+      <!-- 4 Choices -->
+      <div id="quiz-choices" class="grid grid-cols-2 gap-3 mb-6">
+        <!-- Buttons injected -->
+      </div>
+
+      <!-- Score & Status -->
+      <div id="quiz-feedback" class="text-xs font-bold min-h-[20px] mb-4"></div>
+
+      <div class="flex items-center justify-between text-xs text-stone-400 pt-3 border-t border-stone-800">
+        <div>Điểm: <span id="quiz-score" class="font-bold text-emerald-400">0</span> / <span id="quiz-total">0</span></div>
+        <button onclick="nextQuizQuestion()" class="px-3.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200">
+          Câu tiếp theo →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer Slot -->
+  <div id="global-footer-slot"></div>
+
+  <!-- Load Database and Nav scripts -->
+  <script src="js/pinyin_matrix_data.js"></script>
+  <script src="js/common_nav.js"></script>
+
+  <script>
+    let currentTone = 1;
+    let synth = window.speechSynthesis;
+
+    function playAudio(text, rate = 0.85) {
+      if (!synth) return;
+      synth.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = parseFloat(document.getElementById('voice-rate')?.value || rate);
+      synth.speak(utterance);
+    }
+
+    function setTone(tone) {
+      currentTone = tone;
+      // Update tone buttons
+      for (let t = 1; t <= 4; t++) {
+        const btn = document.getElementById(`tone-btn-${t}`);
+        if (t === tone) {
+          btn.className = 'tone-btn p-3 rounded-xl border border-gold bg-gold/20 text-gold-bright flex flex-col items-center justify-center transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)]';
+        } else {
+          btn.className = 'tone-btn p-3 rounded-xl border border-stone-800 bg-stone-950 text-stone-300 hover:border-gold/40 flex flex-col items-center justify-center transition-all';
+        }
+      }
+      renderTable();
+    }
+
+    function playToneSample(tone) {
+      const samples = { 1: 'mā', 2: 'má', 3: 'mǎ', 4: 'mà' };
+      playAudio(samples[tone]);
+    }
+
+    function renderTable() {
+      const data = window.PINYIN_DATA;
+      if (!data) {
+        console.error('Pinyin data not loaded');
+        return;
+      }
+
+      const thead = document.getElementById('pinyin-thead');
+      const tbody = document.getElementById('pinyin-tbody');
+      const searchTerm = document.getElementById('pinyin-search').value.toLowerCase().trim();
+
+      // Render Header row: Vận mẫu label + 22 initials
+      let headHtml = `<tr>
+        <th class="sticky-corner p-3 bg-stone-950 border-r border-b border-stone-800 font-bold text-gold text-xs min-w-[70px]">
+          Vận mẫu \\ Thanh mẫu
+        </th>`;
+
+      data.initials.forEach(init => {
+        const displayInit = init === '' ? '∅ (Zero)' : init;
+        headHtml += `<th class="p-2.5 border-b border-stone-800 font-bold text-stone-200 min-w-[65px] hover:text-gold transition-colors">
+          ${displayInit}
+        </th>`;
+      });
+      headHtml += `</tr>`;
+      thead.innerHTML = headHtml;
+
+      // Render Body rows: 37 finals
+      let bodyHtml = '';
+
+      data.rows.forEach(row => {
+        const finalId = row.id;
+        const finalLabel = row.label;
+
+        let rowCellsHtml = '';
+        let rowHasMatch = false;
+
+        data.initials.forEach(init => {
+          const cellKey = `${finalId}|${init}`;
+          const cellData = data.cells[cellKey];
+
+          if (!cellData) {
+            rowCellsHtml += `<td class="p-2 border border-stone-800/40 bg-stone-950/40 text-stone-700">·</td>`;
+          } else {
+            // Find tone
+            const toneObj = cellData.tones.find(t => t.t === currentTone) || cellData.tones[0];
+            const pinyinText = toneObj ? toneObj.py : cellData.s;
+            const charText = toneObj ? toneObj.c : '';
+            const viMeaning = toneObj ? toneObj.vi : '';
+
+            // Search filter match
+            if (searchTerm && !cellData.s.includes(searchTerm) && !pinyinText.toLowerCase().includes(searchTerm)) {
+              rowCellsHtml += `<td class="p-2 border border-stone-800/40 opacity-20 text-stone-600">${pinyinText}</td>`;
+            } else {
+              if (searchTerm) rowHasMatch = true;
+              rowCellsHtml += `
+                <td onclick="onCellClick('${cellKey}')" 
+                    title="${pinyinText} (${charText}: ${viMeaning})"
+                    class="p-2 border border-stone-800/60 bg-stone-900/60 hover:bg-gold/20 hover:border-gold/60 cursor-pointer transition-all group">
+                  <div class="font-bold text-stone-200 group-hover:text-gold-bright text-xs leading-none">
+                    ${pinyinText}
+                  </div>
+                  ${charText ? `<div class="font-cjk text-[10px] text-stone-400 group-hover:text-cinnabar mt-0.5">${charText}</div>` : ''}
+                </td>
+              `;
+            }
+          }
+        });
+
+        if (!searchTerm || rowHasMatch) {
+          bodyHtml += `
+            <tr class="hover:bg-stone-800/30 transition-colors">
+              <td class="sticky-col p-2.5 bg-stone-950 border-r border-stone-800 font-bold text-gold text-xs whitespace-nowrap">
+                ${finalLabel}
+              </td>
+              ${rowCellsHtml}
+            </tr>
+          `;
+        }
+      });
+
+      tbody.innerHTML = bodyHtml;
+    }
+
+    function onCellClick(cellKey) {
+      const data = window.PINYIN_DATA;
+      const cellData = data.cells[cellKey];
+      if (!cellData) return;
+
+      const toneObj = cellData.tones.find(t => t.t === currentTone) || cellData.tones[0];
+      if (toneObj) {
+        playAudio(toneObj.py);
+      } else {
+        playAudio(cellData.s);
+      }
+
+      openDetailModal(cellData);
+    }
+
+    function openDetailModal(cellData) {
+      const modal = document.getElementById('detail-modal');
+      const title = document.getElementById('modal-syllable-title');
+      const list = document.getElementById('modal-tones-list');
+
+      title.textContent = cellData.s;
+      let tonesHtml = '';
+
+      cellData.tones.forEach(t => {
+        tonesHtml += `
+          <div onclick="playAudio('${t.py}')" class="p-3 rounded-xl bg-stone-950 border border-stone-800 hover:border-gold/50 cursor-pointer flex items-center justify-between transition-all group">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-stone-800 text-gold text-xs font-bold flex items-center justify-center">${t.t}</span>
+              <span class="font-mono text-base font-bold text-stone-100 group-hover:text-gold-bright">${t.py}</span>
+              <span class="font-cjk text-base font-bold text-cinnabar">${t.c}</span>
+              <span class="text-xs text-stone-400">(${t.zy})</span>
+            </div>
+            <div class="text-xs text-stone-300 italic group-hover:text-stone-100">${t.vi}</div>
+          </div>
+        `;
+      });
+
+      list.innerHTML = tonesHtml;
+
+      document.getElementById('modal-play-all').onclick = () => {
+        let i = 0;
+        function playNext() {
+          if (i < cellData.tones.length) {
+            playAudio(cellData.tones[i].py);
+            i++;
+            setTimeout(playNext, 900);
+          }
+        }
+        playNext();
+      };
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    // Quiz ear-training logic
+    let currentQuizTarget = null;
+    let quizScore = 0;
+    let quizTotal = 0;
+
+    function openQuizModal() {
+      document.getElementById('quiz-modal').classList.remove('hidden');
+      quizScore = 0;
+      quizTotal = 0;
+      updateQuizScore();
+      nextQuizQuestion();
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quiz-modal').classList.add('hidden');
+    }
+
+    function nextQuizQuestion() {
+      const data = window.PINYIN_DATA;
+      if (!data) return;
+
+      const keys = Object.keys(data.cells);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      const cell = data.cells[randomKey];
+      if (!cell || !cell.tones || cell.tones.length === 0) {
+        return nextQuizQuestion();
+      }
+
+      const randomTone = cell.tones[Math.floor(Math.random() * cell.tones.length)];
+      currentQuizTarget = randomTone;
+
+      document.getElementById('quiz-feedback').innerHTML = '';
+
+      // Prepare 4 choices (including target)
+      const choices = [randomTone];
+      while (choices.length < 4) {
+        // pick either another tone from same syllable or another random syllable
+        if (cell.tones.length > choices.length && Math.random() > 0.4) {
+          const t = cell.tones[Math.floor(Math.random() * cell.tones.length)];
+          if (!choices.includes(t)) choices.push(t);
+        } else {
+          const k = keys[Math.floor(Math.random() * keys.length)];
+          const c = data.cells[k];
+          if (c && c.tones && c.tones.length > 0) {
+            const t = c.tones[Math.floor(Math.random() * c.tones.length)];
+            if (!choices.includes(t)) choices.push(t);
+          }
+        }
+      }
+
+      // Shuffle
+      choices.sort(() => Math.random() - 0.5);
+
+      const choicesBox = document.getElementById('quiz-choices');
+      choicesBox.innerHTML = choices.map(ch => `
+        <button onclick="checkQuizAnswer('${ch.py}')" class="p-4 rounded-xl bg-stone-950 border border-stone-800 hover:border-emerald-500/60 text-stone-100 font-mono text-lg font-bold transition-all active:scale-95">
+          ${ch.py}
+        </button>
+      `).join('');
+
+      playQuizTargetAudio();
+    }
+
+    function playQuizTargetAudio() {
+      if (currentQuizTarget) {
+        playAudio(currentQuizTarget.py, 0.8);
+      }
+    }
+
+    function checkQuizAnswer(selectedPy) {
+      if (!currentQuizTarget) return;
+
+      quizTotal++;
+      const isCorrect = selectedPy === currentQuizTarget.py;
+      const feedback = document.getElementById('quiz-feedback');
+
+      if (isCorrect) {
+        quizScore++;
+        feedback.innerHTML = `<span class="text-emerald-400">✓ Chính xác! (${currentQuizTarget.py} - Chữ: ${currentQuizTarget.c})</span>`;
+      } else {
+        feedback.innerHTML = `<span class="text-rose-400">✗ Chưa đúng! Đáp án đúng là: ${currentQuizTarget.py} (${currentQuizTarget.c}: ${currentQuizTarget.vi})</span>`;
+      }
+
+      updateQuizScore();
+      setTimeout(nextQuizQuestion, 1800);
+    }
+
+    function updateQuizScore() {
+      document.getElementById('quiz-score').textContent = quizScore;
+      document.getElementById('quiz-total').textContent = quizTotal;
+    }
+
+    // Event listeners
+    document.getElementById('pinyin-search').addEventListener('input', renderTable);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+    });
+  </script>
+</body>
+</html>
